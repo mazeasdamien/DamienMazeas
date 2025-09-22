@@ -3,236 +3,207 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dr. Damien Mazeas</title>
+    <title>Home</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            transition: color 0.7s ease;
-            background-color: transparent; /* Allows the 3D canvas to show through */
+                body {
+                        font-family: 'Inter', sans-serif;
+                        transition: color 0.7s ease;
+                        background-color: transparent;
+
         }
 
-        .dynamic-gradient-bg {
-            background-image: linear-gradient(270deg, #B3D4F0, #FFF2E5, #FFDEDE, #C1E9E6);
-            background-size: 400% 400%;
-            animation: bg-animation 25s ease-in-out infinite;
+                .dynamic-gradient-bg {
+                        background-image: linear-gradient(270deg, #E0F2FE, #F0F9FF, #F3E5F5, #DCE7F7);
+                        background-size: 400% 400%;
+                        animation: bg-animation 25s ease-in-out infinite;
+
         }
 
-        @keyframes bg-animation {
-            0% {
-                background-position: 0% 50%;
-            }
+                @keyframes bg-animation {
+                        0%
 
-            50% {
-                background-position: 100% 50%;
-            }
+        {
+                            background-position: 0% 50%;
 
-            100% {
-                background-position: 0% 50%;
-            }
         }
 
-        .marquee-container {
-            overflow: hidden;
-            white-space: nowrap;
+                    50% {
+                            background-position: 100% 50%;
+
         }
 
-        .marquee {
-            display: inline-block;
-            animation: marquee 25s linear infinite;
+                    100% {
+                            background-position: 0% 50%;
+
         }
 
-            .marquee.dark {
-                color: #E6EDF3;
-            }
 
-        @keyframes marquee {
-            0% {
-                transform: translateX(0);
-            }
-
-            100% {
-                transform: translateX(-50%);
-            }
         }
 
-        .marquee-top {
-            animation-duration: 60s;
-            transition: color 0.7s ease;
+                .marquee-container {
+                        overflow: hidden;
+                        white-space: nowrap;
+
         }
 
-        .marquee-middle {
-            animation-duration: 100s;
+                .marquee {
+                        display: inline-block;
+                        animation: marquee 25s linear infinite;
+
         }
 
-        .marquee-bottom {
-            animation-duration: 80s;
+                @keyframes marquee {
+                        0%
+
+        {
+                            transform: translateX(0);
+
         }
+
+                    100% {
+                            transform: translateX(-50%);
+
+        }
+
+
+        }
+
+                .marquee-top {
+                        animation-duration: 60s;
+                        transition: color 0.7s ease;
+
+        }
+
+                .marquee-middle {
+                        animation-duration: 100s;
+
+        }
+
+                .marquee-bottom {
+                        animation-duration: 80s;
+
+        }
+
 
         /* Glassy Effect Class for Buttons and Cards */
-        .glassy-effect {
-            background-color: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            box-shadow: inset 0.5px 0.5px 1px rgba(255, 255, 255, 0.7), 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            transition: all 0.3s ease;
+                .glassy-effect {
+                        background-color: rgba(255, 255, 255, 0.15);
+                        backdrop-filter: blur(12px);
+                        -webkit-backdrop-filter: blur(12px);
+                        box-shadow: inset 0.5px 0.5px 1px rgba(255, 255, 255, 0.7), 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+                        border: 1px solid rgba(255, 255, 255, 0.4);
+                        transition: all 0.3s ease;
+
         }
+
 
         /* Header Buttons Specific Styling */
-        .header-btn:hover {
-            transform: scale(1.05);
-            background-color: rgba(255, 255, 255, 0.3);
+                .header-btn:hover {
+                        transform: scale(1.05);
+                        background-color: rgba(255, 255, 255, 0.3);
+
         }
+
 
         /* Filter Button Specific Styles */
-        .filter-btn {
-            position: relative;
-            overflow: hidden;
-            color: #111827;
-            background-color: transparent;
-            border: 1.5px solid var(--filter-color, #111827);
-            transition: all 0.3s ease;
+                .filter-btn {
+                        position: relative;
+                        overflow: hidden;
+                        color: #111827;
+                        background-color: transparent;
+                        border: 1.5px solid var(--filter-color, #111827);
+                        transition: all 0.3s ease;
+
         }
 
-            .filter-btn::before {
-                content: '';
-                position: absolute;
-                top: var(--y, 0);
-                left: var(--x, 0);
-                transform: translate(-50%, -50%);
-                width: 0;
-                height: 0;
-                background: radial-gradient(circle closest-side, rgba(255, 255, 255, 0.5), transparent);
-                transition: width 0.3s ease, height 0.3s ease;
-            }
+                    .filter-btn::before {
+                            content: '';
+                            position: absolute;
+                            top: var(--y, 0);
+                            left: var(--x, 0);
+                            transform: translate(-50%, -50%);
+                            width: 0;
+                            height: 0;
+                            background: radial-gradient(circle closest-side, rgba(255, 255, 255, 0.5), transparent);
+                            transition: width 0.3s ease, height 0.3s ease;
 
-            .filter-btn:hover::before {
-                width: 150px;
-                height: 150px;
-            }
+        }
 
-            .filter-btn:hover {
-                background-color: rgba(var(--filter-color-rgb), 0.15);
-                color: #111827;
-                transform: scale(1.05);
-            }
+                    .filter-btn:hover::before {
+                            width: 150px;
+                            height: 150px;
 
-            .filter-btn.active {
-                background-color: var(--filter-color);
-                border-color: var(--filter-color);
-                color: #111827;
-                transform: scale(1.05);
-                box-shadow: 0 4px 10px -2px rgba(0,0,0,0.15);
-            }
+        }
+
+                    .filter-btn:hover {
+                            background-color: rgba(var(--filter-color-rgb), 0.15);
+                            color: #111827;
+                            transform: scale(1.05);
+
+        }
+
+                    .filter-btn.active {
+                            background-color: var(--filter-color);
+                            border-color: var(--filter-color);
+                            color: #111827;
+                            transform: scale(1.05);
+                            box-shadow: 0 4px 10px -2px rgba(0,0,0,0.15);
+
+        }
+
 
         /* Card Specific Styles */
-        .portfolio-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.4s ease;
-            border-left: 5px solid var(--item-color, transparent);
+                .portfolio-card {
+                        transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.4s ease;
+                        border-left: 5px solid var(--item-color, transparent);
+                        background-color: transparent; /* Updated to use transparent base */
+
         }
 
-            .portfolio-card:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            }
+                    .portfolio-card:hover {
+                            transform: translateY(-5px);
+                            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 
-            .portfolio-card img {
-                transition: transform 0.4s ease-out;
-            }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
         }
 
-        .animate-on-load {
-            opacity: 0;
+                    .portfolio-card img {
+                            transition: transform 0.4s ease-out;
+
         }
 
-        .is-visible {
-            animation: fadeInUp 0.7s ease-out forwards;
+                @keyframes fadeInUp {
+                        from
+
+        {
+                            opacity: 0;
+                            transform: translateY(20px);
+
         }
 
-        /* --- Dark Mode Styles --- */
-        html.dark {
-            color-scheme: dark;
+                    to {
+                            opacity: 1;
+                            transform: translateY(0);
+
         }
 
-            html.dark body {
-                color: #E6EDF3;
-            }
 
-            html.dark .text-gray-700 {
-                color: #A3A3A3;
-            }
+        }
 
-            html.dark .dynamic-gradient-bg {
-                background-image: linear-gradient(270deg, #111827, #161B22, #0D1117, #111827);
-            }
+                .animate-on-load {
+                        opacity: 0;
 
-            html.dark #page-background {
-                background-color: transparent;
-            }
+        }
 
-            html.dark h1, html.dark h2, html.dark h3 {
-                color: #E6EDF3;
-            }
+                .is-visible {
+                        animation: fadeInUp 0.7s ease-out forwards;
 
-                html.dark span.font-medium, html.dark h2.text-gray-500, html.dark p.text-gray-500, html.dark p.text-gray-700, html.dark footer {
-                    color: #8B949E;
-                }
+        }
 
-            html.dark .marquee.dark {
-                color: #E6EDF3;
-            }
 
-            html.dark .glassy-effect {
-                background-color: rgba(31, 41, 55, 0.35);
-                border-color: rgba(75, 85, 99, 0.7);
-            }
-
-            html.dark .header-btn {
-                color: #E6EDF3;
-            }
-
-                html.dark .header-btn:hover {
-                    background-color: rgba(55, 65, 81, 0.7);
-                }
-
-            html.dark .filter-btn {
-                color: #E6EDF3;
-                border-color: var(--filter-color, #8B949E);
-            }
-
-                html.dark .filter-btn:hover {
-                    background-color: rgba(var(--filter-color-rgb), 0.2);
-                    color: #E6EDF3;
-                }
-
-                /* Fix for dark mode active filter button */
-                html.dark .filter-btn.active {
-                    background-color: #555c68;
-                    border-color: #555c68;
-                    color: #E6EDF3;
-                    transform: scale(1.05);
-                    box-shadow: 0 4px 10px -2px rgba(0,0,0,0.15);
-                }
-
-            html.dark .portfolio-card {
-                background-color: transparent;
-                box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
-            }
     </style>
 </head>
 <body class="text-gray-900 dynamic-gradient-bg">
@@ -244,31 +215,27 @@
                 <h1 class="text-3xl md:text-4xl font-black tracking-tight">Damien MAZEAS</h1>
             </div>
             <nav class="flex items-center space-x-2 md:space-x-4">
-                <a href="#" target="_blank" class="header-btn glassy-effect text-sm font-semibold tracking-wider p-2.5 rounded-full">CV</a>
+                <a href="pdfs/cv.pdf" target="_blank" class="header-btn glassy-effect text-sm font-semibold tracking-wider p-2.5 rounded-full">CV</a>
                 <a href="contact.html" class="header-btn glassy-effect text-sm font-semibold tracking-wider p-2.5 rounded-full">CONTACT</a>
-                <button id="theme-toggle" type="button" class="header-btn p-2.5 rounded-full text-sm transition-colors glassy-effect">
-                    <svg class="w-5 h-5" id="theme-toggle-dark-icon" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
-                    <svg class="w-5 h-5 hidden" id="theme-toggle-light-icon" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.707.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm-.707 8.486a1 1 0 011.414 0l.707.707a1 1 0 11-1.414 1.414l-.707-.707a1 1 0 010-1.414zM4 11a1 1 0 100-2H3a1 1 0 100 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
-                </button>
             </nav>
         </div>
     </header>
 
     <section class="py-10 md:py-16 relative z-10 animate-on-load">
         <div class="marquee-container mb-4">
-            <div class="marquee marquee-top text-4xl md:text-6xl font-extrabold uppercase">
+            <div class="marquee marquee-top text-gray-900 text-4xl md:text-6xl font-extrabold uppercase">
                 <span>HCI . XR . UNITY 3D . TELEXISTENCE . HUMAN FACTORS . INDUSTRIAL ROBOTICS . REMOTE PRESENCE . USER-CENTERED DESIGN . DIGITAL ENGINEERING .&nbsp;</span>
                 <span>HCI . XR . UNITY 3D . TELEXISTENCE . HUMAN FACTORS . INDUSTRIAL ROBOTICS . REMOTE PRESENCE . USER-CENTERED DESIGN . DIGITAL ENGINEERING .&nbsp;</span>
             </div>
         </div>
         <div class="marquee-container mb-4">
-            <div class="marquee marquee-middle dark text-2xl md:text-4xl font-semibold">
+            <div class="marquee marquee-middle text-gray-900 text-2xl md:text-4xl font-semibold">
                 <span>Hello! I am a researcher in 3D immersive and interactive technologies. I earned my PhD in tele-existence from Cranfield University. I obtained my Master's degree in digital engineering at Arts et Métiers. I solve real-world challenges in maintenance by developing user-centered extended reality solutions. My work integrates Human-Computer Interaction, human factors, and industrial robotics to enhance remote presence and virtual collaboration.&nbsp;</span>
                 <span>Hello! I am a researcher in 3D immersive and interactive technologies. I earned my PhD in tele-existence from Cranfield University. I obtained my Master's degree in digital engineering at Arts et Métiers. I solve real-world challenges in maintenance by developing user-centered extended reality solutions. My work integrates Human-Computer Interaction, human factors, and industrial robotics to enhance remote presence and virtual collaboration.&nbsp;</span>
             </div>
         </div>
         <div class="marquee-container">
-            <div class="marquee marquee-bottom text-2xl md:text-4xl font-semibold"></div>
+            <div class="marquee marquee-bottom text-gray-900 text-2xl md:text-4xl font-semibold"></div>
         </div>
     </section>
 
@@ -297,7 +264,7 @@
                         <div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full">
                             <img src="images/paper5.png" alt="Study of Visualization Modalities on Industrial Robot Teleoperation" class="h-18 w-full sm:h-auto sm:w-1/12 object-cover">
                             <div class="p-4 w-full sm:w-11/12 flex flex-col justify-center">
-                                <p class="text-sm text-blue-400 uppercase tracking-wider mb-1">APRIL 2025, <span class="text-gray-700 normal-case">In MDPI Virtual Worlds</span></p>
+                                <p class="text-sm uppercase tracking-wider mb-1">APRIL 2025, <span class="text-gray-700 normal-case">In MDPI Virtual Worlds</span></p>
                                 <h3 class="font-bold text-lg">Study of Visualization Modalities on Industrial Robot Teleoperation for Inspection in a Virtual Co-Existence Space</h3>
                                 <p class="text-xs text-gray-500 uppercase tracking-wider mt-2"><b>D Mazeas</b>, B Namoano</p>
                             </div>
@@ -306,7 +273,6 @@
                 </div>
                 <div class="portfolio-item animate-on-load" data-category="teaching">
                     <div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full">
-                        <img src="images/hci.png" alt="AI3153 Human-Computer Interaction" class="h-18 w-full sm:h-auto sm:w-1/12 object-cover">
                         <div class="p-4 w-full sm:w-3/4 flex flex-col justify-center">
                             <h3 class="font-bold text-lg">AI3153 Human-Computer Interaction</h3>
                             <p class="text-xs text-gray-500 uppercase tracking-wider">BNBU (UNDERGRADUATES), 2024-2025</p>
@@ -319,17 +285,15 @@
                 </div>
                 <div class="portfolio-item animate-on-load" data-category="teaching">
                     <div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full">
-                        <img src="images/it.png" alt="GTSC2093 IT for Success in Everyday Life and Work" class="h-18 w-full sm:h-auto sm:w-1/12 object-cover">
                         <div class="p-4 w-full sm:w-3/4 flex flex-col justify-center">
                             <h3 class="font-bold text-lg">GTSC2093 IT for Success in Everyday Life and Work</h3>
                             <p class="text-xs text-gray-500 uppercase tracking-wider">BNBU (UNDERGRADUATES), 2024-2025</p>
-                            <p class="text-sm text-gray-700 mt-2">Instructor for a class of 76 students.</p>
+                            <p class="text-sm text-gray-700 mt-2">Instructor for a class of 80 students.</p>
                         </div>
                     </div>
                 </div>
                 <div class="portfolio-item animate-on-load" data-category="teaching">
                     <div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full">
-                        <img src="images/ct.png" alt="GCAP3123 Computer Technology and AI Project" class="h-18 w-full sm:h-auto sm:w-1/12 object-cover">
                         <div class="p-4 w-full sm:w-3/4 flex flex-col justify-center">
                             <h3 class="font-bold text-lg">GCAP3123 Computer Technology and AI Project</h3>
                             <p class="text-xs text-gray-500 uppercase tracking-wider">BNBU (UNDERGRADUATES), 2024-2025</p>
@@ -342,7 +306,7 @@
                         <div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full">
                             <img src="images/paper4.png" alt="Designing Immersive Tools for Expert and Worker Remote Collaboration" class="h-18 w-full sm:h-auto sm:w-1/12 object-cover">
                             <div class="p-4 w-full sm:w-11/12 flex flex-col justify-center">
-                                <p class="text-sm text-blue-400 uppercase tracking-wider mb-1">OCTOBER 2024, <span class="text-gray-700 normal-case">In CIRP Design Conference</span></p>
+                                <p class="text-sm uppercase tracking-wider mb-1">OCTOBER 2024, <span class="text-gray-700 normal-case">In CIRP Design Conference</span></p>
                                 <h3 class="font-bold text-lg">Designing Immersive Tools for Expert and Worker Remote Collaboration</h3>
                                 <p class="text-xs text-gray-500 uppercase tracking-wider mt-2">SCM Galvis*, <b>D Mazeas</b>*, F Noël, JA Erkoyuncu (*Equal contribution)</p>
                             </div>
@@ -354,7 +318,7 @@
                         <div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full">
                             <img src="images/paper3.png" alt="Telexistence-based remote maintenance for marine engineers" class="h-18 w-full sm:h-auto sm:w-1/12 object-cover">
                             <div class="p-4 w-full sm:w-11/12 flex flex-col justify-center">
-                                <p class="text-sm text-blue-400 uppercase tracking-wider mb-1">MAY 2023, <span class="text-700 normal-case">In IEEE Conference on Virtual Reality and 3D User Interfaces Abstracts and Workshops</span></p>
+                                <p class="text-sm uppercase tracking-wider mb-1">MAY 2023, <span class="text-gray-700 normal-case">In IEEE Conference on Virtual Reality and 3D User Interfaces Abstracts and Workshops</span></p>
                                 <h3 class="font-bold text-lg">Telexistence-based remote maintenance for marine engineers</h3>
                                 <p class="text-xs text-gray-500 uppercase tracking-wider mt-2"><b>D Mazeas</b>, JA Erkoyuncu, F Noël</p>
                             </div>
@@ -366,7 +330,7 @@
                         <div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full">
                             <img src="images/paper2.png" alt="A telexistence interface for remote control of a physical industrial robot via data distribution service" class="h-18 w-full sm:h-auto sm:w-1/12 object-cover">
                             <div class="p-4 w-full sm:w-11/12 flex flex-col justify-center">
-                                <p class="text-sm text-blue-400 uppercase tracking-wider mb-1">FEBRUARY 2023, <span class="text-gray-700 normal-case">In IFIP International Conference on Product Lifecycle Management</span></p>
+                                <p class="text-sm uppercase tracking-wider mb-1">FEBRUARY 2023, <span class="text-gray-700 normal-case">In IFIP International Conference on Product Lifecycle Management</span></p>
                                 <h3 class="font-bold text-lg">A telexistence interface for remote control of a physical industrial robot via data distribution service</h3>
                                 <p class="text-xs text-gray-500 uppercase tracking-wider mt-2"><b>D Mazeas</b>, JA Erkoyuncu, F Noël</p>
                             </div>
@@ -378,9 +342,9 @@
                         <div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full">
                             <img src="images/paper1.png" alt="IMPRO: Immersive prototyping in virtual environments for industrial designers" class="h-18 w-full sm:h-auto sm:w-1/12 object-cover">
                             <div class="p-4 w-full sm:w-11/12 flex flex-col justify-center">
-                                <p class="text-sm text-blue-400 uppercase tracking-wider mb-1">JUNE 2020, <span class="text-gray-700 normal-case">In Proceedings of the design society: DESIGN conference</span></p>
+                                <p class="text-sm uppercase tracking-wider mb-1">JUNE 2020, <span class="text-gray-700 normal-case">In Proceedings of the design society: DESIGN conference</span></p>
                                 <h3 class="font-bold text-lg">IMPRO: Immersive prototyping in virtual environments for industrial designers</h3>
-                                <p class="text-xs text-gray-500 uppercase tracking-wider mt-2">S Stadler, H Cornet, <b>D Mazeas*</b>, JR Chardonnet, F Frenkler (*App development, data collection and analysis)</p>
+                                <p class="text-xs text-gray-500 uppercase tracking-wider mt-2">S Stadler, H Cornet, <b>D Mazeas*</b>, JR Chardonnet, F Frenkler (*App development, experiment design, data collection, and analysis)</p>
                             </div>
                         </div>
                     </a>
@@ -399,20 +363,12 @@
             // --- Get Elements ---
             const filterContainer = document.getElementById('filter-container');
             const portfolioItems = document.querySelectorAll('.portfolio-item');
-            const allButtons = document.querySelectorAll('.filter-btn, #theme-toggle, .header-btn');
+            const allButtons = document.querySelectorAll('.filter-btn, .header-btn');
             const filterButtons = filterContainer ? filterContainer.querySelectorAll('.filter-btn') : [];
-            const header = document.querySelector('header');
-            const headerHeight = header.offsetHeight;
-            const themeToggleBtn = document.getElementById('theme-toggle');
-            const darkIcon = document.getElementById('theme-toggle-dark-icon');
-            const lightIcon = document.getElementById('theme-toggle-light-icon');
-            const htmlEl = document.documentElement;
-
-            const marqueeTop = document.querySelector('.marquee-top');
 
             // --- Color & Theme Data ---
             const filterColors = {
-                all: { hex: '#D8E2ED', rgb: '216, 226, 237', hsl: { h: 212, s: 31, l: 89 }, nonPastelHex: '#4A5568' },
+                all: { hex: '#D7D7D7', rgb: '215, 215, 215', hsl: { h: 0, s: 0, l: 84 }, nonPastelHex: '#4A5568' },
                 publication: { hex: '#CDE4F9', rgb: '205, 228, 249', hsl: { h: 210, s: 80, l: 89 }, nonPastelHex: '#3B82F6' },
                 employment: { hex: '#FDECE6', rgb: '253, 236, 230', hsl: { h: 14, s: 92, l: 95 }, nonPastelHex: '#994025' },
                 degree: { hex: '#D6F2F0', rgb: '214, 242, 240', hsl: { h: 177, s: 63, l: 89 }, nonPastelHex: '#107E6D' },
@@ -421,30 +377,17 @@
                 'side-projects': { hex: '#E6D7FD', rgb: '230, 215, 253', hsl: { h: 263, s: 80, l: 92 }, nonPastelHex: '#6B4C9C' }
             };
 
-            // --- Core Functions ---
-            function updateMarqueeColor(filterName) {
-                const isDarkMode = htmlEl.classList.contains('dark');
-                const colorData = filterColors[filterName] || filterColors.all;
-
-                if (!isDarkMode) {
-                    marqueeTop.style.color = colorData.nonPastelHex;
-                } else {
-                    marqueeTop.style.color = '#E6EDF3';
-                }
-            }
-
-            function applyTheme(theme) {
-                if (theme === 'dark') {
-                    htmlEl.classList.add('dark');
-                    darkIcon.classList.add('hidden');
-                    lightIcon.classList.remove('hidden');
-                } else {
-                    htmlEl.classList.remove('dark');
-                    darkIcon.classList.remove('hidden');
-                    lightIcon.classList.add('hidden');
-                }
-                const currentFilter = filterContainer?.querySelector('.active')?.dataset.filter || 'all';
-                updateMarqueeColor(currentFilter);
+            // Function to apply transparent color to cards based on their category
+            function applyFilterColorToCards() {
+                portfolioItems.forEach(item => {
+                    const category = item.dataset.category;
+                    const card = item.querySelector('.portfolio-card');
+                    if (category && filterColors[category] && card) {
+                        const rgb = filterColors[category].rgb;
+                        card.style.backgroundColor = `rgba(${rgb}, 0.25)`;
+                        card.style.borderColor = `rgba(${rgb}, 0.6)`;
+                    }
+                });
             }
 
             // --- Initial Setup ---
@@ -456,17 +399,13 @@
                 }
             });
 
-            portfolioItems.forEach(item => {
-                const firstCategory = item.dataset.category.split(' ')[0];
-                const card = item.querySelector('.portfolio-card');
-                if (firstCategory && filterColors[firstCategory] && card) {
-                    card.style.setProperty('--item-color', filterColors[firstCategory].hex);
-                }
-            });
+            // Set the initial color of the marquee and card backgrounds
+            applyFilterColorToCards();
 
-            const savedTheme = localStorage.getItem('theme');
-            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            applyTheme(savedTheme || (prefersDark ? 'dark' : 'light'));
+            // Animate elements on load
+            document.querySelectorAll('.animate-on-load').forEach((el, index) => {
+                setTimeout(() => { el.classList.add('is-visible'); }, 100 * index);
+            });
 
             // --- Event Listeners ---
             document.addEventListener('mousemove', e => {
@@ -484,7 +423,6 @@
                         filterContainer.querySelector('.active').classList.remove('active');
                         targetButton.classList.add('active');
                         const filter = targetButton.dataset.filter;
-                        updateMarqueeColor(filter);
                         portfolioItems.forEach(item => {
                             const categories = item.dataset.category.split(' ');
                             item.style.display = (filter === 'all' || categories.includes(filter)) ? 'block' : 'none';
@@ -492,30 +430,7 @@
                     }
                 });
             }
-
-            themeToggleBtn.addEventListener('click', () => {
-                const newTheme = htmlEl.classList.contains('dark') ? 'light' : 'dark';
-                localStorage.setItem('theme', newTheme);
-                applyTheme(newTheme);
-            });
-
-            document.querySelectorAll('.portfolio-card img').forEach(image => {
-                image.addEventListener('mousemove', (e) => {
-                    const rect = image.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    image.style.transform = (x < rect.width / 2) ? 'scale(1.05) perspective(1000px) rotateY(-4deg)' : 'scale(1.05) perspective(1000px) rotateY(4deg)';
-                });
-                image.addEventListener('mouseleave', () => {
-                    image.style.transform = 'scale(1) perspective(1000px) rotateY(0deg)';
-                });
-            });
-
-            document.querySelectorAll('.animate-on-load').forEach((el, index) => {
-                setTimeout(() => { el.classList.add('is-visible'); }, 100 * index);
-            });
-
         });
     </script>
-
 </body>
 </html>
