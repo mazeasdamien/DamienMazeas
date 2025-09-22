@@ -1,0 +1,483 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dr. Damien Mazeas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: transparent;
+        }
+
+        #page-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background-color: #F4F4F6;
+        }
+
+        #constellation-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: -1;
+            transition: opacity 0.75s ease-in-out;
+            opacity: 0;
+        }
+
+        .marquee-container {
+            overflow: hidden;
+            white-space: nowrap;
+            color: #E0E0E0;
+        }
+
+        .marquee {
+            display: inline-block;
+            animation: marquee 25s linear infinite;
+        }
+
+            .marquee.dark {
+                color: #111827;
+            }
+
+        @keyframes marquee {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        .marquee-top {
+            animation-duration: 60s;
+        }
+
+        .marquee-middle {
+            animation-duration: 100s;
+        }
+
+        .marquee-bottom {
+            animation-duration: 80s;
+        }
+
+        .filter-btn {
+            position: relative;
+            overflow: hidden;
+            background-color: rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            box-shadow: inset -0.5px -0.5px 0.5px rgba(255, 255, 255, 0.7), inset 0.5px 0.5px 0.5px rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            color: #111827;
+            transition: all 0.3s ease;
+        }
+
+            .filter-btn::before {
+                content: '';
+                position: absolute;
+                top: var(--y, 0);
+                left: var(--x, 0);
+                transform: translate(-50%, -50%);
+                width: 150px;
+                height: 150px;
+                background: radial-gradient(circle closest-side, rgba(255, 255, 255, 0.8), transparent);
+            }
+
+            .filter-btn:hover {
+                background-color: rgba(255, 255, 255, 0.5);
+            }
+
+        header .filter-btn:hover {
+            transform: scale(1.05);
+            background-color: rgba(255, 255, 255, 0.35);
+        }
+
+        .filter-btn.active {
+            background-color: rgba(255, 255, 255, 0.7);
+            color: #000000;
+            font-weight: 600;
+        }
+
+        .portfolio-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+            .portfolio-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            }
+
+            .portfolio-card img {
+                transition: transform 0.4s ease-out;
+            }
+
+        /* Animation for elements appearing on load */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-on-load {
+            opacity: 0;
+        }
+
+        .is-visible {
+            animation: fadeInUp 0.7s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="text-gray-900">
+
+    <div id="page-background"></div>
+    <canvas id="constellation-canvas"></canvas>
+
+    <!-- Header Section -->
+    <header class="w-full p-6 md:p-8 relative z-10 animate-on-load">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-6">
+                <img src="images/profil.jpg"" alt="Damien Mazeas" class="w-16 h-16 md:w-20 md:h-20 rounded-full object-cover border-2 border-white shadow-sm">
+                <h1 class="text-3xl md:text-4xl font-black tracking-tight">Damien MAZEAS</h1>
+            </div>
+            <nav class="flex items-center space-x-4">
+                <a href="#" target="_blank" class="filter-btn text-sm font-semibold tracking-wider px-4 py-2 rounded-full">CV</a>
+                <a href="contact.html" class="filter-btn text-sm font-semibold tracking-wider px-4 py-2 rounded-full">CONTACT</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Marquee Text Section -->
+    <section class="py-10 md:py-16 relative z-10 animate-on-load">
+        <div class="marquee-container mb-4">
+            <div class="marquee marquee-top text-4xl md:text-6xl font-extrabold uppercase">
+                <span>HCI . XR . UNITY 3D . TELEXISTENCE . HUMAN FACTORS . INDUSTRIAL ROBOTICS . REMOTE PRESENCE . USER-CENTERED DESIGN . DIGITAL ENGINEERING .&nbsp;</span>
+                <span>HCI . XR . UNITY 3D . TELEXISTENCE . HUMAN FACTORS . INDUSTRIAL ROBOTICS . REMOTE PRESENCE . USER-CENTERED DESIGN . DIGITAL ENGINEERING .&nbsp;</span>
+            </div>
+        </div>
+        <div class="marquee-container mb-4">
+            <div class="marquee marquee-middle dark text-2xl md:text-4xl font-semibold">
+                <span>Hello! I am a researcher in 3D immersive and interactive technologies. I earned my PhD in tele-existence from Cranfield University. I obtained my Master's degree in digital engineering at Arts et Métiers. I solve real-world challenges in maintenance by developing user-centered extended reality solutions. My work integrates Human-Computer Interaction, human factors, and industrial robotics to enhance remote presence and virtual collaboration.&nbsp;</span>
+                <span>Hello! I am a researcher in 3D immersive and interactive technologies. I earned my PhD in tele-existence from Cranfield University. I obtained my Master's degree in digital engineering at Arts et Métiers. I solve real-world challenges in maintenance by developing user-centered extended reality solutions. My work integrates Human-Computer Interaction, human factors, and industrial robotics to enhance remote presence and virtual collaboration.&nbsp;</span>
+                <span>Hello! I am a researcher in 3D immersive and interactive technologies. I earned my PhD in tele-existence from Cranfield University. I obtained my Master's degree in digital engineering at Arts et Métiers. I solve real-world challenges in maintenance by developing user-centered extended reality solutions. My work integrates Human-Computer Interaction, human factors, and industrial robotics to enhance remote presence and virtual collaboration.&nbsp;</span>
+                <span>Hello! I am a researcher in 3D immersive and interactive technologies. I earned my PhD in tele-existence from Cranfield University. I obtained my Master's degree in digital engineering at Arts et Métiers. I solve real-world challenges in maintenance by developing user-centered extended reality solutions. My work integrates Human-Computer Interaction, human factors, and industrial robotics to enhance remote presence and virtual collaboration.&nbsp;</span>
+            </div>
+        </div>
+        <div class="marquee-container">
+            <div class="marquee marquee-bottom text-2xl md:text-4xl font-semibold">
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content: Filters and Portfolio Grid -->
+    <main class="w-full px-6 md:px-8 pb-16 relative z-10">
+        <div class="max-w-7xl mx-auto">
+            <!-- Filter Navigation -->
+            <div class="mb-12 animate-on-load">
+                <span class="font-medium mb-4 block">Filters :</span>
+                <div id="filter-container" class="flex flex-wrap items-center gap-2 md:gap-4">
+                    <button class="filter-btn active px-4 py-1.5 text-sm font-medium rounded-full" data-filter="all">ALL</button>
+                    <button class="filter-btn px-4 py-1.5 text-sm font-medium rounded-full" data-filter="publication">PUBLICATIONS</button>
+                    <button class="filter-btn px-4 py-1.5 text-sm font-medium rounded-full" data-filter="employment">EMPLOYMENTS</button>
+                    <button class="filter-btn px-4 py-1.5 text-sm font-medium rounded-full" data-filter="degree">DEGREES</button>
+                    <button class="filter-btn px-4 py-1.5 text-sm font-medium rounded-full" data-filter="teaching">TEACHING</button>
+                    <button class="filter-btn px-4 py-1.5 text-sm font-medium rounded-full" data-filter="certification">CERTIFICATION</button>
+                    <button class="filter-btn px-4 py-1.5 text-sm font-medium rounded-full" data-filter="side-projects">SIDE PROJECTS</button>
+                </div>
+            </div>
+
+            <div class="mb-8 animate-on-load">
+                <h2 class="text-sm font-medium text-gray-500 uppercase tracking-wider">Feed</h2>
+            </div>
+
+            <!-- Portfolio Grid -->
+            <div id="portfolio-grid" class="grid grid-cols-1 gap-8">
+                <!-- Publication Items -->
+                <div class="portfolio-item animate-on-load" data-category="publication">
+                    <div class="portfolio-card flex flex-col sm:flex-row bg-white rounded-2xl overflow-hidden shadow-md h-full">
+                        <img src="https://placehold.co/600x400/3B82F6/FFFFFF?text=Robot+Teleoperation" alt="Robot Teleoperation Study Project" class="h-36 w-full sm:h-auto sm:w-1/6 object-cover">
+                        <div class="p-4 w-full sm:w-5/6 flex flex-col justify-center">
+                            <h3 class="font-bold text-lg">Robot Teleoperation Study</h3>
+                            <p class="text-xs text-gray-500 uppercase tracking-wider">VIRTUAL WORLDS, 2025</p>
+                            <p class="text-sm text-gray-700 mt-2">Led a study on visualization modalities for robot teleoperation, handling everything from concept to writing.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="portfolio-item animate-on-load" data-category="publication">
+                    <div class="portfolio-card flex flex-col sm:flex-row bg-white rounded-2xl overflow-hidden shadow-md h-full">
+                        <img src="https://placehold.co/600x400/EC4899/FFFFFF?text=Immersive+Collaboration" alt="Immersive Collaboration Tools Project" class="h-36 w-full sm:h-auto sm:w-1/6 object-cover">
+                        <div class="p-4 w-full sm:w-5/6 flex flex-col justify-center">
+                            <h3 class="font-bold text-lg">Immersive Collaboration Tools</h3>
+                            <p class="text-xs text-gray-500 uppercase tracking-wider">CIRP DESIGN, 2024</p>
+                            <p class="text-sm text-gray-700 mt-2">Designed a collaborative robot system and VR interface for expert-worker remote collaboration.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="portfolio-item animate-on-load" data-category="publication">
+                    <div class="portfolio-card flex flex-col sm:flex-row bg-white rounded-2xl overflow-hidden shadow-md h-full">
+                        <img src="https://placehold.co/600x400/10B981/FFFFFF?text=Telexistence+Interface" alt="Telexistence Interface Project" class="h-36 w-full sm:h-auto sm:w-1/6 object-cover">
+                        <div class="p-4 w-full sm:w-5/6 flex flex-col justify-center">
+                            <h3 class="font-bold text-lg">Telexistence Interface for Robots</h3>
+                            <p class="text-xs text-gray-500 uppercase tracking-wider">PLM, 2023</p>
+                            <p class="text-sm text-gray-700 mt-2">Developed a telexistence framework and immersive UI in Unity to remotely control a physical FANUC robot.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Employment Items -->
+                <div class="portfolio-item animate-on-load" data-category="employment degree teaching">
+                    <div class="portfolio-card flex flex-col sm:flex-row bg-white rounded-2xl overflow-hidden shadow-md h-full">
+                        <img src="https://placehold.co/600x400/F97316/FFFFFF?text=Assistant+Professor" alt="Assistant Professor Role" class="h-36 w-full sm:h-auto sm:w-1/6 object-cover">
+                        <div class="p-4 w-full sm:w-5/6 flex flex-col justify-center">
+                            <h3 class="font-bold text-lg">Assistant Professor</h3>
+                            <p class="text-xs text-gray-500 uppercase tracking-wider">BNBU, 2024-2025</p>
+                            <p class="text-sm text-gray-700 mt-2">Designed and launched the university's HCI course, taught various undergrad courses, and mentored final year projects.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="portfolio-item animate-on-load" data-category="employment">
+                    <div class="portfolio-card flex flex-col sm:flex-row bg-white rounded-2xl overflow-hidden shadow-md h-full">
+                        <img src="https://placehold.co/600x400/000000/FFFFFF?text=Research+Fellow" alt="CNRS Research Fellow Role" class="h-36 w-full sm:h-auto sm:w-1/6 object-cover">
+                        <div class="p-4 w-full sm:w-5/6 flex flex-col justify-center">
+                            <h3 class="font-bold text-lg">CNRS Research Fellow</h3>
+                            <p class="text-xs text-gray-500 uppercase tracking-wider">CNRS@CREATE, 2023-2024</p>
+                            <p class="text-sm text-gray-700 mt-2">Developed Unity 3D frameworks integrating Tobii eye tracking for human-drone interaction studies.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="portfolio-item animate-on-load" data-category="employment">
+                    <div class="portfolio-card flex flex-col sm:flex-row bg-white rounded-2xl overflow-hidden shadow-md h-full">
+                        <img src="https://placehold.co/600x400/FFD700/000000?text=Solutions+Engineer" alt="Solutions Engineer Role" class="h-36 w-full sm:h-auto sm:w-1/6 object-cover">
+                        <div class="p-4 w-full sm:w-5/6 flex flex-col justify-center">
+                            <h3 class="font-bold text-lg">Solutions Engineer</h3>
+                            <p class="text-xs text-gray-500 uppercase tracking-wider">SAFRAN LANDING SYSTEMS, 2020</p>
+                            <p class="text-sm text-gray-700 mt-2">Assisted in implementing an AR solution for landing gear inspection, from requirement gathering to deployment.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Degree Item -->
+                <div class="portfolio-item animate-on-load" data-category="degree">
+                    <div class="portfolio-card flex flex-col sm:flex-row bg-white rounded-2xl overflow-hidden shadow-md h-full">
+                        <img src="https://placehold.co/600x400/4682B4/FFFFFF?text=Education" alt="Education" class="h-36 w-full sm:h-auto sm:w-1/6 object-cover">
+                        <div class="p-4 w-full sm:w-5/6 flex flex-col justify-center">
+                            <h3 class="font-bold text-lg">Education</h3>
+                            <p class="text-xs text-gray-500 uppercase tracking-wider">PHD & MASTER'S</p>
+                            <p class="text-sm text-gray-700 mt-2">PhD in Manufacturing from Cranfield University and a Master's in Digital Engineering from Arts et Métiers.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Side Projects Items -->
+                <div class="portfolio-item animate-on-load" data-category="side-projects">
+                    <div class="portfolio-card flex flex-col sm:flex-row bg-white rounded-2xl overflow-hidden shadow-md h-full">
+                        <img src="https://placehold.co/600x400/6A5ACD/FFFFFF?text=Skills" alt="Technical Skills" class="h-36 w-full sm:h-auto sm:w-1/6 object-cover">
+                        <div class="p-4 w-full sm:w-5/6 flex flex-col justify-center">
+                            <h3 class="font-bold text-lg">Technical Skills</h3>
+                            <p class="text-xs text-gray-500 uppercase tracking-wider">PROGRAMMING, TOOLS & TECHNOLOGIES</p>
+                            <p class="text-sm text-gray-700 mt-2">Proficient in Python, R, C#, Unity 3D, Git, Docker, SQL, Azure, various XR systems, and robotics platforms.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Certification Item -->
+                <div class="portfolio-item animate-on-load" data-category="certification">
+                    <div class="portfolio-card flex flex-col sm:flex-row bg-white rounded-2xl overflow-hidden shadow-md h-full">
+                        <img src="https://placehold.co/600x400/2E8B57/FFFFFF?text=Certified" alt="FANUC Certification" class="h-36 w-full sm:h-auto sm:w-1/6 object-cover">
+                        <div class="p-4 w-full sm:w-5/6 flex flex-col justify-center">
+                            <h3 class="font-bold text-lg">FANUC Programming</h3>
+                            <p class="text-xs text-gray-500 uppercase tracking-wider">CERTIFICATION</p>
+                            <p class="text-sm text-gray-700 mt-2">Certified in Standard Teach Pendant Programming for FANUC robots, enhancing industrial robotics capabilities.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="text-center py-8 text-sm text-gray-500 relative z-10 animate-on-load">
+        <p>Last Updated : September 2025</p>
+        <p class="mt-2">Designed & Developed by Damien Mazeas.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const filterContainer = document.getElementById('filter-container');
+            const portfolioItems = document.querySelectorAll('.portfolio-item');
+            const buttons = document.querySelectorAll('.filter-btn');
+
+            document.addEventListener('mousemove', e => {
+                buttons.forEach(btn => {
+                    const rect = btn.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    btn.style.setProperty('--x', `${x}px`);
+                    btn.style.setProperty('--y', `${y}px`);
+                });
+            });
+
+            if (filterContainer) {
+                filterContainer.addEventListener('click', (event) => {
+                    if (event.target.classList.contains('filter-btn')) {
+                        filterContainer.querySelector('.active').classList.remove('active');
+                        event.target.classList.add('active');
+                        const filter = event.target.dataset.filter;
+                        portfolioItems.forEach(item => {
+                            const categories = item.dataset.category.split(' ');
+                            if (filter === 'all' || categories.includes(filter)) {
+                                item.style.display = 'block';
+                            } else {
+                                item.style.display = 'none';
+                            }
+                        });
+                    }
+                });
+            }
+
+            const header = document.querySelector('header');
+
+            // --- Color Logic ---
+            const randomHue = Math.floor(Math.random() * 360);
+            const pastelColor = `hsl(${randomHue}, 70%, 92%)`;
+            const darkerPastelColor = `hsl(${randomHue}, 70%, 80%)`;
+            const marqueeColor = `hsl(${randomHue}, 70%, 75%)`;
+            const existingColor = '#F4F4F6';
+
+            // --- Constellation Canvas Logic ---
+            const canvas = document.getElementById('constellation-canvas');
+            const ctx = canvas.getContext('2d');
+            let dots = [];
+            const mouse = { x: null, y: null };
+            let mouseMoveTimer = null;
+
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = header.offsetHeight;
+                createDots();
+            }
+
+            function createDots() {
+                dots = [];
+                const dotCount = Math.floor(canvas.width / 24);
+                for (let i = 0; i < dotCount; i++) {
+                    dots.push({
+                        x: Math.random() * canvas.width,
+                        y: Math.random() * canvas.height,
+                        maxDotDistance: 120,
+                        maxMouseDistance: 180
+                    });
+                }
+            }
+
+            window.addEventListener('mousemove', (e) => {
+                canvas.style.opacity = 1;
+                clearTimeout(mouseMoveTimer);
+                mouseMoveTimer = setTimeout(() => {
+                    canvas.style.opacity = 0;
+                }, 500);
+
+                mouse.x = e.clientX;
+                mouse.y = e.clientY;
+            });
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                for (let i = 0; i < dots.length; i++) {
+                    const dotA = dots[i];
+
+                    if (mouse.x && mouse.y) {
+                        const dxMouse = mouse.x - dotA.x;
+                        const dyMouse = mouse.y - dotA.y;
+                        const distMouse = Math.sqrt(dxMouse * dxMouse + dyMouse * dyMouse);
+
+                        if (distMouse < dotA.maxMouseDistance) {
+                            const opacity = 1 - (distMouse / dotA.maxMouseDistance);
+
+                            ctx.beginPath();
+                            ctx.moveTo(dotA.x, dotA.y);
+                            ctx.lineTo(mouse.x, mouse.y);
+                            ctx.strokeStyle = `${darkerPastelColor.slice(0, -1)}, ${opacity * 0.9})`;
+                            ctx.lineWidth = 1.2;
+                            ctx.stroke();
+
+                            for (let j = i; j < dots.length; j++) {
+                                const dotB = dots[j];
+                                const dx = dotB.x - dotA.x;
+                                const dy = dotB.y - dotA.y;
+                                const dist = Math.sqrt(dx * dx + dy * dy);
+
+                                if (dist < dotA.maxDotDistance) {
+                                    ctx.beginPath();
+                                    ctx.moveTo(dotA.x, dotA.y);
+                                    ctx.lineTo(dotB.x, dotB.y);
+                                    ctx.strokeStyle = `${darkerPastelColor.slice(0, -1)}, ${opacity * 0.7})`;
+                                    ctx.lineWidth = 0.8;
+                                    ctx.stroke();
+                                }
+                            }
+                        }
+                    }
+                }
+                requestAnimationFrame(animate);
+            }
+
+
+            // Initial setup
+            resizeCanvas();
+            animate();
+            window.addEventListener('resize', resizeCanvas);
+
+            document.querySelector('.marquee-top').style.color = marqueeColor;
+            document.querySelector('.marquee-bottom').style.color = marqueeColor;
+
+            const headerHeight = header.offsetHeight;
+            const bgDiv = document.getElementById('page-background');
+            bgDiv.style.background = `linear-gradient(to bottom, ${pastelColor}, ${existingColor} ${headerHeight + 80}px)`;
+
+            const portfolioImages = document.querySelectorAll('.portfolio-card img');
+            portfolioImages.forEach(image => {
+                image.addEventListener('mousemove', (e) => {
+                    const rect = image.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const width = rect.width;
+                    if (x < width / 2) {
+                        image.style.transform = 'scale(1.05) perspective(1000px) rotateY(-4deg)';
+                    } else {
+                        image.style.transform = 'scale(1.05) perspective(1000px) rotateY(4deg)';
+                    }
+                });
+                image.addEventListener('mouseleave', () => {
+                    image.style.transform = 'scale(1) perspective(1000px) rotateY(0deg)';
+                });
+            });
+
+            // --- Appearing Animations ---
+            const elementsToAnimate = document.querySelectorAll('.animate-on-load');
+            elementsToAnimate.forEach((el, index) => {
+                setTimeout(() => {
+                    el.classList.add('is-visible');
+                }, 100 * index);
+            });
+        });
+    </script>
+
+</body>
+</html>
