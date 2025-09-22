@@ -11,7 +11,7 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: transparent;
+            transition: background-color 0.7s ease, color 0.7s ease;
         }
 
         #page-background {
@@ -21,7 +21,28 @@
             width: 100%;
             height: 100%;
             z-index: -2;
-            background-color: #F4F4F6;
+            background-color: transparent;
+            transition: background-image 0.7s ease-in-out;
+        }
+
+        .dynamic-gradient-bg {
+            background-image: linear-gradient(270deg, #B3D4F0, #FFF2E5, #FFDEDE, #C1E9E6);
+            background-size: 400% 400%;
+            animation: bg-animation 25s ease-in-out infinite;
+        }
+
+        @keyframes bg-animation {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
         }
 
         #constellation-canvas {
@@ -37,7 +58,6 @@
         .marquee-container {
             overflow: hidden;
             white-space: nowrap;
-            color: #E0E0E0;
         }
 
         .marquee {
@@ -61,6 +81,7 @@
 
         .marquee-top {
             animation-duration: 60s;
+            transition: color 0.7s ease;
         }
 
         .marquee-middle {
@@ -71,15 +92,29 @@
             animation-duration: 80s;
         }
 
+        /* Glassy Effect Class for Buttons and Cards */
+        .glassy-effect {
+            background-color: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: inset 0.5px 0.5px 1px rgba(255, 255, 255, 0.7), 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        /* Header Buttons Specific Styling */
+        .header-btn:hover {
+            transform: scale(1.05);
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Filter Button Specific Styles */
         .filter-btn {
             position: relative;
             overflow: hidden;
-            background-color: rgba(255, 255, 255, 0.35);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            box-shadow: inset -0.5px -0.5px 0.5px rgba(255, 255, 255, 0.7), inset 0.5px 0.5px 0.5px rgba(255, 255, 255, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.5);
             color: #111827;
+            background-color: transparent;
+            border: 1.5px solid var(--filter-color, #111827);
             transition: all 0.3s ease;
         }
 
@@ -89,28 +124,35 @@
                 top: var(--y, 0);
                 left: var(--x, 0);
                 transform: translate(-50%, -50%);
+                width: 0;
+                height: 0;
+                background: radial-gradient(circle closest-side, rgba(255, 255, 255, 0.5), transparent);
+                transition: width 0.3s ease, height 0.3s ease;
+            }
+
+            .filter-btn:hover::before {
                 width: 150px;
                 height: 150px;
-                background: radial-gradient(circle closest-side, rgba(255, 255, 255, 0.8), transparent);
             }
 
             .filter-btn:hover {
-                background-color: rgba(255, 255, 255, 0.5);
+                background-color: rgba(var(--filter-color-rgb), 0.15);
+                color: #111827;
+                transform: scale(1.05);
             }
 
-        header .filter-btn:hover {
-            transform: scale(1.05);
-            background-color: rgba(255, 255, 255, 0.35);
-        }
+            .filter-btn.active {
+                background-color: var(--filter-color);
+                border-color: var(--filter-color);
+                color: #111827;
+                transform: scale(1.05);
+                box-shadow: 0 4px 10px -2px rgba(0,0,0,0.15);
+            }
 
-        .filter-btn.active {
-            background-color: rgba(255, 255, 255, 0.7);
-            color: #000000;
-            font-weight: 600;
-        }
-
+        /* Card Specific Styles */
         .portfolio-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.4s ease;
+            border-left: 5px solid var(--item-color, transparent);
         }
 
             .portfolio-card:hover {
@@ -122,7 +164,6 @@
                 transition: transform 0.4s ease-out;
             }
 
-        /* Animation for elements appearing on load */
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -142,28 +183,91 @@
         .is-visible {
             animation: fadeInUp 0.7s ease-out forwards;
         }
+
+        /* --- Dark Mode Styles --- */
+        html.dark {
+            color-scheme: dark;
+        }
+
+            html.dark body {
+                color: #E6EDF3;
+            }
+
+            html.dark .dynamic-gradient-bg {
+                background-image: linear-gradient(270deg, #111827, #161B22, #0D1117, #111827);
+            }
+
+            html.dark #page-background {
+                background-color: transparent;
+            }
+
+            html.dark h1, html.dark h2, html.dark h3 {
+                color: #E6EDF3;
+            }
+
+                html.dark span.font-medium, html.dark h2.text-gray-500, html.dark p.text-gray-500, html.dark p.text-gray-700, html.dark footer {
+                    color: #8B949E;
+                }
+
+            html.dark .marquee.dark {
+                color: #E6EDF3;
+            }
+
+            html.dark .glassy-effect {
+                background-color: rgba(31, 41, 55, 0.35);
+                border-color: rgba(75, 85, 99, 0.7);
+            }
+
+            html.dark .header-btn {
+                color: #E6EDF3;
+            }
+
+                html.dark .header-btn:hover {
+                    background-color: rgba(55, 65, 81, 0.7);
+                }
+
+            html.dark .filter-btn {
+                color: #E6EDF3;
+                border-color: var(--filter-color, #8B949E);
+            }
+
+                html.dark .filter-btn:hover {
+                    background-color: rgba(var(--filter-color-rgb), 0.2);
+                    color: #E6EDF3;
+                }
+
+                html.dark .filter-btn.active {
+                    color: #111827;
+                }
+
+            html.dark .portfolio-card {
+                background-color: transparent;
+                box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+            }
     </style>
 </head>
-<body class="text-gray-900">
+<body class="text-gray-900 dynamic-gradient-bg">
 
     <div id="page-background"></div>
     <canvas id="constellation-canvas"></canvas>
 
-    <!-- Header Section -->
     <header class="w-full p-6 md:p-8 relative z-10 animate-on-load">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <div class="flex items-center gap-6">
-                <img src="images/profil.jpg"" alt="Damien Mazeas" class="w-16 h-16 md:w-20 md:h-20 rounded-full object-cover border-2 border-white shadow-sm">
+                <img src="images/profil.jpg" alt="Damien Mazeas" class="w-16 h-16 md:w-20 md:h-20 rounded-full object-cover border-2 border-white shadow-sm">
                 <h1 class="text-3xl md:text-4xl font-black tracking-tight">Damien MAZEAS</h1>
             </div>
-            <nav class="flex items-center space-x-4">
-                <a href="#" target="_blank" class="filter-btn text-sm font-semibold tracking-wider px-4 py-2 rounded-full">CV</a>
-                <a href="contact.html" class="filter-btn text-sm font-semibold tracking-wider px-4 py-2 rounded-full">CONTACT</a>
+            <nav class="flex items-center space-x-2 md:space-x-4">
+                <a href="#" target="_blank" class="header-btn glassy-effect text-sm font-semibold tracking-wider p-2.5 rounded-full">CV</a>
+                <a href="contact.html" class="header-btn glassy-effect text-sm font-semibold tracking-wider p-2.5 rounded-full">CONTACT</a>
+                <button id="theme-toggle" type="button" class="header-btn p-2.5 rounded-full text-sm transition-colors glassy-effect">
+                    <svg class="w-5 h-5" id="theme-toggle-dark-icon" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                    <svg class="w-5 h-5 hidden" id="theme-toggle-light-icon" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.707.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm-.707 8.486a1 1 0 011.414 0l.707.707a1 1 0 11-1.414 1.414l-.707-.707a1 1 0 010-1.414zM4 11a1 1 0 100-2H3a1 1 0 100 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+                </button>
             </nav>
         </div>
     </header>
 
-    <!-- Marquee Text Section -->
     <section class="py-10 md:py-16 relative z-10 animate-on-load">
         <div class="marquee-container mb-4">
             <div class="marquee marquee-top text-4xl md:text-6xl font-extrabold uppercase">
@@ -175,30 +279,25 @@
             <div class="marquee marquee-middle dark text-2xl md:text-4xl font-semibold">
                 <span>Hello! I am a researcher in 3D immersive and interactive technologies. I earned my PhD in tele-existence from Cranfield University. I obtained my Master's degree in digital engineering at Arts et Métiers. I solve real-world challenges in maintenance by developing user-centered extended reality solutions. My work integrates Human-Computer Interaction, human factors, and industrial robotics to enhance remote presence and virtual collaboration.&nbsp;</span>
                 <span>Hello! I am a researcher in 3D immersive and interactive technologies. I earned my PhD in tele-existence from Cranfield University. I obtained my Master's degree in digital engineering at Arts et Métiers. I solve real-world challenges in maintenance by developing user-centered extended reality solutions. My work integrates Human-Computer Interaction, human factors, and industrial robotics to enhance remote presence and virtual collaboration.&nbsp;</span>
-                <span>Hello! I am a researcher in 3D immersive and interactive technologies. I earned my PhD in tele-existence from Cranfield University. I obtained my Master's degree in digital engineering at Arts et Métiers. I solve real-world challenges in maintenance by developing user-centered extended reality solutions. My work integrates Human-Computer Interaction, human factors, and industrial robotics to enhance remote presence and virtual collaboration.&nbsp;</span>
-                <span>Hello! I am a researcher in 3D immersive and interactive technologies. I earned my PhD in tele-existence from Cranfield University. I obtained my Master's degree in digital engineering at Arts et Métiers. I solve real-world challenges in maintenance by developing user-centered extended reality solutions. My work integrates Human-Computer Interaction, human factors, and industrial robotics to enhance remote presence and virtual collaboration.&nbsp;</span>
             </div>
         </div>
         <div class="marquee-container">
-            <div class="marquee marquee-bottom text-2xl md:text-4xl font-semibold">
-            </div>
+            <div class="marquee marquee-bottom text-2xl md:text-4xl font-semibold"></div>
         </div>
     </section>
 
-    <!-- Main Content: Filters and Portfolio Grid -->
     <main class="w-full px-6 md:px-8 pb-16 relative z-10">
         <div class="max-w-7xl mx-auto">
-            <!-- Filter Navigation -->
             <div class="mb-12 animate-on-load">
                 <span class="font-medium mb-4 block">Filters :</span>
                 <div id="filter-container" class="flex flex-wrap items-center gap-2 md:gap-4">
-                    <button class="filter-btn active px-4 py-1.5 text-sm font-medium rounded-full" data-filter="all">ALL</button>
-                    <button class="filter-btn px-4 py-1.5 text-sm font-medium rounded-full" data-filter="publication">PUBLICATIONS</button>
-                    <button class="filter-btn px-4 py-1.5 text-sm font-medium rounded-full" data-filter="employment">EMPLOYMENTS</button>
-                    <button class="filter-btn px-4 py-1.5 text-sm font-medium rounded-full" data-filter="degree">DEGREES</button>
-                    <button class="filter-btn px-4 py-1.5 text-sm font-medium rounded-full" data-filter="teaching">TEACHING</button>
-                    <button class="filter-btn px-4 py-1.5 text-sm font-medium rounded-full" data-filter="certification">CERTIFICATION</button>
-                    <button class="filter-btn px-4 py-1.5 text-sm font-medium rounded-full" data-filter="side-projects">SIDE PROJECTS</button>
+                    <button class="filter-btn glassy-effect active px-4 py-1.5 text-sm font-medium rounded-full" data-filter="all">ALL</button>
+                    <button class="filter-btn glassy-effect px-4 py-1.5 text-sm font-medium rounded-full" data-filter="publication">PUBLICATIONS</button>
+                    <button class="filter-btn glassy-effect px-4 py-1.5 text-sm font-medium rounded-full" data-filter="employment">EMPLOYMENTS</button>
+                    <button class="filter-btn glassy-effect px-4 py-1.5 text-sm font-medium rounded-full" data-filter="degree">DEGREES</button>
+                    <button class="filter-btn glassy-effect px-4 py-1.5 text-sm font-medium rounded-full" data-filter="teaching">TEACHING</button>
+                    <button class="filter-btn glassy-effect px-4 py-1.5 text-sm font-medium rounded-full" data-filter="certification">CERTIFICATION</button>
+                    <button class="filter-btn glassy-effect px-4 py-1.5 text-sm font-medium rounded-full" data-filter="side-projects">SIDE PROJECTS</button>
                 </div>
             </div>
 
@@ -206,112 +305,104 @@
                 <h2 class="text-sm font-medium text-gray-500 uppercase tracking-wider">Feed</h2>
             </div>
 
-            <!-- Portfolio Grid -->
             <div id="portfolio-grid" class="grid grid-cols-1 gap-8">
-                <!-- Publication Items -->
                 <div class="portfolio-item animate-on-load" data-category="publication">
-                    <div class="portfolio-card flex flex-col sm:flex-row bg-white rounded-2xl overflow-hidden shadow-md h-full">
-                        <img src="https://placehold.co/600x400/3B82F6/FFFFFF?text=Robot+Teleoperation" alt="Robot Teleoperation Study Project" class="h-36 w-full sm:h-auto sm:w-1/6 object-cover">
-                        <div class="p-4 w-full sm:w-5/6 flex flex-col justify-center">
-                            <h3 class="font-bold text-lg">Robot Teleoperation Study</h3>
-                            <p class="text-xs text-gray-500 uppercase tracking-wider">VIRTUAL WORLDS, 2025</p>
-                            <p class="text-sm text-gray-700 mt-2">Led a study on visualization modalities for robot teleoperation, handling everything from concept to writing.</p>
+                    <a href="pdfs/paper5.pdf" target="_blank" class="block">
+                        <div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full">
+                            <img src="images/paper5.png" alt="Study of Visualization Modalities on Industrial Robot Teleoperation" class="h-18 w-full sm:h-auto sm:w-1/12 object-cover">
+                            <div class="p-4 w-full sm:w-11/12 flex flex-col justify-center">
+                                <p class="text-sm text-blue-400 uppercase tracking-wider mb-1">APRIL 2025, <span class="text-gray-700 normal-case">In MDPI Virtual Worlds</span></p>
+                                <h3 class="font-bold text-lg">Study of Visualization Modalities on Industrial Robot Teleoperation for Inspection in a Virtual Co-Existence Space</h3>
+                                <p class="text-xs text-gray-500 uppercase tracking-wider mt-2"><b>D Mazeas</b>, B Namoano</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="portfolio-item animate-on-load" data-category="teaching">
+                    <div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full">
+                        <img src="images/hci.png" alt="AI3153 Human-Computer Interaction" class="h-18 w-full sm:h-auto sm:w-1/12 object-cover">
+                        <div class="p-4 w-full sm:w-3/4 flex flex-col justify-center">
+                            <h3 class="font-bold text-lg">AI3153 Human-Computer Interaction</h3>
+                            <p class="text-xs text-gray-500 uppercase tracking-wider">BNBU (UNDERGRADUATES), 2024-2025</p>
+                            <p class="text-sm text-gray-700 mt-2">Syllabus Creator and Instructor for a class of 63 students.</p>
+                        </div>
+                        <div class="flex items-center justify-center sm:w-1/4 p-4">
+                            <a href="pdfs/HCIsyllabus.pdf" target="_blank" class="filter-btn glassy-effect px-4 py-1.5 text-sm font-medium rounded-full flex-shrink-0" style="--filter-color: #FFC4C4; --filter-color-rgb: 255, 196, 196;">Syllabus & student feedback </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="portfolio-item animate-on-load" data-category="teaching">
+                    <div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full">
+                        <img src="images/it.png" alt="GTSC2093 IT for Success in Everyday Life and Work" class="h-18 w-full sm:h-auto sm:w-1/12 object-cover">
+                        <div class="p-4 w-full sm:w-3/4 flex flex-col justify-center">
+                            <h3 class="font-bold text-lg">GTSC2093 IT for Success in Everyday Life and Work</h3>
+                            <p class="text-xs text-gray-500 uppercase tracking-wider">BNBU (UNDERGRADUATES), 2024-2025</p>
+                            <p class="text-sm text-gray-700 mt-2">Instructor for a class of 76 students.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="portfolio-item animate-on-load" data-category="teaching">
+                    <div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full">
+                        <img src="images/ct.png" alt="GCAP3123 Computer Technology and AI Project" class="h-18 w-full sm:h-auto sm:w-1/12 object-cover">
+                        <div class="p-4 w-full sm:w-3/4 flex flex-col justify-center">
+                            <h3 class="font-bold text-lg">GCAP3123 Computer Technology and AI Project</h3>
+                            <p class="text-xs text-gray-500 uppercase tracking-wider">BNBU (UNDERGRADUATES), 2024-2025</p>
+                            <p class="text-sm text-gray-700 mt-2">Instructor for a project-based class of 50 students.</p>
                         </div>
                     </div>
                 </div>
                 <div class="portfolio-item animate-on-load" data-category="publication">
-                    <div class="portfolio-card flex flex-col sm:flex-row bg-white rounded-2xl overflow-hidden shadow-md h-full">
-                        <img src="https://placehold.co/600x400/EC4899/FFFFFF?text=Immersive+Collaboration" alt="Immersive Collaboration Tools Project" class="h-36 w-full sm:h-auto sm:w-1/6 object-cover">
-                        <div class="p-4 w-full sm:w-5/6 flex flex-col justify-center">
-                            <h3 class="font-bold text-lg">Immersive Collaboration Tools</h3>
-                            <p class="text-xs text-gray-500 uppercase tracking-wider">CIRP DESIGN, 2024</p>
-                            <p class="text-sm text-gray-700 mt-2">Designed a collaborative robot system and VR interface for expert-worker remote collaboration.</p>
+                    <a href="pdfs/paper4.pdf" target="_blank" class="block">
+                        <div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full">
+                            <img src="images/paper4.png" alt="Designing Immersive Tools for Expert and Worker Remote Collaboration" class="h-18 w-full sm:h-auto sm:w-1/12 object-cover">
+                            <div class="p-4 w-full sm:w-11/12 flex flex-col justify-center">
+                                <p class="text-sm text-blue-400 uppercase tracking-wider mb-1">OCTOBER 2024, <span class="text-gray-700 normal-case">In CIRP Design Conference</span></p>
+                                <h3 class="font-bold text-lg">Designing Immersive Tools for Expert and Worker Remote Collaboration</h3>
+                                <p class="text-xs text-gray-500 uppercase tracking-wider mt-2">SCM Galvis*, <b>D Mazeas</b>*, F Noël, JA Erkoyuncu (*Equal contribution)</p>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
                 <div class="portfolio-item animate-on-load" data-category="publication">
-                    <div class="portfolio-card flex flex-col sm:flex-row bg-white rounded-2xl overflow-hidden shadow-md h-full">
-                        <img src="https://placehold.co/600x400/10B981/FFFFFF?text=Telexistence+Interface" alt="Telexistence Interface Project" class="h-36 w-full sm:h-auto sm:w-1/6 object-cover">
-                        <div class="p-4 w-full sm:w-5/6 flex flex-col justify-center">
-                            <h3 class="font-bold text-lg">Telexistence Interface for Robots</h3>
-                            <p class="text-xs text-gray-500 uppercase tracking-wider">PLM, 2023</p>
-                            <p class="text-sm text-gray-700 mt-2">Developed a telexistence framework and immersive UI in Unity to remotely control a physical FANUC robot.</p>
+                    <a href="pdfs/paper3.pdf" target="_blank" class="block">
+                        <div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full">
+                            <img src="images/paper3.png" alt="Telexistence-based remote maintenance for marine engineers" class="h-18 w-full sm:h-auto sm:w-1/12 object-cover">
+                            <div class="p-4 w-full sm:w-11/12 flex flex-col justify-center">
+                                <p class="text-sm text-blue-400 uppercase tracking-wider mb-1">MAY 2023, <span class="text-gray-700 normal-case">In IEEE Conference on Virtual Reality and 3D User Interfaces Abstracts and Workshops</span></p>
+                                <h3 class="font-bold text-lg">Telexistence-based remote maintenance for marine engineers</h3>
+                                <p class="text-xs text-gray-500 uppercase tracking-wider mt-2"><b>D Mazeas</b>, JA Erkoyuncu, F Noël</p>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
-
-                <!-- Employment Items -->
-                <div class="portfolio-item animate-on-load" data-category="employment degree teaching">
-                    <div class="portfolio-card flex flex-col sm:flex-row bg-white rounded-2xl overflow-hidden shadow-md h-full">
-                        <img src="https://placehold.co/600x400/F97316/FFFFFF?text=Assistant+Professor" alt="Assistant Professor Role" class="h-36 w-full sm:h-auto sm:w-1/6 object-cover">
-                        <div class="p-4 w-full sm:w-5/6 flex flex-col justify-center">
-                            <h3 class="font-bold text-lg">Assistant Professor</h3>
-                            <p class="text-xs text-gray-500 uppercase tracking-wider">BNBU, 2024-2025</p>
-                            <p class="text-sm text-gray-700 mt-2">Designed and launched the university's HCI course, taught various undergrad courses, and mentored final year projects.</p>
+                <div class="portfolio-item animate-on-load" data-category="publication">
+                    <a href="pdfs/paper2.pdf" target="_blank" class="block">
+                        <div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full">
+                            <img src="images/paper2.png" alt="A telexistence interface for remote control of a physical industrial robot via data distribution service" class="h-18 w-full sm:h-auto sm:w-1/12 object-cover">
+                            <div class="p-4 w-full sm:w-11/12 flex flex-col justify-center">
+                                <p class="text-sm text-blue-400 uppercase tracking-wider mb-1">FEBRUARY 2023, <span class="text-gray-700 normal-case">In IFIP International Conference on Product Lifecycle Management</span></p>
+                                <h3 class="font-bold text-lg">A telexistence interface for remote control of a physical industrial robot via data distribution service</h3>
+                                <p class="text-xs text-gray-500 uppercase tracking-wider mt-2"><b>D Mazeas</b>, JA Erkoyuncu, F Noël</p>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
-                <div class="portfolio-item animate-on-load" data-category="employment">
-                    <div class="portfolio-card flex flex-col sm:flex-row bg-white rounded-2xl overflow-hidden shadow-md h-full">
-                        <img src="https://placehold.co/600x400/000000/FFFFFF?text=Research+Fellow" alt="CNRS Research Fellow Role" class="h-36 w-full sm:h-auto sm:w-1/6 object-cover">
-                        <div class="p-4 w-full sm:w-5/6 flex flex-col justify-center">
-                            <h3 class="font-bold text-lg">CNRS Research Fellow</h3>
-                            <p class="text-xs text-gray-500 uppercase tracking-wider">CNRS@CREATE, 2023-2024</p>
-                            <p class="text-sm text-gray-700 mt-2">Developed Unity 3D frameworks integrating Tobii eye tracking for human-drone interaction studies.</p>
+                <div class="portfolio-item animate-on-load" data-category="publication">
+                    <a href="pdfs/paper1.pdf" target="_blank" class="block">
+                        <div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full">
+                            <img src="images/paper1.png" alt="IMPRO: Immersive prototyping in virtual environments for industrial designers" class="h-18 w-full sm:h-auto sm:w-1/12 object-cover">
+                            <div class="p-4 w-full sm:w-11/12 flex flex-col justify-center">
+                                <p class="text-sm text-blue-400 uppercase tracking-wider mb-1">JUNE 2020, <span class="text-gray-700 normal-case">In Proceedings of the design society: DESIGN conference</span></p>
+                                <h3 class="font-bold text-lg">IMPRO: Immersive prototyping in virtual environments for industrial designers</h3>
+                                <p class="text-xs text-gray-500 uppercase tracking-wider mt-2">S Stadler, H Cornet, <b>D Mazeas*</b>, JR Chardonnet, F Frenkler (*App development, data collection and analysis)</p>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
-                <div class="portfolio-item animate-on-load" data-category="employment">
-                    <div class="portfolio-card flex flex-col sm:flex-row bg-white rounded-2xl overflow-hidden shadow-md h-full">
-                        <img src="https://placehold.co/600x400/FFD700/000000?text=Solutions+Engineer" alt="Solutions Engineer Role" class="h-36 w-full sm:h-auto sm:w-1/6 object-cover">
-                        <div class="p-4 w-full sm:w-5/6 flex flex-col justify-center">
-                            <h3 class="font-bold text-lg">Solutions Engineer</h3>
-                            <p class="text-xs text-gray-500 uppercase tracking-wider">SAFRAN LANDING SYSTEMS, 2020</p>
-                            <p class="text-sm text-gray-700 mt-2">Assisted in implementing an AR solution for landing gear inspection, from requirement gathering to deployment.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Degree Item -->
-                <div class="portfolio-item animate-on-load" data-category="degree">
-                    <div class="portfolio-card flex flex-col sm:flex-row bg-white rounded-2xl overflow-hidden shadow-md h-full">
-                        <img src="https://placehold.co/600x400/4682B4/FFFFFF?text=Education" alt="Education" class="h-36 w-full sm:h-auto sm:w-1/6 object-cover">
-                        <div class="p-4 w-full sm:w-5/6 flex flex-col justify-center">
-                            <h3 class="font-bold text-lg">Education</h3>
-                            <p class="text-xs text-gray-500 uppercase tracking-wider">PHD & MASTER'S</p>
-                            <p class="text-sm text-gray-700 mt-2">PhD in Manufacturing from Cranfield University and a Master's in Digital Engineering from Arts et Métiers.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Side Projects Items -->
-                <div class="portfolio-item animate-on-load" data-category="side-projects">
-                    <div class="portfolio-card flex flex-col sm:flex-row bg-white rounded-2xl overflow-hidden shadow-md h-full">
-                        <img src="https://placehold.co/600x400/6A5ACD/FFFFFF?text=Skills" alt="Technical Skills" class="h-36 w-full sm:h-auto sm:w-1/6 object-cover">
-                        <div class="p-4 w-full sm:w-5/6 flex flex-col justify-center">
-                            <h3 class="font-bold text-lg">Technical Skills</h3>
-                            <p class="text-xs text-gray-500 uppercase tracking-wider">PROGRAMMING, TOOLS & TECHNOLOGIES</p>
-                            <p class="text-sm text-gray-700 mt-2">Proficient in Python, R, C#, Unity 3D, Git, Docker, SQL, Azure, various XR systems, and robotics platforms.</p>
-                        </div>
-                    </div>
-                </div>
-                <!-- Certification Item -->
-                <div class="portfolio-item animate-on-load" data-category="certification">
-                    <div class="portfolio-card flex flex-col sm:flex-row bg-white rounded-2xl overflow-hidden shadow-md h-full">
-                        <img src="https://placehold.co/600x400/2E8B57/FFFFFF?text=Certified" alt="FANUC Certification" class="h-36 w-full sm:h-auto sm:w-1/6 object-cover">
-                        <div class="p-4 w-full sm:w-5/6 flex flex-col justify-center">
-                            <h3 class="font-bold text-lg">FANUC Programming</h3>
-                            <p class="text-xs text-gray-500 uppercase tracking-wider">CERTIFICATION</p>
-                            <p class="text-sm text-gray-700 mt-2">Certified in Standard Teach Pendant Programming for FANUC robots, enhancing industrial robotics capabilities.</p>
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </div>
     </main>
 
-    <!-- Footer Section -->
     <footer class="text-center py-8 text-sm text-gray-500 relative z-10 animate-on-load">
         <p>Last Updated : September 2025</p>
         <p class="mt-2">Designed & Developed by Damien Mazeas.</p>
@@ -319,162 +410,138 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // --- Get Elements ---
             const filterContainer = document.getElementById('filter-container');
             const portfolioItems = document.querySelectorAll('.portfolio-item');
-            const buttons = document.querySelectorAll('.filter-btn');
+            const allButtons = document.querySelectorAll('.filter-btn, #theme-toggle, .header-btn');
+            const filterButtons = filterContainer ? filterContainer.querySelectorAll('.filter-btn') : [];
+            const header = document.querySelector('header');
+            const bgDiv = document.getElementById('page-background');
+            const headerHeight = header.offsetHeight;
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            const darkIcon = document.getElementById('theme-toggle-dark-icon');
+            const lightIcon = document.getElementById('theme-toggle-light-icon');
+            const htmlEl = document.documentElement;
 
+            // --- Color & Theme Data ---
+            const filterColors = {
+                all: { hex: '#D8E2ED', rgb: '216, 226, 237', hsl: { h: 212, s: 31, l: 89 }, nonPastelHex: '#4A5568' },
+                publication: { hex: '#CDE4F9', rgb: '205, 228, 249', hsl: { h: 210, s: 80, l: 89 }, nonPastelHex: '#3B82F6' },
+                employment: { hex: '#FDECE6', rgb: '253, 236, 230', hsl: { h: 14, s: 92, l: 95 }, nonPastelHex: '#994025' },
+                degree: { hex: '#D6F2F0', rgb: '214, 242, 240', hsl: { h: 177, s: 63, l: 89 }, nonPastelHex: '#107E6D' },
+                teaching: { hex: '#FDDCE1', rgb: '253, 220, 225', hsl: { h: 349, s: 94, l: 93 }, nonPastelHex: '#993441' },
+                certification: { hex: '#D7F1D5', rgb: '215, 241, 213', hsl: { h: 115, s: 57, l: 89 }, nonPastelHex: '#2E8B57' },
+                'side-projects': { hex: '#E6D7FD', rgb: '230, 215, 253', hsl: { h: 263, s: 80, l: 92 }, nonPastelHex: '#6B4C9C' }
+            };
+            const lightModeBg = '#F4F4F6';
+            const darkModeBg = '#0D1117';
+
+            const marqueeTop = document.querySelector('.marquee-top');
+
+            // --- Core Functions ---
+            function updateBackground(filterName) {
+                const isDarkMode = htmlEl.classList.contains('dark');
+                const colorData = filterColors[filterName] || filterColors.all;
+                const { h, s } = colorData.hsl;
+                const l = isDarkMode ? 10 : 92;
+                const gradientTopColor = `hsl(${h}, ${s}%, ${l}%)`;
+                bgDiv.style.backgroundImage = `linear-gradient(to bottom, ${gradientTopColor}, transparent)`;
+            }
+
+            function updateMarqueeColor(filterName) {
+                const isDarkMode = htmlEl.classList.contains('dark');
+                const colorData = filterColors[filterName] || filterColors.all;
+
+                // Only change the marquee color in light mode to ensure readability.
+                // In dark mode, it's always white to contrast with the dark background.
+                if (!isDarkMode) {
+                    marqueeTop.style.color = colorData.nonPastelHex;
+                } else {
+                    marqueeTop.style.color = '#E6EDF3';
+                }
+            }
+
+            function applyTheme(theme) {
+                if (theme === 'dark') {
+                    htmlEl.classList.add('dark');
+                    darkIcon.classList.add('hidden');
+                    lightIcon.classList.remove('hidden');
+                } else {
+                    htmlEl.classList.remove('dark');
+                    darkIcon.classList.remove('hidden');
+                    lightIcon.classList.add('hidden');
+                }
+                const currentFilter = filterContainer?.querySelector('.active')?.dataset.filter || 'all';
+                updateBackground(currentFilter);
+                updateMarqueeColor(currentFilter);
+            }
+
+            // --- Initial Setup ---
+            filterButtons.forEach(btn => {
+                const filter = btn.dataset.filter;
+                if (filter && filterColors[filter]) {
+                    btn.style.setProperty('--filter-color', filterColors[filter].hex);
+                    btn.style.setProperty('--filter-color-rgb', filterColors[filter].rgb);
+                }
+            });
+
+            portfolioItems.forEach(item => {
+                const firstCategory = item.dataset.category.split(' ')[0];
+                const card = item.querySelector('.portfolio-card');
+                if (firstCategory && filterColors[firstCategory] && card) {
+                    card.style.setProperty('--item-color', filterColors[firstCategory].hex);
+                }
+            });
+
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: light)').matches;
+            applyTheme(savedTheme || (prefersDark ? 'dark' : 'light'));
+
+            // --- Event Listeners ---
             document.addEventListener('mousemove', e => {
-                buttons.forEach(btn => {
+                allButtons.forEach(btn => {
                     const rect = btn.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    btn.style.setProperty('--x', `${x}px`);
-                    btn.style.setProperty('--y', `${y}px`);
+                    btn.style.setProperty('--x', `${e.clientX - rect.left}px`);
+                    btn.style.setProperty('--y', `${e.clientY - rect.top}px`);
                 });
             });
 
             if (filterContainer) {
                 filterContainer.addEventListener('click', (event) => {
-                    if (event.target.classList.contains('filter-btn')) {
+                    const targetButton = event.target.closest('.filter-btn');
+                    if (targetButton) {
                         filterContainer.querySelector('.active').classList.remove('active');
-                        event.target.classList.add('active');
-                        const filter = event.target.dataset.filter;
+                        targetButton.classList.add('active');
+                        const filter = targetButton.dataset.filter;
+                        updateBackground(filter);
+                        updateMarqueeColor(filter);
                         portfolioItems.forEach(item => {
                             const categories = item.dataset.category.split(' ');
-                            if (filter === 'all' || categories.includes(filter)) {
-                                item.style.display = 'block';
-                            } else {
-                                item.style.display = 'none';
-                            }
+                            item.style.display = (filter === 'all' || categories.includes(filter)) ? 'block' : 'none';
                         });
                     }
                 });
             }
 
-            const header = document.querySelector('header');
-
-            // --- Color Logic ---
-            const randomHue = Math.floor(Math.random() * 360);
-            const pastelColor = `hsl(${randomHue}, 70%, 92%)`;
-            const darkerPastelColor = `hsl(${randomHue}, 70%, 80%)`;
-            const marqueeColor = `hsl(${randomHue}, 70%, 75%)`;
-            const existingColor = '#F4F4F6';
-
-            // --- Constellation Canvas Logic ---
-            const canvas = document.getElementById('constellation-canvas');
-            const ctx = canvas.getContext('2d');
-            let dots = [];
-            const mouse = { x: null, y: null };
-            let mouseMoveTimer = null;
-
-            function resizeCanvas() {
-                canvas.width = window.innerWidth;
-                canvas.height = header.offsetHeight;
-                createDots();
-            }
-
-            function createDots() {
-                dots = [];
-                const dotCount = Math.floor(canvas.width / 24);
-                for (let i = 0; i < dotCount; i++) {
-                    dots.push({
-                        x: Math.random() * canvas.width,
-                        y: Math.random() * canvas.height,
-                        maxDotDistance: 120,
-                        maxMouseDistance: 180
-                    });
-                }
-            }
-
-            window.addEventListener('mousemove', (e) => {
-                canvas.style.opacity = 1;
-                clearTimeout(mouseMoveTimer);
-                mouseMoveTimer = setTimeout(() => {
-                    canvas.style.opacity = 0;
-                }, 500);
-
-                mouse.x = e.clientX;
-                mouse.y = e.clientY;
+            themeToggleBtn.addEventListener('click', () => {
+                const newTheme = htmlEl.classList.contains('dark') ? 'light' : 'dark';
+                localStorage.setItem('theme', newTheme);
+                applyTheme(newTheme);
             });
 
-            function animate() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-                for (let i = 0; i < dots.length; i++) {
-                    const dotA = dots[i];
-
-                    if (mouse.x && mouse.y) {
-                        const dxMouse = mouse.x - dotA.x;
-                        const dyMouse = mouse.y - dotA.y;
-                        const distMouse = Math.sqrt(dxMouse * dxMouse + dyMouse * dyMouse);
-
-                        if (distMouse < dotA.maxMouseDistance) {
-                            const opacity = 1 - (distMouse / dotA.maxMouseDistance);
-
-                            ctx.beginPath();
-                            ctx.moveTo(dotA.x, dotA.y);
-                            ctx.lineTo(mouse.x, mouse.y);
-                            ctx.strokeStyle = `${darkerPastelColor.slice(0, -1)}, ${opacity * 0.9})`;
-                            ctx.lineWidth = 1.2;
-                            ctx.stroke();
-
-                            for (let j = i; j < dots.length; j++) {
-                                const dotB = dots[j];
-                                const dx = dotB.x - dotA.x;
-                                const dy = dotB.y - dotA.y;
-                                const dist = Math.sqrt(dx * dx + dy * dy);
-
-                                if (dist < dotA.maxDotDistance) {
-                                    ctx.beginPath();
-                                    ctx.moveTo(dotA.x, dotA.y);
-                                    ctx.lineTo(dotB.x, dotB.y);
-                                    ctx.strokeStyle = `${darkerPastelColor.slice(0, -1)}, ${opacity * 0.7})`;
-                                    ctx.lineWidth = 0.8;
-                                    ctx.stroke();
-                                }
-                            }
-                        }
-                    }
-                }
-                requestAnimationFrame(animate);
-            }
-
-
-            // Initial setup
-            resizeCanvas();
-            animate();
-            window.addEventListener('resize', resizeCanvas);
-
-            document.querySelector('.marquee-top').style.color = marqueeColor;
-            document.querySelector('.marquee-bottom').style.color = marqueeColor;
-
-            const headerHeight = header.offsetHeight;
-            const bgDiv = document.getElementById('page-background');
-            bgDiv.style.background = `linear-gradient(to bottom, ${pastelColor}, ${existingColor} ${headerHeight + 80}px)`;
-
-            const portfolioImages = document.querySelectorAll('.portfolio-card img');
-            portfolioImages.forEach(image => {
+            document.querySelectorAll('.portfolio-card img').forEach(image => {
                 image.addEventListener('mousemove', (e) => {
                     const rect = image.getBoundingClientRect();
                     const x = e.clientX - rect.left;
-                    const width = rect.width;
-                    if (x < width / 2) {
-                        image.style.transform = 'scale(1.05) perspective(1000px) rotateY(-4deg)';
-                    } else {
-                        image.style.transform = 'scale(1.05) perspective(1000px) rotateY(4deg)';
-                    }
+                    image.style.transform = (x < rect.width / 2) ? 'scale(1.05) perspective(1000px) rotateY(-4deg)' : 'scale(1.05) perspective(1000px) rotateY(4deg)';
                 });
                 image.addEventListener('mouseleave', () => {
                     image.style.transform = 'scale(1) perspective(1000px) rotateY(0deg)';
                 });
             });
 
-            // --- Appearing Animations ---
-            const elementsToAnimate = document.querySelectorAll('.animate-on-load');
-            elementsToAnimate.forEach((el, index) => {
-                setTimeout(() => {
-                    el.classList.add('is-visible');
-                }, 100 * index);
+            document.querySelectorAll('.animate-on-load').forEach((el, index) => {
+                setTimeout(() => { el.classList.add('is-visible'); }, 100 * index);
             });
         });
     </script>

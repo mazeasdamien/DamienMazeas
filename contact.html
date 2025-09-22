@@ -11,9 +11,12 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #F4F4F6;
+            background-color: #F4F4F6; /* Fallback */
+            cursor: none; /* Hides the default system cursor */
+            transition: color 0.5s ease;
         }
 
+        /* --- Animated Aurora Background --- */
         #page-background {
             position: fixed;
             top: 0;
@@ -21,6 +24,35 @@
             width: 100%;
             height: 100%;
             z-index: -2;
+            overflow: hidden;
+            background-color: #F4F4F6;
+            transition: background-color 0.5s ease;
+        }
+
+            #page-background::before {
+                content: '';
+                position: absolute;
+                width: 200%;
+                height: 200%;
+                top: -50%;
+                left: -50%;
+                background: radial-gradient(circle at 20% 20%, #d1e9ff 0%, transparent 30%), radial-gradient(circle at 80% 30%, #ffd1f7 0%, transparent 30%), radial-gradient(circle at 50% 80%, #d4ffea 0%, transparent 35%);
+                animation: aurora-flow 25s linear infinite;
+                transition: background 0.5s ease, opacity 0.5s ease;
+            }
+
+        @keyframes aurora-flow {
+            0% {
+                transform: rotate(0deg) scale(1.2);
+            }
+
+            50% {
+                transform: rotate(180deg) scale(1.3);
+            }
+
+            100% {
+                transform: rotate(360deg) scale(1.2);
+            }
         }
 
         #constellation-canvas {
@@ -28,19 +60,20 @@
             top: 0;
             left: 0;
             width: 100%;
+            height: 100%;
             z-index: -1;
-            transition: opacity 0.75s ease-in-out;
-            opacity: 0;
+            opacity: 0.7;
         }
 
-        .filter-btn {
+        /* --- Enhanced Glassmorphism & Button Styles --- */
+        .filter-btn, #theme-toggle {
             position: relative;
             overflow: hidden;
-            background-color: rgba(255, 255, 255, 0.35);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            box-shadow: inset -0.5px -0.5px 0.5px rgba(255, 255, 255, 0.7), inset 0.5px 0.5px 0.5px rgba(255, 255, 255, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.5);
+            background-color: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: inset 0 0 0 0.5px rgba(255,255,255,0.6);
             color: #111827;
             transition: all 0.3s ease;
         }
@@ -53,26 +86,25 @@
                 transform: translate(-50%, -50%);
                 width: 150px;
                 height: 150px;
-                background: radial-gradient(circle closest-side, rgba(255, 255, 255, 0.8), transparent);
+                background: radial-gradient(circle closest-side, rgba(255, 255, 255, 0.7), transparent);
             }
 
-        header .filter-btn:hover {
-            transform: scale(1.05);
-            background-color: rgba(255, 255, 255, 0.35);
-        }
+            .filter-btn:hover, #theme-toggle:hover {
+                transform: scale(1.1);
+                background-color: rgba(255, 255, 255, 0.5);
+            }
 
         .social-btn {
-            background-color: rgba(229, 231, 235, 0.7) !important;
-            backdrop-filter: blur(5px) !important;
-            -webkit-backdrop-filter: blur(5px) !important;
+            background-color: rgba(255, 255, 255, 0.4) !important;
         }
 
             .social-btn:hover {
-                background-color: rgba(209, 213, 219, 0.9) !important;
-                transform: scale(1.05);
+                background-color: #111827 !important;
+                color: #ffffff;
+                border-color: #111827;
             }
 
-        /* --- Animation Styles --- */
+        /* --- On-Load Animation Styles --- */
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -98,7 +130,7 @@
         }
 
         .animate-on-load {
-            opacity: 0; /* Keep hidden until animation starts */
+            opacity: 0;
         }
 
         .fade-in-up {
@@ -108,22 +140,128 @@
         .scale-in {
             animation: scaleIn 0.7s ease-out forwards;
         }
+
+        /* --- Custom Cursor Styles --- */
+        #cursor-dot {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 6px;
+            background-color: #111827;
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            transition: background-color 0.5s ease;
+        }
+
+        #cursor-outline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 30px;
+            height: 30px;
+            border: 2px solid rgba(27, 27, 27, 0.4);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s ease, height 0.3s ease, border-color 0.5s ease;
+            z-index: 9999;
+        }
+
+            #cursor-outline.grow {
+                width: 50px;
+                height: 50px;
+                border-color: rgba(27, 27, 27, 0.2);
+            }
+
+        /* --- Dark Mode Styles --- */
+        html.dark {
+            color-scheme: dark;
+        }
+
+            html.dark body {
+                color: #E6EDF3;
+            }
+
+            html.dark #page-background {
+                background-color: #0D1117;
+            }
+
+                html.dark #page-background::before {
+                    background: radial-gradient(circle at 20% 20%, #2a3a6b 0%, transparent 30%), radial-gradient(circle at 80% 30%, #6b2a60 0%, transparent 30%), radial-gradient(circle at 50% 80%, #2a6b4c 0%, transparent 35%);
+                    opacity: 0.6;
+                }
+
+            html.dark h1, html.dark h2, html.dark h3 {
+                color: #E6EDF3;
+            }
+
+            html.dark p.text-gray-600, html.dark label, html.dark footer {
+                color: #8B949E;
+            }
+
+            html.dark a {
+                color: #58a6ff;
+            }
+
+            html.dark .filter-btn, html.dark #theme-toggle {
+                background-color: rgba(31, 41, 55, 0.3);
+                border-color: rgba(75, 85, 99, 0.5);
+                color: #E6EDF3;
+            }
+
+                html.dark .filter-btn:hover, html.dark #theme-toggle:hover {
+                    background-color: rgba(55, 65, 81, 0.5);
+                    border-color: rgba(100, 116, 139, 0.7);
+                }
+
+            html.dark .social-btn:hover {
+                background-color: #E6EDF3 !important;
+                color: #0D1117;
+                border-color: #E6EDF3;
+            }
+
+            html.dark #contact-card {
+                background-color: rgba(22, 27, 34, 0.3);
+                border-color: rgba(75, 85, 99, 0.5);
+            }
+
+            html.dark #cursor-dot {
+                background-color: #E6EDF3;
+            }
+
+            html.dark #cursor-outline {
+                border-color: rgba(230, 237, 243, 0.4);
+            }
+
+                html.dark #cursor-outline.grow {
+                    border-color: rgba(230, 237, 243, 0.2);
+                }
     </style>
 </head>
-<body class="text-gray-900">
+<body>
+
+    <div id="cursor-dot"></div>
+    <div id="cursor-outline"></div>
 
     <div id="page-background"></div>
     <canvas id="constellation-canvas"></canvas>
 
     <header class="w-full p-6 md:p-8 relative z-10">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <a href="index.html" class="flex items-center gap-6">
+            <div class="flex items-center gap-6">
                 <img src="images/profil.jpg" alt="Damien Mazeas" class="w-16 h-16 md:w-20 md:h-20 rounded-full object-cover border-2 border-white shadow-sm animate-on-load">
                 <h1 class="text-3xl md:text-4xl font-black tracking-tight animate-on-load">Damien MAZEAS</h1>
-            </a>
-            <nav class="flex items-center space-x-4">
+            </div>
+            <nav class="flex items-center space-x-2 md:space-x-4">
                 <a href="index.html" class="filter-btn text-sm font-semibold tracking-wider px-4 py-2 rounded-full animate-on-load">HOME</a>
                 <a href="#" target="_blank" class="filter-btn text-sm font-semibold tracking-wider px-4 py-2 rounded-full animate-on-load">CV</a>
+                <button id="theme-toggle" type="button" class="p-2.5 rounded-full text-sm">
+                    <svg class="w-5 h-5" id="theme-toggle-dark-icon" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                    <svg class="w-5 h-5 hidden" id="theme-toggle-light-icon" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.707.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm-.707 8.486a1 1 0 011.414 0l.707.707a1 1 0 11-1.414 1.414l-.707-.707a1 1 0 010-1.414zM4 11a1 1 0 100-2H3a1 1 0 100 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+                </button>
             </nav>
         </div>
     </header>
@@ -135,9 +273,8 @@
                 I'm always open to discussing new research, projects, or collaboration opportunities.
             </p>
 
-            <div class="bg-white/50 backdrop-blur-lg border border-white/50 rounded-2xl shadow-lg p-8 text-left animate-on-load">
+            <div id="contact-card" class="bg-white/30 backdrop-blur-xl border border-white/50 rounded-2xl shadow-lg p-8 text-left animate-on-load">
                 <h3 class="font-bold text-xl mb-6">Contact Information</h3>
-
                 <div class="space-y-4">
                     <div>
                         <label class="text-sm font-semibold text-gray-500 uppercase">Email</label>
@@ -149,27 +286,23 @@
                         <label class="text-sm font-semibold text-gray-500 uppercase">Social</label>
                         <div class="flex flex-wrap items-center gap-4 mt-1">
                             <a href="https://www.linkedin.com/in/mazeas/" target="_blank" class="filter-btn social-btn text-sm font-semibold tracking-wider px-4 py-2 rounded-full inline-flex items-center gap-2 animate-on-load">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-linkedin" viewBox="0 0 16 16">
-                                    <path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854zm4.943 12.248V6.169H2.542v7.225zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.705-.52-1.248-1.342-1.248S1.12 4.455 1.12 5.16c0 .694.522 1.248 1.327 1.248zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016l.016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225z" />
-                                </svg>
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/LinkedIn_icon.svg/1200px-LinkedIn_icon.svg.png" class="w-4 h-4" alt="LinkedIn logo">
                                 LinkedIn
                             </a>
                             <a href="https://github.com/mazeasdamien" target="_blank" class="filter-btn social-btn text-sm font-semibold tracking-wider px-4 py-2 rounded-full inline-flex items-center gap-2 animate-on-load">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-github" viewBox="0 0 16 16">
-                                    <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8" />
-                                </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8" /></svg>
                                 GitHub
                             </a>
-                            <a href="https://orcid.org/0000-0001-9258-3909" target="_blank" class="filter-btn social-btn text-sm font-semibold tracking-wider px-4 py-2 rounded-full inline-flex items-center gap-2">
+                            <a href="https://orcid.org/0000-0001-9258-3909" target="_blank" class="filter-btn social-btn text-sm font-semibold tracking-wider px-4 py-2 rounded-full inline-flex items-center gap-2 animate-on-load">
                                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/ORCID_iD.svg/2048px-ORCID_iD.svg.png" class="w-4 h-4" alt="ORCID logo">
                                 Orcid
                             </a>
-                            <a href="https://scholar.google.com/citations?user=SydtND4AAAAJ&hl=en" target="_blank" class="filter-btn social-btn text-sm font-semibold tracking-wider px-4 py-2 rounded-full inline-flex items-center gap-2">
-                                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5.242 12.012L12 16.146L18.758 12.012L12 7.878L5.242 12.012ZM12 21.879L0 14.07L12 6.261L24 14.07L12 21.879ZM12 3L18.758 7.134L12 11.267L5.242 7.134L12 3Z" fill="currentColor"></path></svg>
+                            <a href="https://scholar.google.com/citations?user=SydtND4AAAAJ&hl=en" target="_blank" class="filter-btn social-btn text-sm font-semibold tracking-wider px-4 py-2 rounded-full inline-flex items-center gap-2 animate-on-load">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Google_Scholar_logo.svg/2048px-Google_Scholar_logo.svg.png" class="w-4 h-4" alt="Google Scholar logo">
                                 Google Scholar
                             </a>
-                            <a href="https://www.youtube.com/@mazeas" target="_blank" class="filter-btn social-btn text-sm font-semibold tracking-wider px-4 py-2 rounded-full inline-flex items-center gap-2">
-                                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" fill="currentColor"></path></svg>
+                            <a href="https://www.youtube.com/@mazeas" target="_blank" class="filter-btn social-btn text-sm font-semibold tracking-wider px-4 py-2 rounded-full inline-flex items-center gap-2 animate-on-load">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png" class="w-4 h-4 object-contain" alt="YouTube logo">
                                 YouTube
                             </a>
                         </div>
@@ -186,137 +319,197 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- Page Load Animation Logic ---
+            // --- Dark Mode Logic ---
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            const darkIcon = document.getElementById('theme-toggle-dark-icon');
+            const lightIcon = document.getElementById('theme-toggle-light-icon');
+            const htmlEl = document.documentElement;
+
+            const applyTheme = (theme) => {
+                if (theme === 'dark') {
+                    htmlEl.classList.add('dark');
+                    darkIcon.classList.add('hidden');
+                    lightIcon.classList.remove('hidden');
+                } else {
+                    htmlEl.classList.remove('dark');
+                    darkIcon.classList.remove('hidden');
+                    lightIcon.classList.add('hidden');
+                }
+            };
+
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            applyTheme(savedTheme || (prefersDark ? 'dark' : 'light'));
+
+            themeToggleBtn.addEventListener('click', () => {
+                const newTheme = htmlEl.classList.contains('dark') ? 'light' : 'dark';
+                localStorage.setItem('theme', newTheme);
+                applyTheme(newTheme);
+            });
+
+            // --- On-Load Animation Logic ---
             const animationConfig = [
                 { selector: 'header img', animation: 'scale-in', delay: 100 },
                 { selector: 'header h1', animation: 'fade-in-up', delay: 200 },
                 { selector: 'header nav a:nth-child(1)', animation: 'fade-in-up', delay: 300 },
                 { selector: 'header nav a:nth-child(2)', animation: 'fade-in-up', delay: 350 },
+                { selector: '#theme-toggle', animation: 'fade-in-up', delay: 400 },
                 { selector: 'main h2', animation: 'fade-in-up', delay: 450 },
                 { selector: 'main > div > p', animation: 'fade-in-up', delay: 550 },
-                { selector: 'main .bg-white\\/50', animation: 'scale-in', delay: 650 },
+                { selector: '#contact-card', animation: 'scale-in', delay: 650 },
                 { selector: 'footer', animation: 'fade-in-up', delay: 950 }
             ];
 
             animationConfig.forEach(item => {
                 const element = document.querySelector(item.selector);
                 if (element) {
+                    element.classList.add('animate-on-load'); // ensure it starts hidden
                     setTimeout(() => {
                         element.classList.add(item.animation);
-                        element.classList.remove('animate-on-load');
                     }, item.delay);
                 }
             });
 
             const socialButtons = document.querySelectorAll('.social-btn');
             socialButtons.forEach((btn, index) => {
+                btn.classList.add('animate-on-load'); // ensure it starts hidden
                 setTimeout(() => {
                     btn.classList.add('scale-in');
-                    btn.classList.remove('animate-on-load');
                 }, 800 + (index * 100));
             });
 
-
-            // --- Original Script Logic ---
-            const buttons = document.querySelectorAll('.filter-btn');
-            document.addEventListener('mousemove', e => {
-                buttons.forEach(btn => {
-                    const rect = btn.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    btn.style.setProperty('--x', `${x}px`);
-                    btn.style.setProperty('--y', `${y}px`);
-                });
-            });
-
-            const header = document.querySelector('header');
-            const randomHue = Math.floor(Math.random() * 360);
-            const pastelColor = `hsl(${randomHue}, 70%, 92%)`;
-            const darkerPastelColor = `hsl(${randomHue}, 70%, 80%)`;
-            const existingColor = '#F4F4F6';
-
+            // --- Constellation Canvas Logic ---
             const canvas = document.getElementById('constellation-canvas');
             const ctx = canvas.getContext('2d');
             let dots = [];
             const mouse = { x: null, y: null };
-            let mouseMoveTimer = null;
+            const dotConnectionDistance = 100;
+            const baseDotDensity = 1000;
 
             function resizeCanvas() {
                 canvas.width = window.innerWidth;
-                canvas.height = header.offsetHeight;
+                canvas.height = window.innerHeight;
                 createDots();
             }
 
             function createDots() {
                 dots = [];
-                const dotCount = Math.floor(canvas.width / 24);
+                const dotCount = Math.floor((canvas.width * canvas.height) / baseDotDensity);
                 for (let i = 0; i < dotCount; i++) {
                     dots.push({
                         x: Math.random() * canvas.width,
                         y: Math.random() * canvas.height,
-                        maxDotDistance: 120,
-                        maxMouseDistance: 180
+                        hue: Math.floor(Math.random() * 360),
+                        size: Math.random() * 2 + 1,
+                        speedX: (Math.random() - 0.5) * 0.5,
+                        speedY: (Math.random() - 0.5) * 0.5
                     });
                 }
             }
 
-            window.addEventListener('mousemove', (e) => {
-                canvas.style.opacity = 1;
-                clearTimeout(mouseMoveTimer);
-                mouseMoveTimer = setTimeout(() => {
-                    canvas.style.opacity = 0;
-                }, 500);
-
-                mouse.x = e.clientX;
-                mouse.y = e.clientY;
-            });
-
             function animate() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
-                for (let i = 0; i < dots.length; i++) {
-                    const dotA = dots[i];
-                    if (mouse.x && mouse.y) {
-                        const dxMouse = mouse.x - dotA.x;
-                        const dyMouse = mouse.y - dotA.y;
-                        const distMouse = Math.sqrt(dxMouse * dxMouse + dyMouse * dyMouse);
+                const nearbyDots = [];
+                for (const dot of dots) {
+                    dot.speedX *= 0.98;
+                    dot.speedY *= 0.98;
+                    const driftStrength = 0.01;
+                    dot.speedX += (Math.random() - 0.5) * driftStrength;
+                    dot.speedY += (Math.random() - 0.5) * driftStrength;
+                    dot.x += dot.speedX;
+                    dot.y += dot.speedY;
+                    if (dot.x < 0) dot.x = canvas.width;
+                    if (dot.x > canvas.width) dot.x = 0;
+                    if (dot.y < 0) dot.y = canvas.height;
+                    if (dot.y > canvas.height) dot.y = 0;
 
-                        if (distMouse < dotA.maxMouseDistance) {
-                            const opacity = 1 - (distMouse / dotA.maxMouseDistance);
+                    ctx.beginPath();
+                    ctx.arc(dot.x, dot.y, dot.size, 0, Math.PI * 2);
+                    ctx.fillStyle = `hsla(${dot.hue}, 80%, 70%, 0.8)`;
+                    ctx.fill();
+
+                    if (mouse.x !== null) {
+                        const distMouse = Math.hypot(mouse.x - dot.x, mouse.y - dot.y);
+                        if (distMouse < dotConnectionDistance) {
+                            nearbyDots.push(dot);
+                            const opacity = 1 - (distMouse / dotConnectionDistance);
+                            ctx.beginPath();
+                            ctx.moveTo(dot.x, dot.y);
+                            ctx.lineTo(mouse.x, mouse.y);
+                            ctx.strokeStyle = `hsla(${dot.hue}, 80%, 70%, ${opacity})`;
+                            ctx.lineWidth = 1.8;
+                            ctx.stroke();
+                        }
+                    }
+                }
+                for (let i = 0; i < nearbyDots.length; i++) {
+                    for (let j = i + 1; j < nearbyDots.length; j++) {
+                        const dotA = nearbyDots[i];
+                        const dotB = nearbyDots[j];
+                        const distance = Math.hypot(dotA.x - dotB.x, dotA.y - dotB.y);
+                        if (distance < dotConnectionDistance) {
+                            const opacity = 1 - (distance / dotConnectionDistance);
                             ctx.beginPath();
                             ctx.moveTo(dotA.x, dotA.y);
-                            ctx.lineTo(mouse.x, mouse.y);
-                            ctx.strokeStyle = `${darkerPastelColor.slice(0, -1)}, ${opacity * 0.9})`;
-                            ctx.lineWidth = 1.2;
+                            ctx.lineTo(dotB.x, dotB.y);
+                            ctx.strokeStyle = `hsla(${dotA.hue}, 80%, 70%, ${opacity * 0.6})`;
+                            ctx.lineWidth = 1;
                             ctx.stroke();
-
-                            for (let j = i; j < dots.length; j++) {
-                                const dotB = dots[j];
-                                const dx = dotB.x - dotA.x;
-                                const dy = dotB.y - dotA.y;
-                                const dist = Math.sqrt(dx * dx + dy * dy);
-
-                                if (dist < dotA.maxDotDistance) {
-                                    ctx.beginPath();
-                                    ctx.moveTo(dotA.x, dotA.y);
-                                    ctx.lineTo(dotB.x, dotB.y);
-                                    ctx.strokeStyle = `${darkerPastelColor.slice(0, -1)}, ${opacity * 0.7})`;
-                                    ctx.lineWidth = 0.8;
-                                    ctx.stroke();
-                                }
-                            }
                         }
                     }
                 }
                 requestAnimationFrame(animate);
             }
-
             resizeCanvas();
             animate();
             window.addEventListener('resize', resizeCanvas);
 
-            const headerHeight = header.offsetHeight;
-            const bgDiv = document.getElementById('page-background');
-            bgDiv.style.background = `linear-gradient(to bottom, ${pastelColor}, ${existingColor} ${headerHeight + 80}px)`;
+            function updateMousePosition(e) {
+                const event = e.touches ? e.touches[0] : e;
+                mouse.x = event.clientX;
+                mouse.y = event.clientY;
+            }
+            window.addEventListener('mousemove', updateMousePosition);
+            window.addEventListener('touchmove', updateMousePosition);
+
+            window.addEventListener('click', e => {
+                const repelRadius = 120;
+                const repelStrength = 5;
+                for (const dot of dots) {
+                    const distance = Math.hypot(e.clientX - dot.x, e.clientY - dot.y);
+                    if (distance < repelRadius) {
+                        const angle = Math.atan2(dot.y - e.clientY, dot.x - e.clientX);
+                        const force = (1 - distance / repelRadius) * repelStrength;
+                        dot.speedX += Math.cos(angle) * force;
+                        dot.speedY += Math.sin(angle) * force;
+                    }
+                }
+            });
+
+            // --- Custom Cursor Logic ---
+            const cursorDot = document.getElementById('cursor-dot');
+            const cursorOutline = document.getElementById('cursor-outline');
+            window.addEventListener('mousemove', e => {
+                cursorDot.style.left = `${e.clientX}px`;
+                cursorDot.style.top = `${e.clientY}px`;
+                cursorOutline.animate({
+                    left: `${e.clientX}px`,
+                    top: `${e.clientY}px`
+                }, { duration: 500, fill: "forwards" });
+
+                const allHeaderButtons = document.querySelectorAll('header .filter-btn, header #theme-toggle');
+                allHeaderButtons.forEach(btn => {
+                    const rect = btn.getBoundingClientRect();
+                    btn.style.setProperty('--x', `${e.clientX - rect.left}px`);
+                    btn.style.setProperty('--y', `${e.clientY - rect.top}px`);
+                });
+            });
+
+            const interactiveElements = document.querySelectorAll('a, button');
+            interactiveElements.forEach(el => {
+                el.addEventListener('mouseenter', () => cursorOutline.classList.add('grow'));
+                el.addEventListener('mouseleave', () => cursorOutline.classList.remove('grow'));
+            });
         });
     </script>
 
