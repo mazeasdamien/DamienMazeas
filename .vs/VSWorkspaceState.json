@@ -1,7 +1,9 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\images",
+    "\\images\\social"
   ],
-  "SelectedNode": "\\contact.html",
+  "SelectedNode": "\\images\\logos",
   "PreviewInSolutionExplorer": false
 }
