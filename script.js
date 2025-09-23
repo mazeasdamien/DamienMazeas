@@ -21,10 +21,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const filterColors = {
             all: {
-                hex: '#94A3B8', // Slate 400
-                rgb: '148, 163, 184',
-                nonPastelHex: '#475569', // Slate 600
-                palette: ['#E2E8F0', '#CBD5E1', '#B9D2F8', '#C7D2FE']
+                hex: '#852A0D',          // Burnt Orange
+                rgb: '133, 42, 13',
+                nonPastelHex: '#C54D13', // Brighter Orange
+                palette: ['#4D1B0B', '#852A0D', '#C54D13', '#FF7B25']
             },
             publication: {
                 hex: '#60A5FA', // Blue 400
@@ -33,16 +33,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 palette: ['#93C5FD', '#60A5FA', '#3B82F6', '#BFDBFE']
             },
             employment: {
-                hex: '#FBBF24', // Amber 400
-                rgb: '251, 191, 36',
-                nonPastelHex: '#F59E0B', // Amber 500
-                palette: ['#FCD34D', '#FBBF24', '#F59E0B', '#FEF3C7']
+                hex: '#00796B',          // Teal
+                rgb: '0, 121, 107',
+                nonPastelHex: '#4DB6AC', // Light Teal
+                palette: ['#032030', '#004D40', '#00796B', '#4DB6AC']
             },
             degree: {
-                hex: '#34D399', // Emerald 400
-                rgb: '52, 211, 153',
-                nonPastelHex: '#10B981', // Emerald 500
-                palette: ['#6EE7B7', '#34D399', '#10B981', '#D1FAE5']
+                hex: '#5E548E',          // Muted Purple
+                rgb: '94, 84, 142',
+                nonPastelHex: '#9F86C0', // Lilac
+                palette: ['#231942', '#5E548E', '#9F86C0', '#BE95C4']
             },
             teaching: {
                 hex: '#F87171', // Red 400
@@ -51,10 +51,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 palette: ['#FCA5A5', '#F87171', '#EF4444', '#FEE2E2']
             },
             certification: {
-                hex: '#2DD4BF', // Teal 400
-                rgb: '45, 212, 191',
-                nonPastelHex: '#14B8A6', // Teal 500
-                palette: ['#5EEAD4', '#2DD4BF', '#14B8A6', '#CCFBF1']
+                hex: '#52525B',          // Zinc 600
+                rgb: '82, 82, 91',
+                nonPastelHex: '#A1A1AA', // Zinc 400
+                palette: ['#18181B', '#27272A', '#3F3F46', '#52525B']
             },
             'side-projects': {
                 hex: '#818CF8', // Indigo 400
