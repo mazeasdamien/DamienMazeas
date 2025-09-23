@@ -3,8 +3,8 @@
   "WorkspaceRootPath": "C:\\Users\\Damien Mazeas\\Desktop\\portfolio\\MyResumeOnline\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Damien Mazeas\\Desktop\\portfolio\\MyResumeOnline\\index.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:index.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Damien Mazeas\\Desktop\\portfolio\\MyResumeOnline\\home.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:home.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Damien Mazeas\\Desktop\\portfolio\\MyResumeOnline\\README.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}",
@@ -27,12 +27,12 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "index.html",
-              "DocumentMoniker": "C:\\Users\\Damien Mazeas\\Desktop\\portfolio\\MyResumeOnline\\index.html",
-              "RelativeDocumentMoniker": "index.html",
-              "ToolTip": "C:\\Users\\Damien Mazeas\\Desktop\\portfolio\\MyResumeOnline\\index.html",
-              "RelativeToolTip": "index.html",
-              "ViewState": "AgIAAEkCAAAAAAAAAAAAAFUCAABFAAAAAAAAAA==",
+              "Title": "home.html",
+              "DocumentMoniker": "C:\\Users\\Damien Mazeas\\Desktop\\portfolio\\MyResumeOnline\\home.html",
+              "RelativeDocumentMoniker": "home.html",
+              "ToolTip": "C:\\Users\\Damien Mazeas\\Desktop\\portfolio\\MyResumeOnline\\home.html",
+              "RelativeToolTip": "home.html",
+              "ViewState": "AgIAAG8BAAAAAAAAAAAAAIABAAA2AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
               "WhenOpened": "2025-09-22T02:16:58.678Z",
               "IsPinned": true,
@@ -46,9 +46,10 @@
               "RelativeDocumentMoniker": "README.md",
               "ToolTip": "C:\\Users\\Damien Mazeas\\Desktop\\portfolio\\MyResumeOnline\\README.md",
               "RelativeToolTip": "README.md",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAATAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001818|",
-              "WhenOpened": "2025-09-23T01:30:35.898Z"
+              "WhenOpened": "2025-09-23T01:30:35.898Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",

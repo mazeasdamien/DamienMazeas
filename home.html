@@ -1,0 +1,541 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - DM</title>
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.jpg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f7ff;
+            color: #1f2937;
+        }
+
+        #background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -1;
+            overflow: hidden;
+            filter: blur(80px) saturate(1.2);
+        }
+
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            transition: background-color 1.5s ease-in-out, transform 0.5s ease-out;
+            animation: move 25s infinite alternate;
+        }
+
+        .color-1 {
+            width: 35vw;
+            height: 35vw;
+            top: 5vh;
+            left: 10vw;
+            background-color: var(--gradient-1);
+            animation-delay: -2s;
+        }
+
+        .color-2 {
+            width: 30vw;
+            height: 30vw;
+            top: 10vh;
+            right: 5vw;
+            background-color: var(--gradient-2);
+            animation-delay: -5s;
+        }
+
+        .color-3 {
+            width: 25vw;
+            height: 25vw;
+            bottom: 5vh;
+            left: 20vw;
+            background-color: var(--gradient-3);
+            animation-delay: -10s;
+        }
+
+        .color-4 {
+            width: 30vw;
+            height: 30vw;
+            bottom: 10vh;
+            right: 15vw;
+            background-color: var(--gradient-4);
+            animation-delay: -7s;
+        }
+
+        #cursor-blob {
+            width: 200px;
+            height: 200px;
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: none;
+            transition: none;
+        }
+
+        @keyframes move {
+            from {
+                transform: translate(0, 0) rotate(0deg) scale(1.1);
+            }
+
+            to {
+                transform: translate(10vw, -10vh) rotate(120deg) scale(1.2);
+            }
+        }
+
+        .marquee-container {
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .marquee {
+            display: inline-block;
+            animation: marquee 25s linear infinite;
+        }
+
+        @keyframes marquee {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        .marquee-top {
+            animation-duration: 80s;
+            transition: color 0.7s ease;
+        }
+
+        .marquee-middle {
+            animation-duration: 100s;
+        }
+
+        .glassy-effect {
+            background-color: rgba(255, 255, 255, 0.55);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: inset 0.5px 0.5px 1px rgba(255, 255, 255, 0.7), 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .header-btn:hover {
+            transform: scale(1.05);
+            background-color: rgba(255, 255, 255, 0.7);
+        }
+
+        .filter-btn {
+            position: relative;
+            overflow: hidden;
+            color: #111827;
+            background-color: rgba(255, 255, 255, 0.4);
+            border: 1.5px solid rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+            .filter-btn::before {
+                content: '';
+                position: absolute;
+                top: var(--y, 0);
+                left: var(--x, 0);
+                transform: translate(-50%, -50%);
+                width: 0;
+                height: 0;
+                background: radial-gradient(circle closest-side, rgba(255, 255, 255, 0.5), transparent);
+                transition: width 0.3s ease, height 0.3s ease;
+            }
+
+            .filter-btn:hover::before {
+                width: 150px;
+                height: 150px;
+            }
+
+            .filter-btn:hover {
+                background-color: rgba(var(--filter-color-rgb), 0.25);
+                color: #111827;
+                transform: scale(1.05);
+                border-color: rgba(var(--filter-color-rgb), 0.4);
+            }
+
+            .filter-btn.active {
+                background-color: var(--filter-color-active);
+                border-color: var(--filter-color-active);
+                color: #FFFFFF;
+                font-weight: 600;
+                transform: scale(1.05);
+                box-shadow: 0 0 15px -2px rgba(var(--filter-color-rgb), 0.6), 0 4px 8px -2px rgba(0,0,0,0.2);
+            }
+
+        .portfolio-item {
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+
+            .portfolio-item.is-visible {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+        .portfolio-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.4s ease, background-color 0.4s ease;
+            border-left: 5px solid var(--item-color, transparent);
+        }
+
+            .portfolio-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            }
+
+        .profile-picture-container {
+            width: 8rem;
+            height: 8rem;
+            position: relative;
+            border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            animation: morph 8s ease-in-out infinite;
+            transition: all 0.5s ease-in-out;
+            --glow-color: 107, 114, 128;
+        }
+
+        @keyframes morph {
+            0% {
+                border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+            }
+
+            50% {
+                border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
+            }
+
+            100% {
+                border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+            }
+        }
+
+        .profile-picture-container:hover {
+            border-radius: 50%;
+            box-shadow: 0 0 40px rgba(var(--glow-color), 0.7), 0 0 80px rgba(var(--glow-color), 0.5);
+            animation-play-state: paused;
+        }
+
+        @media (min-width: 768px) {
+            .profile-picture-container {
+                width: 10rem;
+                height: 10rem;
+            }
+        }
+
+        .name-container {
+            position: relative;
+        }
+
+        .social-bubble-container {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            display: flex;
+            gap: 0.5rem;
+            padding-top: 0.75rem;
+            opacity: 0;
+            transform: translate(-50%, -10px);
+            pointer-events: none;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .name-container:hover .social-bubble-container {
+            opacity: 1;
+            transform: translate(-50%, 0);
+            pointer-events: auto;
+        }
+
+        .social-bubble {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+            transition: transform 0.3s ease;
+        }
+
+            .social-bubble:hover {
+                transform: scale(1.15);
+            }
+
+            .social-bubble img {
+                width: 22px;
+                height: 22px;
+                object-fit: contain;
+            }
+    </style>
+</head>
+<body>
+    <div id="background-container">
+        <div class="blob color-1"></div>
+        <div class="blob color-2"></div>
+        <div class="blob color-3"></div>
+        <div class="blob color-4"></div>
+        <div id="cursor-blob" class="blob"></div>
+    </div>
+
+    <header class="w-full p-6 md:p-8 relative z-10">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-6">
+                <div class="profile-picture-container">
+                    <img src="images/profil.jpg" alt="Damien Mazeas" class="w-full h-full object-cover">
+                </div>
+                <div class="name-container">
+                    <h1 class="text-3xl md:text-4xl font-black tracking-tight cursor-pointer">Damien MAZEAS</h1>
+                    <div class="social-bubble-container">
+                        <a href="https://www.linkedin.com/in/mazeas/" target="_blank" class="social-bubble glassy-effect" aria-label="LinkedIn"><img src="images/social/LinkedIn_icon.svg.webp" alt="LinkedIn logo"></a>
+                        <a href="https://github.com/mazeasdamien" target="_blank" class="social-bubble glassy-effect" aria-label="GitHub"><img src="images/social/Octicons-mark-github.svg.png" alt="GitHub logo"></a>
+                        <a href="https://orcid.org/0000-0001-9258-3909" target="_blank" class="social-bubble glassy-effect" aria-label="Orcid"><img src="images/social/ORCID_iD.svg.png" alt="ORCID logo"></a>
+                        <a href="https://scholar.google.com/citations?user=SydtND4AAAAJ&hl=en" target="_blank" class="social-bubble glassy-effect" aria-label="Google Scholar"><img src="images/social/Google_Scholar_logo.svg.png" alt="Google Scholar logo"></a>
+                        <a href="https://www.youtube.com/@mazeas" target="_blank" class="social-bubble glassy-effect" aria-label="YouTube"><img src="images/social/Youtube_logo.png" alt="YouTube logo"></a>
+                    </div>
+                </div>
+            </div>
+            <nav class="flex items-center space-x-2 md:space-x-4">
+                <a href="pdfs/cv.pdf" target="_blank" class="header-btn glassy-effect text-sm font-semibold tracking-wider p-2.5 rounded-full">CV</a>
+                <a href="contact.html" class="header-btn glassy-effect text-sm font-semibold tracking-wider p-2.5 rounded-full">CONTACT</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="py-10 md:py-16 relative z-10">
+        <div class="marquee-container mb-4">
+            <div class="marquee marquee-top text-gray-900 text-4xl md:text-6xl font-extrabold uppercase">
+                <span>HCI . XR . UNITY 3D . TELEXISTENCE . HUMAN FACTORS . INDUSTRIAL ROBOTICS . REMOTE PRESENCE . USER-CENTERED DESIGN . DIGITAL ENGINEERING .&nbsp;</span>
+                <span>HCI . XR . UNITY 3D . TELEXISTENCE . HUMAN FACTORS . INDUSTRIAL ROBOTICS . REMOTE PRESENCE . USER-CENTERED DESIGN . DIGITAL ENGINEERING .&nbsp;</span>
+            </div>
+        </div>
+        <div class="marquee-container mb-4">
+            <div class="marquee marquee-middle text-gray-900 text-2xl md:text-4xl font-semibold">
+                <span>Hello! I am a researcher in 3D immersive and interactive technologies. I earned my PhD in Human-Computer Interaction from Cranfield University. I obtained my Master's degree in digital engineering at Arts et Métiers. I solve real-world challenges in maintenance by developing user-centered extended reality solutions. My work integrates Human-Computer Interaction, human factors, and industrial robotics to enhance remote presence and virtual collaboration.&nbsp;</span>
+                <span>Hello! I am a researcher in 3D immersive and interactive technologies. I earned my PhD in Human-Computer Interaction from Cranfield University. I obtained my Master's degree in digital engineering at Arts et Métiers. I solve real-world challenges in maintenance by developing user-centered extended reality solutions. My work integrates Human-Computer Interaction, human factors, and industrial robotics to enhance remote presence and virtual collaboration.&nbsp;</span>
+            </div>
+        </div>
+    </section>
+
+    <main class="w-full px-6 md:px-8 pb-16 relative z-10">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-12">
+                <span class="font-medium mb-4 block">Filters :</span>
+                <div id="filter-container" class="flex flex-wrap items-center gap-2 md:gap-4">
+                    <button class="filter-btn glassy-effect active px-4 py-1.5 text-sm font-medium rounded-full" data-filter="all">ALL</button>
+                    <button class="filter-btn glassy-effect px-4 py-1.5 text-sm font-medium rounded-full" data-filter="publication">PUBLICATIONS</button>
+                    <button class="filter-btn glassy-effect px-4 py-1.5 text-sm font-medium rounded-full" data-filter="employment">EMPLOYMENTS</button>
+                    <button class="filter-btn glassy-effect px-4 py-1.5 text-sm font-medium rounded-full" data-filter="degree">DEGREES</button>
+                    <button class="filter-btn glassy-effect px-4 py-1.5 text-sm font-medium rounded-full" data-filter="teaching">TEACHING</button>
+                    <button class="filter-btn glassy-effect px-4 py-1.5 text-sm font-medium rounded-full" data-filter="certification">CERTIFICATION</button>
+                    <button class="filter-btn glassy-effect px-4 py-1.5 text-sm font-medium rounded-full" data-filter="side-projects">SIDE PROJECTS</button>
+                </div>
+            </div>
+            <div class="mb-8">
+                <h2 class="text-sm font-medium text-gray-500 uppercase tracking-wider">Feed (From newest to oldest)</h2>
+            </div>
+            <div id="portfolio-grid" class="grid grid-cols-1 gap-8">
+            </div>
+        </div>
+    </main>
+
+    <footer class="text-center py-8 text-sm text-gray-500 relative z-10">
+        <p>&copy; 2025 Damien Mazeas | Designed & Developed by the Author</p>
+        <p class="mt-2">Last Updated: September 2025</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const filterContainer = document.getElementById('filter-container');
+            const portfolioGrid = document.getElementById('portfolio-grid');
+            const allButtons = document.querySelectorAll('.filter-btn, .header-btn, .social-bubble');
+            const filterButtons = filterContainer ? filterContainer.querySelectorAll('.filter-btn') : [];
+            const backgroundContainer = document.getElementById('background-container');
+            const cursorBlob = document.getElementById('cursor-blob');
+            const profilePicContainer = document.querySelector('.profile-picture-container');
+
+            const filterColors = {
+                all: { hex: '#D1D5DB', rgb: '209, 213, 219', nonPastelHex: '#4B5563', palette: ['#DBEAFE', '#E0F2FE', '#F3E5F5', '#DCE7F7'] },
+                publication: { hex: '#BFDBFE', rgb: '191, 219, 254', nonPastelHex: '#2563EB', palette: ['#BFDBFE', '#93C5FD', '#E0F2FE', '#BAE6FD'] },
+                employment: { hex: '#FDE68A', rgb: '253, 230, 138', nonPastelHex: '#D97706', palette: ['#FDE68A', '#FCD34D', '#FFFBEB', '#FBBF24'] },
+                degree: { hex: '#A7F3D0', rgb: '167, 243, 208', nonPastelHex: '#059669', palette: ['#A7F3D0', '#6EE7B7', '#ECFDF5', '#86EFAC'] },
+                teaching: { hex: '#FECACA', rgb: '254, 202, 202', nonPastelHex: '#DC2626', palette: ['#FECACA', '#FCA5A5', '#FEF2F2', '#F87171'] },
+                certification: { hex: '#A7F3D0', rgb: '167, 243, 208', nonPastelHex: '#16A34A', palette: ['#A7F3D0', '#6EE7B7', '#D1FAE5', '#86EFAC'] },
+                'side-projects': { hex: '#DDD6FE', rgb: '221, 214, 254', nonPastelHex: '#7C3AED', palette: ['#DDD6FE', '#C4B5FD', '#F5F3FF', '#A78BFA'] }
+            };
+
+            const portfolioData = [
+                { category: 'publication', date: '2025-04-01', html: `<a href="pdfs/paper5.pdf" target="_blank" class="block"><div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full"><img src="images/paper5.png" alt="Paper thumbnail" class="h-18 w-full sm:h-auto sm:w-1/12 object-cover"><div class="p-4 w-full sm:w-11/12 flex flex-col justify-center"><p class="text-sm uppercase tracking-wider mb-1">APRIL 2025, <span class="text-gray-700 normal-case">In MDPI Virtual Worlds</span></p><h3 class="font-bold text-lg">Study of Visualization Modalities on Industrial Robot Teleoperation for Inspection in a Virtual Co-Existence Space</h3><p class="text-xs text-gray-500 uppercase tracking-wider mt-2"><b>D Mazeas</b>, B Namoano</p></div></div></a>` },
+                { category: 'teaching', date: '2025-01-01', html: `<div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full"><div class="p-4 w-full sm:w-3/4 flex flex-col justify-center"><h3 class="font-bold text-lg">AI3153 Human-Computer Interaction</h3><p class="text-xs text-gray-500 uppercase tracking-wider">BNBU (UNDERGRADUATES), 2024-2025</p><p class="text-sm text-gray-700 mt-2">Syllabus Creator and Instructor for a class of 63 students.</p></div><div class="flex items-center justify-center sm:w-1/4 p-4"><a href="pdfs/HCIsyllabus.pdf" target="_blank" class="filter-btn glassy-effect px-4 py-1.5 text-sm font-medium rounded-full flex-shrink-0" style="--filter-color: #FFC4C4; --filter-color-rgb: 255, 196, 196;">Syllabus & student feedback </a></div></div>` },
+                { category: 'teaching', date: '2025-01-01', html: `<div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full"><div class="p-4 w-full sm:w-3/4 flex flex-col justify-center"><h3 class="font-bold text-lg">GTSC2093 IT for Success in Everyday Life and Work</h3><p class="text-xs text-gray-500 uppercase tracking-wider">BNBU (UNDERGRADUATES), 2024-2025</p><p class="text-sm text-gray-700 mt-2">Instructor for a class of 80 students.</p></div></div>` },
+                { category: 'teaching', date: '2025-01-01', html: `<div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full"><div class="p-4 w-full sm:w-3/4 flex flex-col justify-center"><h3 class="font-bold text-lg">GCAP3123 Computer Technology and AI Project</h3><p class="text-xs text-gray-500 uppercase tracking-wider">BNBU (UNDERGRADUATES), 2024-2025</p><p class="text-sm text-gray-700 mt-2">Instructor for a project-based class of 50 students.</p></div></div>` },
+                { category: 'employment', date: '2024-09-18', html: `<div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full"><div class="w-full sm:w-24 flex items-center justify-center p-4"><img src="images/logos/bnbu.png" alt="BNBU Logo" class="object-contain h-30"></div><div class="p-4 flex flex-col justify-center"><h3 class="font-bold text-lg">Assistant Professor</h3><p class="text-xs text-gray-500 uppercase tracking-wider">BNBU (Zhuhai, China) | 10 Months (2024 - 2025)</p><p class="text-sm text-gray-700 mt-2">Conducted undergraduate lecturing and mentoring in HCI and XR.</p></div></div>` },
+                { category: 'publication', date: '2024-08-01', html: `<a href="pdfs/paper4.pdf" target="_blank" class="block"><div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full"><img src="images/paper4.png" alt="Paper thumbnail" class="h-18 w-full sm:h-auto sm:w-1/12 object-cover"><div class="p-4 w-full sm:w-11/12 flex flex-col justify-center"><p class="text-sm uppercase tracking-wider mb-1">OCTOBER 2024, <span class="text-gray-700 normal-case">In CIRP Design Conference</span></p><h3 class="font-bold text-lg">Designing Immersive Tools for Expert and Worker Remote Collaboration</h3><p class="text-xs text-gray-500 uppercase tracking-wider mt-2">SCM Galvis*, <b>D Mazeas</b>*, F Noël, JA Erkoyuncu (*Equal contribution)</p></div></div></a>` },
+                { category: 'degree', date: '2024-04-01', html: `<div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full"><div class="w-full sm:w-24 flex items-center justify-center p-4"><img src="images/logos/cranfield.webp" alt="Cranfield University Logo" class="object-contain h-20"></div><div class="p-4 flex flex-col justify-center"><p class="text-xs text-gray-500 uppercase tracking-wider">APR 2024</p><h3 class="font-bold text-lg">PhD in Human-Computer Interaction</h3><p class="text-sm text-gray-700 mt-1">Cranfield University (UK) - Centre for Digital and Design Engineering</p></div></div>` },
+                { category: 'employment', date: '2023-08-01', html: `<div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full"><div class="w-full sm:w-24 flex items-center justify-center p-4"><img src="images/logos/cnrs.png" alt="CNRS Logo" class="object-contain h-20"></div><div class="p-4 flex flex-col justify-center"><h3 class="font-bold text-lg">Research Fellow</h3><p class="text-xs text-gray-500 uppercase tracking-wider">CNRS@CREATE (Singapore) | 1 Year (2023 - 2024)</p><p class="text-sm text-gray-700 mt-2">Studied how viewpoints shaped virtual navigation.</p></div></div>` },
+                { category: 'publication', date: '2023-05-01', html: `<a href="pdfs/paper3.pdf" target="_blank" class="block"><div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full"><img src="images/paper3.png" alt="Paper thumbnail" class="h-18 w-full sm:h-auto sm:w-1/12 object-cover"><div class="p-4 w-full sm:w-11/12 flex flex-col justify-center"><p class="text-sm uppercase tracking-wider mb-1">MAY 2023, <span class="text-gray-700 normal-case">In IEEE Conference on Virtual Reality and 3D User Interfaces Abstracts and Workshops</span></p><h3 class="font-bold text-lg">Telexistence-based remote maintenance for marine engineers</h3><p class="text-xs text-gray-500 uppercase tracking-wider mt-2"><b>D Mazeas</b>, JA Erkoyuncu, F Noël</p></div></div></a>` },
+                { category: 'employment', date: '2023-02-01', html: `<div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full"><div class="w-full sm:w-24 flex items-center justify-center p-4"><img src="images/logos/gscop.jpg" alt="G-SCOP Lab Logo" class="object-contain h-20"></div><div class="p-4 flex flex-col justify-center"><h3 class="font-bold text-lg">Visiting PhD Student</h3><p class="text-xs text-gray-500 uppercase tracking-wider">G-SCOP LAB (Grenoble, France) | 6 Months (2023)</p><p class="text-sm text-gray-700 mt-2">Designed a framework for expert-worker virtual reality remote collaboration.</p></div></div>` },
+                { category: 'publication', date: '2023-02-01', html: `<a href="pdfs/paper2.pdf" target="_blank" class="block"><div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full"><img src="images/paper2.png" alt="Paper thumbnail" class="h-18 w-full sm:h-auto sm:w-1/12 object-cover"><div class="p-4 w-full sm:w-11/12 flex flex-col justify-center"><p class="text-sm uppercase tracking-wider mb-1">FEBRUARY 2023, <span class="text-gray-700 normal-case">In IFIP International Conference on Product Lifecycle Management</span></p><h3 class="font-bold text-lg">A telexistence interface for remote control of a physical industrial robot via data distribution service</h3><p class="text-xs text-gray-500 uppercase tracking-wider mt-2"><b>D Mazeas</b>, JA Erkoyuncu, F Noël</p></div></div></a>` },
+                { category: 'side-projects', date: '2022-11-01', html: `<a href="https://github.com/mazeasdamien/UR16e-inverse-kinematics-unity" target="_blank" class="block"><div class="portfolio-card glassy-effect flex items-center rounded-2xl overflow-hidden shadow-md h-full p-4"><div class="w-16 flex-shrink-0 flex items-center justify-center"><img src="images/social/Octicons-mark-github.svg.png" class="h-8 w-8"></div><div class="flex-grow"><h3 class="font-bold text-lg">Universal Robots 16e inverse kinematics in Unity3D</h3><p class="text-xs text-gray-500 uppercase tracking-wider">GitHub Project</p></div></div></a>` },
+                { category: 'side-projects', date: '2022-10-01', html: `<a href="https://youtu.be/z6q5F0_8e6w" target="_blank" class="block"><div class="portfolio-card glassy-effect flex items-center rounded-2xl overflow-hidden shadow-md h-full p-4"><div class="w-16 flex-shrink-0 flex items-center justify-center"><img src="images/social/Youtube_logo.png" class="h-6"></div><div class="flex-grow"><h3 class="font-bold text-lg">Linking FANUC Roboguide software with Unity 3D</h3><p class="text-xs text-gray-500 uppercase tracking-wider">YouTube Demo</p></div></div></a>` },
+                { category: 'side-projects', date: '2022-09-01', html: `<a href="https://youtu.be/kYAwO05a7uA" target="_blank" class="block"><div class="portfolio-card glassy-effect flex items-center rounded-2xl overflow-hidden shadow-md h-full p-4"><div class="w-16 flex-shrink-0 flex items-center justify-center"><img src="images/social/Youtube_logo.png" class="h-6"></div><div class="flex-grow"><h3 class="font-bold text-lg">Pick and place programmed with a FANUC robot</h3><p class="text-xs text-gray-500 uppercase tracking-wider">YouTube Demo</p></div></div></a>` },
+                { category: 'side-projects', date: '2022-08-01', html: `<a href="https://youtu.be/qla41tEnjsY" target="_blank" class="block"><div class="portfolio-card glassy-effect flex items-center rounded-2xl overflow-hidden shadow-md h-full p-4"><div class="w-16 flex-shrink-0 flex items-center justify-center"><img src="images/social/Youtube_logo.png" class="h-6"></div><div class="flex-grow"><h3 class="font-bold text-lg">Remote control of a TurtleBot2 with the HoloLens 2</h3><p class="text-xs text-gray-500 uppercase tracking-wider">YouTube Demo</p></div></div></a>` },
+                { category: 'side-projects', date: '2022-07-01', html: `<a href="https://www.theiam.org/media/4835/emerging-tech-to-support-asset-management.pdf" target="_blank" class="block"><div class="portfolio-card glassy-effect flex items-center rounded-2xl overflow-hidden shadow-md h-full p-4"><div class="w-16 flex-shrink-0 flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg></div><div class="flex-grow"><h3 class="font-bold text-lg">Emerging tech to support asset management</h3><p class="text-xs text-gray-500 uppercase tracking-wider">Technical Article</p></div></div></a>` },
+                { category: 'side-projects', date: '2022-06-01', html: `<a href="https://youtu.be/w-u5z22H3II" target="_blank" class="block"><div class="portfolio-card glassy-effect flex items-center rounded-2xl overflow-hidden shadow-md h-full p-4"><div class="w-16 flex-shrink-0 flex items-center justify-center"><img src="images/social/Youtube_logo.png" class="h-6"></div><div class="flex-grow"><h3 class="font-bold text-lg">Visualization of an injection moulding in VR</h3><p class="text-xs text-gray-500 uppercase tracking-wider">YouTube Demo</p></div></div></a>` },
+                { category: 'side-projects', date: '2022-05-01', html: `<a href="https://youtu.be/q-4sC-T0-YI" target="_blank" class="block"><div class="portfolio-card glassy-effect flex items-center rounded-2xl overflow-hidden shadow-md h-full p-4"><div class="w-16 flex-shrink-0 flex items-center justify-center"><img src="images/social/Youtube_logo.png" class="h-6"></div><div class="flex-grow"><h3 class="font-bold text-lg">Training procedure for starting a production line in VR</h3><p class="text-xs text-gray-500 uppercase tracking-wider">YouTube Demo</p></div></div></a>` },
+                { category: 'certification', date: '2021-09-01', html: `<div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full"><div class="w-full sm:w-24 flex items-center justify-center p-4"><img src="images/logos/fanuc.png" alt="FANUC Logo" class="object-contain h-12"></div><div class="p-4 flex flex-col justify-center"><p class="text-xs text-gray-500 uppercase tracking-wider">SEP 2021</p><h3 class="font-bold text-lg">Standard Teach Pendant Programming</h3><p class="text-sm text-gray-700 mt-1">FANUC (UK)</p></div></div>` },
+                { category: 'publication', date: '2020-06-01', html: `<a href="pdfs/paper1.pdf" target="_blank" class="block"><div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full"><img src="images/paper1.png" alt="Paper thumbnail" class="h-18 w-full sm:h-auto sm:w-1/12 object-cover"><div class="p-4 w-full sm:w-11/12 flex flex-col justify-center"><p class="text-sm uppercase tracking-wider mb-1">JUNE 2020, <span class="text-gray-700 normal-case">In Proceedings of the design society: DESIGN conference</span></p><h3 class="font-bold text-lg">IMPRO: Immersive prototyping in virtual environments for industrial designers</h3><p class="text-xs text-gray-500 uppercase tracking-wider mt-2">S Stadler, H Cornet, <b>D Mazeas*</b>, JR Chardonnet, F Frenkler (*App development, experiment design, data collection, and analysis)</p></div></div></a>` },
+                { category: 'employment', date: '2020-01-01', html: `<div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full"><div class="w-full sm:w-24 flex items-center justify-center p-4"><img src="images/logos/safran.png" alt="Safran Logo" class="object-contain h-20"></div><div class="p-4 flex flex-col justify-center"><h3 class="font-bold text-lg">Solutions Engineer</h3><p class="text-xs text-gray-500 uppercase tracking-wider">SAFRAN LANDING SYSTEMS (Gloucester, UK) | 6 Months (2020)</p><p class="text-sm text-gray-700 mt-2">Assisted with the implementation of augmented reality solutions for maintenance.</p></div></div>` },
+                { category: 'employment', date: '2019-10-01', html: `<div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full"><div class="w-full sm:w-24 flex items-center justify-center p-4"><img src="images/logos/sec.png" alt="SEC Logo" class="object-contain h-30"></div><div class="p-4 flex flex-col justify-center"><h3 class="font-bold text-lg">Freelance</h3><p class="text-xs text-gray-500 uppercase tracking-wider">SINGAPORE-ETH CENTRE (Remote) | 4 Months (2019 - 2020)</p><p class="text-sm text-gray-700 mt-2">Developed Unity 3D applications to study human navigation in isolation.</p></div></div>` },
+                { category: 'degree', date: '2019-09-01', html: `<div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full"><div class="w-full sm:w-24 flex items-center justify-center p-4"><img src="images/logos/artsetmetiers.svg" alt="Arts et Métiers Logo" class="object-contain h-30"></div><div class="p-4 flex flex-col justify-center"><p class="text-xs text-gray-500 uppercase tracking-wider">SEP 2019</p><h3 class="font-bold text-lg">Master's degree in Digital Engineering</h3><p class="text-sm text-gray-700 mt-1">Arts et Métiers (France) - Institute Image</p></div></div>` },
+                { category: 'employment', date: '2019-04-01', html: `<div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full"><div class="w-full sm:w-24 flex items-center justify-center p-4"><img src="images/logos/tumcreate.png" alt="TUMCREATE Logo" class="object-contain h-20"></div><div class="p-4 flex flex-col justify-center"><h3 class="font-bold text-lg">Research Assistant</h3><p class="text-xs text-gray-500 uppercase tracking-wider">TUMCREATE (Singapore) | 6 Months (2019)</p><p class="text-sm text-gray-700 mt-2">Studied the use of virtual reality for industrial designers.</p></div></div>` },
+                { category: 'employment', date: '2018-09-01', html: `<div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full"><div class="w-full sm:w-24 flex items-center justify-center p-4"><img src="images/logos/orano.svg" alt="Orano Logo" class="object-contain h-20"></div><div class="p-4 flex flex-col justify-center"><h3 class="font-bold text-lg">Virtual Reality Intern</h3><p class="text-xs text-gray-500 uppercase tracking-wider">ORANO (Cherbourg, France) | 6 Months (2018)</p><p class="text-sm text-gray-700 mt-2">Prepared project reviews for the design office using IC.IDO, Unity 3D, PiXYZ, SolidWorks, and Autodesk Navisworks.</p></div></div>` },
+                { category: 'degree', date: '2017-07-01', html: `<div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full"><div class="w-full sm:w-24 flex items-center justify-center p-4"><img src="images/logos/poitiers.png" alt="University of Poitiers Logo" class="object-contain h-20"></div><div class="p-4 flex flex-col justify-center"><p class="text-xs text-gray-500 uppercase tracking-wider">JUL 2017</p><h3 class="font-bold text-lg">Professional Bachelor's degree in Industrial Design</h3><p class="text-sm text-gray-700 mt-1">University of Poitiers (France)</p></div></div>` },
+                { category: 'employment', date: '2017-04-01', html: `<div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full"><div class="w-full sm:w-24 flex items-center justify-center p-4"><img src="images/logos/vernetdray.png" alt="Vernet Dray Logo" class="object-contain h-20"></div><div class="p-4 flex flex-col justify-center"><h3 class="font-bold text-lg">SolidWorks Intern</h3><p class="text-xs text-gray-500 uppercase tracking-wider">VERNET DRAY (Lyon, France) | 4 Months (2017)</p><p class="text-sm text-gray-700 mt-2">Modeled jewelry and created technical drawings on SolidWorks.</p></div></div>` },
+                { category: 'degree', date: '2016-06-01', html: `<div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full"><div class="w-full sm:w-24 flex items-center justify-center p-4"><img src="images/logos/tours.png" alt="University of Tours Logo" class="object-contain h-20"></div><div class="p-4 flex flex-col justify-center"><p class="text-xs text-gray-500 uppercase tracking-wider">JUN 2016</p><h3 class="font-bold text-lg">Associate's degree in Materials Engineering</h3><p class="text-sm text-gray-700 mt-1">University of Tours (France)</p></div></div>` },
+                { category: 'employment', date: '2016-04-01', html: `<div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full"><div class="w-full sm:w-24 flex items-center justify-center p-4"><img src="images/logos/europoly.png" alt="EUROPOLY Logo" class="object-contain h-20"></div><div class="p-4 flex flex-col justify-center"><h3 class="font-bold text-lg">Methods Intern</h3><p class="text-xs text-gray-500 uppercase tracking-wider">EUROPOLY (Lyon, France) | 3 Months (2016)</p><p class="text-sm text-gray-700 mt-2">Programmed a 3-axis CNC on Autodesk ArtCAM and produced technical drawings on SolidWorks.</p></div></div>` }
+            ];
+
+            function hexToRgb(hex) {
+                let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+                return result ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` : null;
+            }
+
+            function updateTheme(filterName = 'all') {
+                const filterData = filterColors[filterName];
+                const colors = filterData.palette;
+                backgroundContainer.style.setProperty('--gradient-1', colors[0]);
+                backgroundContainer.style.setProperty('--gradient-2', colors[1]);
+                backgroundContainer.style.setProperty('--gradient-3', colors[2]);
+                backgroundContainer.style.setProperty('--gradient-4', colors[3]);
+                const glowRgb = hexToRgb(filterData.nonPastelHex);
+                if (glowRgb) {
+                    profilePicContainer.style.setProperty('--glow-color', glowRgb);
+                }
+            }
+
+            function applyFilterColorToCards() {
+                document.querySelectorAll('.portfolio-item').forEach(item => {
+                    const category = item.dataset.category;
+                    const card = item.querySelector('.portfolio-card');
+                    if (category && filterColors[category] && card) {
+                        const rgb = filterColors[category].rgb;
+                        card.style.backgroundColor = `rgba(${rgb}, 0.55)`;
+                        card.style.borderColor = `rgba(${rgb}, 0.7)`;
+                    }
+                });
+            }
+
+            function animateItems(filter = 'all') {
+                const items = document.querySelectorAll('.portfolio-item');
+                let delay = 0;
+                items.forEach(item => {
+                    const categories = item.dataset.category.split(' ');
+                    let shouldShow = false;
+
+                    if (categories.includes('side-projects')) {
+                        shouldShow = (filter === 'side-projects');
+                    } else {
+                        shouldShow = (filter === 'all' || categories.includes(filter));
+                    }
+
+                    if (shouldShow) {
+                        item.style.display = 'block';
+                        setTimeout(() => item.classList.add('is-visible'), delay);
+                        delay += 50;
+                    } else {
+                        item.classList.remove('is-visible');
+                        setTimeout(() => { item.style.display = 'none'; }, 500);
+                    }
+                });
+            }
+
+            function renderPortfolio() {
+                portfolioData.sort((a, b) => new Date(b.date) - new Date(a.date));
+                const gridHTML = portfolioData.map(item => `<div class="portfolio-item" data-category="${item.category}">${item.html}</div>`).join('');
+                portfolioGrid.innerHTML = gridHTML;
+                applyFilterColorToCards();
+                animateItems();
+            }
+
+            filterButtons.forEach(btn => {
+                const filter = btn.dataset.filter;
+                if (filter && filterColors[filter]) {
+                    btn.style.setProperty('--filter-color', filterColors[filter].hex);
+                    btn.style.setProperty('--filter-color-rgb', filterColors[filter].rgb);
+                    btn.style.setProperty('--filter-color-active', filterColors[filter].nonPastelHex);
+                }
+            });
+
+            renderPortfolio();
+            updateTheme('all');
+
+            window.addEventListener('mousemove', e => {
+                cursorBlob.animate({
+                    left: `${e.clientX}px`,
+                    top: `${e.clientY}px`
+                }, { duration: 2000, fill: "forwards" });
+
+                allButtons.forEach(btn => {
+                    const rect = btn.getBoundingClientRect();
+                    btn.style.setProperty('--x', `${e.clientX - rect.left}px`);
+                    btn.style.setProperty('--y', `${e.clientY - rect.top}px`);
+                });
+            });
+
+            window.addEventListener('click', e => {
+                const colorBlobs = document.querySelectorAll('.blob:not(#cursor-blob)');
+                colorBlobs.forEach(blob => {
+                    const rect = blob.getBoundingClientRect();
+                    const blobX = rect.left + rect.width / 2;
+                    const blobY = rect.top + rect.height / 2;
+                    const angle = Math.atan2(blobY - e.clientY, blobX - e.clientX);
+                    const force = 100;
+                    const translateX = Math.cos(angle) * force;
+                    const translateY = Math.sin(angle) * force;
+
+                    const currentTransform = window.getComputedStyle(blob).transform;
+                    const newTransform = currentTransform === 'none'
+                        ? `translate(${translateX}px, ${translateY}px)`
+                        : `${currentTransform} translate(${translateX}px, ${translateY}px)`;
+
+                    blob.style.transform = newTransform;
+
+                    setTimeout(() => {
+                        blob.style.transform = '';
+                    }, 500);
+                });
+            });
+
+            if (filterContainer) {
+                filterContainer.addEventListener('click', (event) => {
+                    const targetButton = event.target.closest('.filter-btn');
+                    if (targetButton) {
+                        filterContainer.querySelector('.active').classList.remove('active');
+                        targetButton.classList.add('active');
+                        const filter = targetButton.dataset.filter;
+                        updateTheme(filter);
+                        animateItems(filter);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
