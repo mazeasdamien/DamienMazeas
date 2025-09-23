@@ -9,240 +9,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #F4F4F6; /* Fallback */
-            cursor: none; /* Hides the default system cursor */
-            transition: color 0.5s ease;
-        }
-
-        /* --- Animated Aurora Background --- */
-        #page-background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -2;
-            overflow: hidden;
-            background-color: #F4F4F6;
-            transition: background-color 0.5s ease;
-        }
-
-            #page-background::before {
-                content: '';
-                position: absolute;
-                width: 200%;
-                height: 200%;
-                top: -50%;
-                left: -50%;
-                background: radial-gradient(circle at 20% 20%, #d1e9ff 0%, transparent 30%), radial-gradient(circle at 80% 30%, #ffd1f7 0%, transparent 30%), radial-gradient(circle at 50% 80%, #d4ffea 0%, transparent 35%);
-                animation: aurora-flow 25s linear infinite;
-                transition: background 0.5s ease, opacity 0.5s ease;
-            }
-
-        @keyframes aurora-flow {
-            0% {
-                transform: rotate(0deg) scale(1.2);
-            }
-
-            50% {
-                transform: rotate(180deg) scale(1.3);
-            }
-
-            100% {
-                transform: rotate(360deg) scale(1.2);
-            }
-        }
-
-        #constellation-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            opacity: 0.7;
-        }
-
-        /* --- Enhanced Glassmorphism & Button Styles --- */
-        .filter-btn, #theme-toggle {
-            position: relative;
-            overflow: hidden;
-            background-color: rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            box-shadow: inset 0 0 0 0.5px rgba(255,255,255,0.6);
-            color: #111827;
-            transition: all 0.3s ease;
-        }
-
-            .filter-btn::before {
-                content: '';
-                position: absolute;
-                top: var(--y, 0);
-                left: var(--x, 0);
-                transform: translate(-50%, -50%);
-                width: 150px;
-                height: 150px;
-                background: radial-gradient(circle closest-side, rgba(255, 255, 255, 0.7), transparent);
-            }
-
-            .filter-btn:hover, #theme-toggle:hover {
-                transform: scale(1.1);
-                background-color: rgba(255, 255, 255, 0.5);
-            }
-
-        .social-btn {
-            background-color: rgba(255, 255, 255, 0.4) !important;
-        }
-
-            .social-btn:hover {
-                background-color: #111827 !important;
-                color: #ffffff;
-                border-color: #111827;
-            }
-
-        /* --- On-Load Animation Styles --- */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes scaleIn {
-            from {
-                opacity: 0;
-                transform: scale(0.95);
-            }
-
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        .animate-on-load {
-            opacity: 0;
-        }
-
-        .fade-in-up {
-            animation: fadeInUp 0.7s ease-out forwards;
-        }
-
-        .scale-in {
-            animation: scaleIn 0.7s ease-out forwards;
-        }
-
-        /* --- Custom Cursor Styles --- */
-        #cursor-dot {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 6px;
-            height: 6px;
-            background-color: #111827;
-            border-radius: 50%;
-            pointer-events: none;
-            transform: translate(-50%, -50%);
-            z-index: 9999;
-            transition: background-color 0.5s ease;
-        }
-
-        #cursor-outline {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 30px;
-            height: 30px;
-            border: 2px solid rgba(27, 27, 27, 0.4);
-            border-radius: 50%;
-            pointer-events: none;
-            transform: translate(-50%, -50%);
-            transition: width 0.3s ease, height 0.3s ease, border-color 0.5s ease;
-            z-index: 9999;
-        }
-
-            #cursor-outline.grow {
-                width: 50px;
-                height: 50px;
-                border-color: rgba(27, 27, 27, 0.2);
-            }
-
-        /* --- Dark Mode Styles --- */
-        html.dark {
-            color-scheme: dark;
-        }
-
-            html.dark body {
-                color: #E6EDF3;
-            }
-
-            html.dark #page-background {
-                background-color: #0D1117;
-            }
-
-                html.dark #page-background::before {
-                    background: radial-gradient(circle at 20% 20%, #2a3a6b 0%, transparent 30%), radial-gradient(circle at 80% 30%, #6b2a60 0%, transparent 30%), radial-gradient(circle at 50% 80%, #2a6b4c 0%, transparent 35%);
-                    opacity: 0.6;
-                }
-
-            html.dark h1, html.dark h2, html.dark h3 {
-                color: #E6EDF3;
-            }
-
-            html.dark p.text-gray-600, html.dark label, html.dark footer {
-                color: #8B949E;
-            }
-
-            html.dark a {
-                color: #58a6ff;
-            }
-
-            html.dark .filter-btn, html.dark #theme-toggle {
-                background-color: rgba(31, 41, 55, 0.3);
-                border-color: rgba(75, 85, 99, 0.5);
-                color: #E6EDF3;
-            }
-
-                html.dark .filter-btn:hover, html.dark #theme-toggle:hover {
-                    background-color: rgba(55, 65, 81, 0.5);
-                    border-color: rgba(100, 116, 139, 0.7);
-                }
-
-            html.dark .social-btn:hover {
-                background-color: #E6EDF3 !important;
-                color: #0D1117;
-                border-color: #E6EDF3;
-            }
-
-            html.dark #contact-card {
-                background-color: rgba(22, 27, 34, 0.3);
-                border-color: rgba(75, 85, 99, 0.5);
-            }
-
-            html.dark #cursor-dot {
-                background-color: #E6EDF3;
-            }
-
-            html.dark #cursor-outline {
-                border-color: rgba(230, 237, 243, 0.4);
-            }
-
-                html.dark #cursor-outline.grow {
-                    border-color: rgba(230, 237, 243, 0.2);
-                }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body id="contact-page" class="dark">
 
     <div id="cursor-dot"></div>
     <div id="cursor-outline"></div>
@@ -253,54 +22,51 @@
     <header class="w-full p-6 md:p-8 relative z-10">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <div class="flex items-center gap-6">
-                <img src="images/profil.jpg" alt="Damien Mazeas" class="w-16 h-16 md:w-20 md:h-20 rounded-full object-cover border-2 border-white shadow-sm animate-on-load">
-                <h1 class="text-3xl md:text-4xl font-black tracking-tight animate-on-load">Damien MAZEAS</h1>
+                <div class="profile-picture-container">
+                    <img src="images/profil.jpg" alt="Damien Mazeas" class="w-full h-full object-cover">
+                </div>
+                <div class="name-container">
+                    <h1 class="text-3xl md:text-4xl font-black tracking-tight">Damien MAZEAS</h1>
+                </div>
             </div>
             <nav class="flex items-center space-x-2 md:space-x-4">
-                <a href="index.html" class="filter-btn text-sm font-semibold tracking-wider px-4 py-2 rounded-full animate-on-load">HOME</a>
-                <a href="#" target="_blank" class="filter-btn text-sm font-semibold tracking-wider px-4 py-2 rounded-full animate-on-load">CV</a>
+                <a href="index.html" class="header-btn glassy-effect text-sm font-semibold tracking-wider p-2.5 rounded-full">HOME</a>
+                <a href="pdfs/cv.pdf" target="_blank" class="header-btn glassy-effect text-sm font-semibold tracking-wider p-2.5 rounded-full">CV</a>
             </nav>
         </div>
     </header>
 
-    <main class="w-full px-6 md:px-8 py-16 relative z-10">
+    <main class="w-full px-6 md:px-8 py-2 relative z-10">
         <div class="max-w-3xl mx-auto text-center">
-            <h2 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-4 animate-on-load">Get in Touch</h2>
-            <p class="text-lg text-gray-600 mb-8 animate-on-load">
-                I'm always open to discussing new research, projects, or collaboration opportunities.
-            </p>
-
-            <div id="contact-card" class="bg-white/30 backdrop-blur-xl border border-white/50 rounded-2xl shadow-lg p-8 text-left animate-on-load">
-                <h3 class="font-bold text-xl mb-6">Contact Information</h3>
+            <div id="contact-card" class="glassy-effect rounded-2xl shadow-lg p-8 text-left">
+                <h3 class="font-bold text-xl mb-2">Get in Touch</h3>
+                <p class="text-left text-gray-400 mb-8">
+                    I'm always open to discussing new research, projects, or collaboration opportunities.
+                </p>
                 <div class="space-y-4">
                     <div>
                         <label class="text-sm font-semibold text-gray-500 uppercase">Email</label>
-                        <p class="text-lg text-gray-800">
-                            <a href="mailto:damien.mazeas@icloud.com" class="hover:text-blue-600 transition-colors">damien.mazeas@icloud.com</a>
+                        <p class="text-lg">
+                            <a href="mailto:damien.mazeas@icloud.com" class="hover:text-blue-400 transition-colors">damien.mazeas@icloud.com</a>
                         </p>
                     </div>
                     <div>
                         <label class="text-sm font-semibold text-gray-500 uppercase">Social</label>
                         <div class="flex flex-wrap items-center gap-4 mt-1">
-                            <a href="https://www.linkedin.com/in/mazeas/" target="_blank" class="filter-btn social-btn text-sm font-semibold tracking-wider px-4 py-2 rounded-full inline-flex items-center gap-2 animate-on-load">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/LinkedIn_icon.svg/1200px-LinkedIn_icon.svg.png" class="w-4 h-4" alt="LinkedIn logo">
-                                LinkedIn
+                            <a href="https://www.linkedin.com/in/mazeas/" target="_blank" class="filter-btn social-btn text-sm font-semibold tracking-wider px-4 py-2 rounded-full inline-flex items-center gap-2">
+                                <img src="images/social/LinkedIn_icon.svg.webp" class="w-4 h-4" alt="LinkedIn logo"> LinkedIn
                             </a>
-                            <a href="https://github.com/mazeasdamien" target="_blank" class="filter-btn social-btn text-sm font-semibold tracking-wider px-4 py-2 rounded-full inline-flex items-center gap-2 animate-on-load">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8" /></svg>
-                                GitHub
+                            <a href="https://github.com/mazeasdamien" target="_blank" class="filter-btn social-btn text-sm font-semibold tracking-wider px-4 py-2 rounded-full inline-flex items-center gap-2">
+                                <img src="images/social/Octicons-mark-github.svg.png" class="w-4 h-4" alt="GitHub logo"> GitHub
                             </a>
-                            <a href="https://orcid.org/0000-0001-9258-3909" target="_blank" class="filter-btn social-btn text-sm font-semibold tracking-wider px-4 py-2 rounded-full inline-flex items-center gap-2 animate-on-load">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/ORCID_iD.svg/2048px-ORCID_iD.svg.png" class="w-4 h-4" alt="ORCID logo">
-                                Orcid
+                            <a href="https://orcid.org/0000-0001-9258-3909" target="_blank" class="filter-btn social-btn text-sm font-semibold tracking-wider px-4 py-2 rounded-full inline-flex items-center gap-2">
+                                <img src="images/social/ORCID_iD.svg.png" class="w-4 h-4" alt="ORCID logo"> Orcid
                             </a>
-                            <a href="https://scholar.google.com/citations?user=SydtND4AAAAJ&hl=en" target="_blank" class="filter-btn social-btn text-sm font-semibold tracking-wider px-4 py-2 rounded-full inline-flex items-center gap-2 animate-on-load">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Google_Scholar_logo.svg/2048px-Google_Scholar_logo.svg.png" class="w-4 h-4" alt="Google Scholar logo">
-                                Google Scholar
+                            <a href="https://scholar.google.com/citations?user=SydtND4AAAAJ&hl=en" target="_blank" class="filter-btn social-btn text-sm font-semibold tracking-wider px-4 py-2 rounded-full inline-flex items-center gap-2">
+                                <img src="images/social/Google_Scholar_logo.svg.png" class="w-4 h-4" alt="Google Scholar logo"> Google Scholar
                             </a>
-                            <a href="https://www.youtube.com/@mazeas" target="_blank" class="filter-btn social-btn text-sm font-semibold tracking-wider px-4 py-2 rounded-full inline-flex items-center gap-2 animate-on-load">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png" class="w-4 h-4 object-contain" alt="YouTube logo">
-                                YouTube
+                            <a href="https://www.youtube.com/@mazeas" target="_blank" class="filter-btn social-btn text-sm font-semibold tracking-wider px-4 py-2 rounded-full inline-flex items-center gap-2">
+                                <img src="images/social/Youtube_logo.png" class="w-4 h-4 object-contain" alt="YouTube logo"> YouTube
                             </a>
                         </div>
                     </div>
@@ -309,182 +75,11 @@
         </div>
     </main>
 
-    <footer class="text-center py-8 text-sm text-gray-500 relative z-10 animate-on-load">
+    <footer class="text-center py-8 text-sm text-gray-500 relative z-10">
         <p>&copy; 2025 Damien Mazeas | Designed & Developed by the Author</p>
         <p class="mt-2">Last Updated: September 2025</p>
     </footer>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // --- Dark Mode Logic ---
-            const htmlEl = document.documentElement;
-            htmlEl.classList.add('dark');
-
-            // --- On-Load Animation Logic ---
-            const animationConfig = [
-                { selector: 'header img', animation: 'scale-in', delay: 100 },
-                { selector: 'header h1', animation: 'fade-in-up', delay: 200 },
-                { selector: 'header nav a:nth-child(1)', animation: 'fade-in-up', delay: 300 },
-                { selector: 'header nav a:nth-child(2)', animation: 'fade-in-up', delay: 350 },
-                { selector: '#theme-toggle', animation: 'fade-in-up', delay: 400 },
-                { selector: 'main h2', animation: 'fade-in-up', delay: 450 },
-                { selector: 'main > div > p', animation: 'fade-in-up', delay: 550 },
-                { selector: '#contact-card', animation: 'scale-in', delay: 650 },
-                { selector: 'footer', animation: 'fade-in-up', delay: 950 }
-            ];
-
-            animationConfig.forEach(item => {
-                const element = document.querySelector(item.selector);
-                if (element) {
-                    element.classList.add('animate-on-load'); // ensure it starts hidden
-                    setTimeout(() => {
-                        element.classList.add(item.animation);
-                    }, item.delay);
-                }
-            });
-
-            const socialButtons = document.querySelectorAll('.social-btn');
-            socialButtons.forEach((btn, index) => {
-                btn.classList.add('animate-on-load'); // ensure it starts hidden
-                setTimeout(() => {
-                    btn.classList.add('scale-in');
-                }, 800 + (index * 100));
-            });
-
-            // --- Constellation Canvas Logic ---
-            const canvas = document.getElementById('constellation-canvas');
-            const ctx = canvas.getContext('2d');
-            let dots = [];
-            const mouse = { x: null, y: null };
-            const dotConnectionDistance = 100;
-            const baseDotDensity = 1000;
-
-            function resizeCanvas() {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-                createDots();
-            }
-
-            function createDots() {
-                dots = [];
-                const dotCount = Math.floor((canvas.width * canvas.height) / baseDotDensity);
-                for (let i = 0; i < dotCount; i++) {
-                    dots.push({
-                        x: Math.random() * canvas.width,
-                        y: Math.random() * canvas.height,
-                        hue: Math.floor(Math.random() * 360),
-                        size: Math.random() * 2 + 1,
-                        speedX: (Math.random() - 0.5) * 0.5,
-                        speedY: (Math.random() - 0.5) * 0.5
-                    });
-                }
-            }
-
-            function animate() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                const nearbyDots = [];
-                for (const dot of dots) {
-                    dot.speedX *= 0.98;
-                    dot.speedY *= 0.98;
-                    const driftStrength = 0.01;
-                    dot.speedX += (Math.random() - 0.5) * driftStrength;
-                    dot.speedY += (Math.random() - 0.5) * driftStrength;
-                    dot.x += dot.speedX;
-                    dot.y += dot.speedY;
-                    if (dot.x < 0) dot.x = canvas.width;
-                    if (dot.x > canvas.width) dot.x = 0;
-                    if (dot.y < 0) dot.y = canvas.height;
-                    if (dot.y > canvas.height) dot.y = 0;
-
-                    ctx.beginPath();
-                    ctx.arc(dot.x, dot.y, dot.size, 0, Math.PI * 2);
-                    ctx.fillStyle = `hsla(${dot.hue}, 80%, 70%, 0.8)`;
-                    ctx.fill();
-
-                    if (mouse.x !== null) {
-                        const distMouse = Math.hypot(mouse.x - dot.x, mouse.y - dot.y);
-                        if (distMouse < dotConnectionDistance) {
-                            nearbyDots.push(dot);
-                            const opacity = 1 - (distMouse / dotConnectionDistance);
-                            ctx.beginPath();
-                            ctx.moveTo(dot.x, dot.y);
-                            ctx.lineTo(mouse.x, mouse.y);
-                            ctx.strokeStyle = `hsla(${dot.hue}, 80%, 70%, ${opacity})`;
-                            ctx.lineWidth = 1.8;
-                            ctx.stroke();
-                        }
-                    }
-                }
-                for (let i = 0; i < nearbyDots.length; i++) {
-                    for (let j = i + 1; j < nearbyDots.length; j++) {
-                        const dotA = nearbyDots[i];
-                        const dotB = nearbyDots[j];
-                        const distance = Math.hypot(dotA.x - dotB.x, dotA.y - dotB.y);
-                        if (distance < dotConnectionDistance) {
-                            const opacity = 1 - (distance / dotConnectionDistance);
-                            ctx.beginPath();
-                            ctx.moveTo(dotA.x, dotA.y);
-                            ctx.lineTo(dotB.x, dotB.y);
-                            ctx.strokeStyle = `hsla(${dotA.hue}, 80%, 70%, ${opacity * 0.6})`;
-                            ctx.lineWidth = 1;
-                            ctx.stroke();
-                        }
-                    }
-                }
-                requestAnimationFrame(animate);
-            }
-            resizeCanvas();
-            animate();
-            window.addEventListener('resize', resizeCanvas);
-
-            function updateMousePosition(e) {
-                const event = e.touches ? e.touches[0] : e;
-                mouse.x = event.clientX;
-                mouse.y = event.clientY;
-            }
-            window.addEventListener('mousemove', updateMousePosition);
-            window.addEventListener('touchmove', updateMousePosition);
-
-            window.addEventListener('click', e => {
-                const repelRadius = 120;
-                const repelStrength = 5;
-                for (const dot of dots) {
-                    const distance = Math.hypot(e.clientX - dot.x, e.clientY - dot.y);
-                    if (distance < repelRadius) {
-                        const angle = Math.atan2(dot.y - e.clientY, dot.x - e.clientX);
-                        const force = (1 - distance / repelRadius) * repelStrength;
-                        dot.speedX += Math.cos(angle) * force;
-                        dot.speedY += Math.sin(angle) * force;
-                    }
-                }
-            });
-
-            // --- Custom Cursor Logic ---
-            const cursorDot = document.getElementById('cursor-dot');
-            const cursorOutline = document.getElementById('cursor-outline');
-            window.addEventListener('mousemove', e => {
-                cursorDot.style.left = `${e.clientX}px`;
-                cursorDot.style.top = `${e.clientY}px`;
-                cursorOutline.animate({
-                    left: `${e.clientX}px`,
-                    top: `${e.clientY}px`
-                }, { duration: 500, fill: "forwards" });
-
-                const allHeaderButtons = document.querySelectorAll('header .filter-btn, header #theme-toggle');
-                allHeaderButtons.forEach(btn => {
-                    const rect = btn.getBoundingClientRect();
-                    btn.style.setProperty('--x', `${e.clientX - rect.left}px`);
-                    btn.style.setProperty('--y', `${e.clientY - rect.top}px`);
-                });
-            });
-
-            const interactiveElements = document.querySelectorAll('a, button');
-            interactiveElements.forEach(el => {
-                el.addEventListener('mouseenter', () => cursorOutline.classList.add('grow'));
-                el.addEventListener('mouseleave', () => cursorOutline.classList.remove('grow'));
-            });
-        });
-    </script>
-
+    <script src="script.js"></script>
 </body>
 </html>
