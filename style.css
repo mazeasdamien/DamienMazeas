@@ -386,9 +386,6 @@ body {
     color: #E6EDF3;
 }
 
-#home-page p,
-#home-page footer,
-#home-page span.font-medium,
 #home-page .portfolio-card p,
 .portfolio-card .text-gray-700,
 .portfolio-card .text-gray-500 {
@@ -399,7 +396,8 @@ body {
     color: #000000 !important;
 }
 
-/* New dedicated rule for the footer */
-#home-page footer {
-    color: #8B949E; /* This is the light grey you use on your contact page */
+/* Corrected rule for the footer */
+#home-page footer,
+#home-page footer p {
+    color: #8B949E;
 }
