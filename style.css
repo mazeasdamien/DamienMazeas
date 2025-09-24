@@ -399,30 +399,3 @@ body {
     color: #000000 !important;
 }
 
-#contact-page p,
-#contact-page label,
-#contact-page footer {
-    color: #000000;
-
-#home-page p.font-medium,
-#home-page span.font-medium {
-    color: #FFFFFF;
-}
-
-#home-page .portfolio-card h3 {
-    color: #000000;
-}
-
-#citation-text,
-#citation-text a {
-    color: #FFFFFF !important;
-}
-
-#contact-card p,
-#contact-card label {
-    color: #FFFFFF;
-}
-
-footer {
-    color: #FFFFFF;
-}
