@@ -399,3 +399,7 @@ body {
     color: #000000 !important;
 }
 
+/* New dedicated rule for the footer */
+#home-page footer {
+    color: #8B949E; /* This is the light grey you use on your contact page */
+}
