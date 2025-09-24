@@ -7,16 +7,16 @@
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:script.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Damien Mazeas\\Desktop\\portfolio\\MyResumeOnline\\style.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:style.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Damien Mazeas\\Desktop\\portfolio\\MyResumeOnline\\ur16e.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:ur16e.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Damien Mazeas\\Desktop\\portfolio\\MyResumeOnline\\index.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:index.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Damien Mazeas\\Desktop\\portfolio\\MyResumeOnline\\style.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:style.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Damien Mazeas\\Desktop\\portfolio\\MyResumeOnline\\contact.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
@@ -38,19 +38,20 @@
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 1,
               "Title": "style.css",
               "DocumentMoniker": "C:\\Users\\Damien Mazeas\\Desktop\\portfolio\\MyResumeOnline\\style.css",
               "RelativeDocumentMoniker": "style.css",
               "ToolTip": "C:\\Users\\Damien Mazeas\\Desktop\\portfolio\\MyResumeOnline\\style.css",
               "RelativeToolTip": "style.css",
-              "ViewState": "AgIAAH0BAAAAAAAAAAAYwKcBAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAEkBAAAAAAAAAAAAAKcBAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
-              "WhenOpened": "2025-09-23T10:51:34.592Z"
+              "WhenOpened": "2025-09-23T10:51:34.592Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "ur16e.html",
               "DocumentMoniker": "C:\\Users\\Damien Mazeas\\Desktop\\portfolio\\MyResumeOnline\\ur16e.html",
               "RelativeDocumentMoniker": "ur16e.html",
@@ -58,8 +59,7 @@
               "RelativeToolTip": "ur16e.html",
               "ViewState": "AgIAACMAAAAAAAAAAAAYwDkAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
-              "WhenOpened": "2025-09-23T13:17:11.551Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-23T13:17:11.551Z"
             },
             {
               "$type": "Document",
@@ -69,14 +69,14 @@
               "RelativeDocumentMoniker": "script.js",
               "ToolTip": "C:\\Users\\Damien Mazeas\\Desktop\\portfolio\\MyResumeOnline\\script.js",
               "RelativeToolTip": "script.js",
-              "ViewState": "AgIAAEIBAAAAAAAAAAAowGsBAAADAAAAAAAAAA==",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAAABcAAAAdAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
               "WhenOpened": "2025-09-23T10:51:12.733Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "index.html",
               "DocumentMoniker": "C:\\Users\\Damien Mazeas\\Desktop\\portfolio\\MyResumeOnline\\index.html",
               "RelativeDocumentMoniker": "index.html",

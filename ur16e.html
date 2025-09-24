@@ -20,26 +20,27 @@
     <canvas id="constellation-canvas"></canvas>
 
     <header class="w-full p-6 md:p-8 relative z-10">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <div class="flex items-center gap-6">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-center md:justify-between">
+            <div class="flex flex-col items-center md:flex-row gap-4 md:gap-6 mb-4 md:mb-0">
                 <div class="profile-picture-container">
                     <img src="images/profil.jpg" alt="Damien Mazeas" class="w-full h-full object-cover">
                 </div>
-                <div class="name-container">
+                <div class="name-container text-center md:text-left">
                     <h1 class="text-3xl md:text-4xl font-black tracking-tight cursor-pointer">Damien MAZEAS</h1>
-                    <div class="social-bubble-container">
+                    <div class="flex items-center justify-center md:justify-start gap-2 mt-2">
                         <a href="https://www.linkedin.com/in/mazeas/" target="_blank" class="social-bubble glassy-effect" aria-label="LinkedIn"><img src="images/social/LinkedIn_icon.svg.webp" alt="LinkedIn logo"></a>
                         <a href="https://github.com/mazeasdamien" target="_blank" class="social-bubble glassy-effect" aria-label="GitHub">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-6 h-6">
                                 <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8" />
                             </svg>
-                        </a>                                <a href="https://orcid.org/0000-0001-9258-3909" target="_blank" class="social-bubble glassy-effect" aria-label="Orcid"><img src="images/social/ORCID_iD.svg.png" alt="ORCID logo"></a>
+                        </a>
+                        <a href="https://orcid.org/0000-0001-9258-3909" target="_blank" class="social-bubble glassy-effect" aria-label="Orcid"><img src="images/social/ORCID_iD.svg.png" alt="ORCID logo"></a>
                         <a href="https://scholar.google.com/citations?user=SydtND4AAAAJ&hl=en" target="_blank" class="social-bubble glassy-effect" aria-label="Google Scholar"><img src="images/social/Google_Scholar_logo.svg.png" alt="Google Scholar logo"></a>
                         <a href="https://www.youtube.com/@mazeas" target="_blank" class="social-bubble glassy-effect" aria-label="YouTube"><img src="images/social/Youtube_logo.png" alt="YouTube logo"></a>
                     </div>
                 </div>
             </div>
-            <nav class="flex items-center space-x-2 md:space-x-4">
+            <nav class="w-full flex justify-center md:w-auto md:justify-end items-center space-x-2 md:space-x-4 mt-4 md:mt-0">
                 <a href="index.html" class="header-btn glassy-effect text-sm font-semibold tracking-wider p-2.5 rounded-full">HOME</a>
                 <a href="pdfs/cv.pdf" target="_blank" class="header-btn glassy-effect text-sm font-semibold tracking-wider p-2.5 rounded-full">CV</a>
             </nav>

@@ -21,46 +21,52 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const filterColors = {
             all: {
-                hex: '#852A0D',          // Burnt Orange
-                rgb: '133, 42, 13',
-                nonPastelHex: '#C54D13', // Brighter Orange
-                palette: ['#4D1B0B', '#852A0D', '#C54D13', '#FF7B25']
+                hex: '#34D399',          // Soft Emerald
+                rgb: '52, 211, 153',
+                nonPastelHex: '#10B981', // Brighter Emerald
+                palette: ['#065F46', '#047857', '#059669', '#34D399']
             },
             publication: {
-                hex: '#52525B',          // Zinc 600
-                rgb: '82, 82, 91',
-                nonPastelHex: '#A1A1AA', // Zinc 400
-                palette: ['#18181B', '#27272A', '#3F3F46', '#52525B']
+                hex: '#7DD3FC',          // Sky Blue
+                rgb: '125, 211, 252',
+                nonPastelHex: '#38BDF8', // Brighter Sky Blue
+                palette: ['#0369A1', '#0284C7', '#0EA5E9', '#7DD3FC']
             },
             employment: {
-                hex: '#525252',          // Neutral 600
-                rgb: '82, 82, 82',
-                nonPastelHex: '#A3A3A3', // Neutral 400
-                palette: ['#171717', '#262626', '#404040', '#525252']
+                hex: '#FB923C',          // Soft Orange
+                rgb: '251, 146, 60',
+                nonPastelHex: '#F97316', // Brighter Orange
+                palette: ['#9A3412', '#C2410C', '#EA580C', '#FB923C']
             },
             degree: {
-                hex: '#57534E',          // Stone 600
-                rgb: '87, 83, 78',
-                nonPastelHex: '#A8A29E', // Stone 400
-                palette: ['#1C1917', '#292524', '#44403C', '#57534E']
+                hex: '#A78BFA',          // Lavender
+                rgb: '167, 139, 250',
+                nonPastelHex: '#8B5CF6', // Brighter Lavender
+                palette: ['#5B21B6', '#6D28D9', '#7C3AED', '#A78BFA']
             },
             teaching: {
-                hex: '#852A0D',          // Burnt Orange
-                rgb: '133, 42, 13',
-                nonPastelHex: '#C54D13', // Brighter Orange
-                palette: ['#4D1B0B', '#852A0D', '#C54D13', '#FF7B25']
+                hex: '#FB7185',          // Dusty Rose
+                rgb: '251, 113, 133',
+                nonPastelHex: '#F43F5E', // Brighter Rose
+                palette: ['#9F1239', '#BE123C', '#E11D48', '#FB7185']
             },
             certification: {
-                hex: '#475569',          // Slate 600
-                rgb: '71, 85, 105',
-                nonPastelHex: '#94A3B8', // Slate 400
-                palette: ['#0F172A', '#1E293B', '#334155', '#475569']
+                hex: '#2DD4BF',          // Minty Teal
+                rgb: '45, 212, 191',
+                nonPastelHex: '#14B8A6', // Brighter Teal
+                palette: ['#115E59', '#0D9488', '#0F766E', '#2DD4BF']
             },
             'side-projects': {
-                hex: '#5B21B6',          // Violet 800
-                rgb: '91, 33, 182',
-                nonPastelHex: '#8B5CF6', // Violet 500
-                palette: ['#2E1065', '#4C1D95', '#5B21B6', '#6D28D9']
+                hex: '#E879F9',          // Light Fuchsia
+                rgb: '232, 121, 249',
+                nonPastelHex: '#D946EF', // Brighter Fuchsia
+                palette: ['#86198F', '#A21CAF', '#C026D3', '#E879F9']
+            },
+            logic: {
+                hex: '#94A3B8',          // Light Slate Gray
+                rgb: '148, 163, 184',
+                nonPastelHex: '#64748B', // Brighter Slate
+                palette: ['#334155', '#475569', '#64748B', '#94A3B8']
             }
         };
 
