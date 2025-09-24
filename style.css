@@ -6,8 +6,8 @@ body {
 }
 
 #home-page {
-    background-color: #f0f7ff;
-    color: #1f2937;
+    background-color: #0D1117;
+    color: #E6EDF3;
 }
 
     #home-page #background-container {
@@ -24,7 +24,7 @@ body {
 .blob {
     position: absolute;
     border-radius: 50%;
-    opacity: 0.3; /* <-- ADD OR CHANGE THIS LINE */
+    opacity: 0.3;
     transition: background-color 1.5s ease-in-out, transform 0.5s ease-out;
     animation: move 25s infinite alternate;
 }
@@ -88,7 +88,6 @@ body {
     }
 }
 
-/* --- Contact Page Constellation Background --- */
 #contact-page #page-background {
     position: fixed;
     top: 0;
@@ -133,30 +132,33 @@ body {
 .marquee-top {
     animation-duration: 80s;
     transition: color 0.7s ease;
+    color: #4B5563;
 }
 
-/* --- Glassy Effect & Buttons --- */
 .glassy-effect {
-    background-color: rgba(255, 255, 255, 0.55);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    box-shadow: inset 0.5px 0.5px 1px rgba(255, 255, 255, 0.7), 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.5);
     transition: all 0.3s ease;
+    background-color: rgba(31, 41, 55, 0.4);
+    border: 1px solid rgba(75, 85, 99, 0.5);
+    color: #E6EDF3;
+    box-shadow: inset 0.5px 0.5px 1px rgba(255, 255, 255, 0.1), 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.15);
 }
 
 .header-btn:hover {
     transform: scale(1.05);
-    background-color: rgba(255, 255, 255, 0.7);
+    background-color: rgba(55, 65, 81, 0.6);
+    border-color: rgba(100, 116, 139, 0.7);
 }
 
 .filter-btn {
     position: relative;
     overflow: hidden;
-    color: #111827;
-    background-color: rgba(255, 255, 255, 0.4);
-    border: 1.5px solid rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
+    background-color: rgba(31, 41, 55, 0.4);
+    border: 1.5px solid rgba(75, 85, 99, 0.5);
+    color: #E6EDF3;
+    box-shadow: inset 0.5px 0.5px 1px rgba(255, 255, 255, 0.1), 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.15);
 }
 
     .filter-btn::before {
@@ -167,7 +169,7 @@ body {
         transform: translate(-50%, -50%);
         width: 0;
         height: 0;
-        background: radial-gradient(circle closest-side, rgba(255, 255, 255, 0.5), transparent);
+        background: radial-gradient(circle closest-side, rgba(255, 255, 255, 0.2), transparent);
         transition: width 0.3s ease, height 0.3s ease;
     }
 
@@ -177,22 +179,20 @@ body {
     }
 
     .filter-btn:hover {
-        background-color: rgba(var(--filter-color-rgb), 0.25);
-        color: #111827;
+        background-color: rgba(55, 65, 81, 0.6);
+        border-color: rgba(100, 116, 139, 0.7);
         transform: scale(1.05);
-        border-color: rgba(var(--filter-color-rgb), 0.4);
     }
 
     .filter-btn.active {
-        background-color: var(--filter-color-active);
-        border-color: var(--filter-color-active);
         color: #FFFFFF;
+        background-color: rgba(var(--filter-color-rgb), 0.4);
+        border-color: rgba(var(--filter-color-rgb), 0.6);
         font-weight: 600;
         transform: scale(1.05);
         box-shadow: 0 0 15px -2px rgba(var(--filter-color-rgb), 0.6), 0 4px 8px -2px rgba(0,0,0,0.2);
     }
 
-/* --- Portfolio Grid --- */
 .portfolio-item {
     display: none;
     opacity: 0;
@@ -215,7 +215,6 @@ body {
         box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
     }
 
-/* --- Profile Picture & Socials --- */
 .profile-picture-container {
     width: 8rem;
     height: 8rem;
@@ -280,56 +279,60 @@ body {
     align-items: center;
     justify-content: center;
     text-decoration: none;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+    background-color: rgba(31, 41, 55, 0.4);
+    border: 1px solid rgba(75, 85, 99, 0.5);
+    box-shadow: inset 0.5px 0.5px 1px rgba(255, 255, 255, 0.1), 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.15);
 }
 
-.social-bubble:hover {
-    transform: scale(1.15);
-}
+    .social-bubble:hover {
+        transform: scale(1.15);
+        background-color: rgba(55, 65, 81, 0.6);
+        border-color: rgba(100, 116, 139, 0.7);
+    }
 
-.social-bubble img {
-    width: 22px;
-    height: 22px;
-    object-fit: contain;
-}
+    .social-bubble img {
+        width: 22px;
+        height: 22px;
+        object-fit: contain;
+    }
 
 #contact-page {
     color: #E6EDF3;
 }
 
-#contact-page h1, #contact-page h2, #contact-page h3 {
-    color: #E6EDF3;
-}
+    #contact-page h1, #contact-page h2, #contact-page h3 {
+        color: #E6EDF3;
+    }
 
-#contact-page p, #contact-page label, #contact-page footer {
-    color: #8B949E;
-}
+    #contact-page p, #contact-page label, #contact-page footer {
+        color: #8B949E;
+    }
 
-#contact-page a {
-    color: #58a6ff;
-}
+    #contact-page a {
+        color: #58a6ff;
+    }
 
-#contact-page .glassy-effect,
-#contact-page .filter-btn,
-#contact-page .header-btn {
-    background-color: rgba(31, 41, 55, 0.4);
-    border-color: rgba(75, 85, 99, 0.5);
-    color: #E6EDF3;
-}
+    #contact-page .glassy-effect,
+    #contact-page .filter-btn,
+    #contact-page .header-btn {
+        background-color: rgba(31, 41, 55, 0.4);
+        border-color: rgba(75, 85, 99, 0.5);
+        color: #E6EDF3;
+    }
 
-#contact-page .glassy-effect:hover,
-#contact-page .filter-btn:hover,
-#contact-page .header-btn:hover {
-    background-color: rgba(55, 65, 81, 0.6);
-    border-color: rgba(100, 116, 139, 0.7);
-}
+        #contact-page .glassy-effect:hover,
+        #contact-page .filter-btn:hover,
+        #contact-page .header-btn:hover {
+            background-color: rgba(55, 65, 81, 0.6);
+            border-color: rgba(100, 116, 139, 0.7);
+        }
 
-#contact-page .social-btn:hover {
-    background-color: #E6EDF3 !important;
-    color: #0D1117;
-    border-color: #E6EDF3;
-}
+    #contact-page .social-btn:hover {
+        background-color: #E6EDF3 !important;
+        color: #0D1117;
+        border-color: #E6EDF3;
+    }
 
 #cursor-dot {
     position: fixed;
@@ -342,7 +345,7 @@ body {
     transform: translate(-50%, -50%);
     z-index: 9999;
     transition: background-color 0.5s ease;
-    background-color: #111827;
+    background-color: #E6EDF3;
 }
 
 #cursor-outline {
@@ -351,7 +354,7 @@ body {
     left: 0;
     width: 30px;
     height: 30px;
-    border: 2px solid rgba(27, 27, 27, 0.4);
+    border: 2px solid rgba(230, 237, 243, 0.4);
     border-radius: 50%;
     pointer-events: none;
     transform: translate(-50%, -50%);
@@ -359,11 +362,11 @@ body {
     z-index: 9999;
 }
 
-#cursor-outline.grow {
-    width: 50px;
-    height: 50px;
-    border-color: rgba(27, 27, 27, 0.2);
-}
+    #cursor-outline.grow {
+        width: 50px;
+        height: 50px;
+        border-color: rgba(230, 237, 243, 0.2);
+    }
 
 #contact-page #cursor-dot {
     background-color: #E6EDF3;
@@ -388,70 +391,33 @@ body {
     background-color: rgba(31, 41, 55, 0.4);
     border-color: rgba(75, 85, 99, 0.5);
 }
-#home-page.dark {
-    background-color: #0D1117;
+
+#home-page h1,
+#home-page h2,
+#home-page h3,
+#home-page span:not(.text-gray-700) {
     color: #E6EDF3;
 }
 
-    #home-page.dark h1,
-    #home-page.dark h2,
-    #home-page.dark h3,
-    #home-page.dark span:not(.text-gray-700) {
+#home-page p,
+#home-page footer,
+#home-page span.font-medium {
+    color: #8B949E;
+}
+
+    #home-page p.font-medium {
         color: #E6EDF3;
     }
 
-    #home-page.dark p,
-    #home-page.dark footer,
-    #home-page.dark span.font-medium {
-        color: #8B949E;
-    }
-        #home-page.dark p.font-medium {
-            color: #E6EDF3;
-        }
+#home-page .portfolio-card h3 {
+    color: #E6EDF3;
+}
 
-    #home-page.dark .marquee-top {
-        color: #4B5563;
-    }
-    #home-page.dark .glassy-effect,
-    #home-page.dark .filter-btn,
-    #home-page.dark .header-btn,
-    #home-page.dark .social-bubble {
-        background-color: rgba(31, 41, 55, 0.4);
-        border-color: rgba(75, 85, 99, 0.5);
-        color: #E6EDF3;
-        box-shadow: inset 0.5px 0.5px 1px rgba(255, 255, 255, 0.1), 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.15);
-    }
+#home-page .portfolio-card p {
+    color: #8B949E;
+}
 
-        #home-page.dark .glassy-effect:hover,
-        #home-page.dark .filter-btn:hover,
-        #home-page.dark .header-btn:hover,
-        #home-page.dark .social-bubble:hover {
-            background-color: rgba(55, 65, 81, 0.6);
-            border-color: rgba(100, 116, 139, 0.7);
-        }
-
-    /* Ensure text inside portfolio cards is readable in dark mode */
-    #home-page.dark .portfolio-card h3,
-    #home-page.dark .portfolio-card p {
-        color: #E6EDF3;
-    }
-
-/* Fix: I noticed you wanted block text in black, which would be invisible.
-   Assuming you meant for the cards, I've set the text to be black for light mode
-   and white/gray for dark mode for proper readability. */
 .portfolio-card .text-gray-700,
 .portfolio-card .text-gray-500 {
-    color: #374151; /* Default dark gray for light mode */
-}
-
-#home-page.dark .portfolio-card .text-gray-700,
-#home-page.dark .portfolio-card .text-gray-500 {
-    color: #8B949E !important; /* Lighter gray for dark mode */
-}
-
-/* Fix: Make active filter buttons use a transparent background color */
-#home-page.dark .filter-btn.active {
-    color: #FFFFFF;
-    background-color: rgba(var(--filter-color-rgb), 0.4);
-    border-color: rgba(var(--filter-color-rgb), 0.6);
+    color: #8B949E;
 }

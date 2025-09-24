@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
-<body id="home-page" class="dark">
+<body id="home-page">
 
     <div id="background-container">
         <div class="blob color-1"></div>
@@ -30,13 +30,13 @@
                 <div class="name-container">
                     <h1 class="text-3xl md:text-4xl font-black tracking-tight cursor-pointer">Damien MAZEAS</h1>
                     <div class="social-bubble-container">
-                        <a href="https://www.linkedin.com/in/mazeas/" target="_blank" class="social-bubble glassy-effect" aria-label="LinkedIn"><img src="images/social/LinkedIn_icon.svg.webp" alt="LinkedIn logo"></a>
-                        <a href="https://github.com/mazeasdamien" target="_blank" class="social-bubble glassy-effect" aria-label="GitHub">
+                        <a href="https://www.linkedin.com/in/mazeas/" target="_blank" class="social-bubble" aria-label="LinkedIn"><img src="images/social/LinkedIn_icon.svg.webp" alt="LinkedIn logo"></a>
+                        <a href="https://github.com/mazeasdamien" target="_blank" class="social-bubble" aria-label="GitHub">
                             <img src="images/social/github-white-icon.svg" alt="GitHub logo">
                         </a>
-                        <a href="https://orcid.org/0000-0001-9258-3909" target="_blank" class="social-bubble glassy-effect" aria-label="Orcid"><img src="images/social/ORCID_iD.svg.png" alt="ORCID logo"></a>
-                        <a href="https://scholar.google.com/citations?user=SydtND4AAAAJ&hl=en" target="_blank" class="social-bubble glassy-effect" aria-label="Google Scholar"><img src="images/social/Google_Scholar_logo.svg.png" alt="Google Scholar logo"></a>
-                        <a href="https://www.youtube.com/@mazeas" target="_blank" class="social-bubble glassy-effect" aria-label="YouTube"><img src="images/social/Youtube_logo.png" alt="YouTube logo"></a>
+                        <a href="https://orcid.org/0000-0001-9258-3909" target="_blank" class="social-bubble" aria-label="Orcid"><img src="images/social/ORCID_iD.svg.png" alt="ORCID logo"></a>
+                        <a href="https://scholar.google.com/citations?user=SydtND4AAAAJ&hl=en" target="_blank" class="social-bubble" aria-label="Google Scholar"><img src="images/social/Google_Scholar_logo.svg.png" alt="Google Scholar logo"></a>
+                        <a href="https://www.youtube.com/@mazeas" target="_blank" class="social-bubble" aria-label="YouTube"><img src="images/social/Youtube_logo.png" alt="YouTube logo"></a>
                     </div>
                 </div>
             </div>
@@ -62,18 +62,19 @@
             <div class="mb-12">
                 <span class="font-medium mb-4 block">Filters :</span>
                 <div id="filter-container" class="flex flex-wrap items-center gap-2 md:gap-4">
-                    <button class="filter-btn glassy-effect active px-4 py-1.5 text-sm font-medium rounded-full" data-filter="all">ALL</button>
-                    <button class="filter-btn glassy-effect px-4 py-1.5 text-sm font-medium rounded-full" data-filter="publication">PUBLICATIONS</button>
-                    <button class="filter-btn glassy-effect px-4 py-1.5 text-sm font-medium rounded-full" data-filter="employment">EMPLOYMENTS</button>
-                    <button class="filter-btn glassy-effect px-4 py-1.5 text-sm font-medium rounded-full" data-filter="degree">DEGREES</button>
-                    <button class="filter-btn glassy-effect px-4 py-1.5 text-sm font-medium rounded-full" data-filter="teaching">TEACHING</button>
-                    <button class="filter-btn glassy-effect px-4 py-1.5 text-sm font-medium rounded-full" data-filter="certification">CERTIFICATION</button>
-                    <button class="filter-btn glassy-effect px-4 py-1.5 text-sm font-medium rounded-full" data-filter="side-projects">SIDE PROJECTS</button>
+                    <button class="filter-btn active px-4 py-1.5 text-sm font-medium rounded-full" data-filter="all">ALL</button>
+                    <button class="filter-btn px-4 py-1.5 text-sm font-medium rounded-full" data-filter="publication">PUBLICATIONS</button>
+                    <button class="filter-btn px-4 py-1.5 text-sm font-medium rounded-full" data-filter="employment">EMPLOYMENTS</button>
+                    <button class="filter-btn px-4 py-1.5 text-sm font-medium rounded-full" data-filter="degree">DEGREES</button>
+                    <button class="filter-btn px-4 py-1.5 text-sm font-medium rounded-full" data-filter="teaching">TEACHING</button>
+                    <button class="filter-btn px-4 py-1.5 text-sm font-medium rounded-full" data-filter="certification">CERTIFICATION</button>
+                    <div class="h-6 w-px bg-slate-600"></div>
+                    <button class="filter-btn px-4 py-1.5 text-sm font-medium rounded-full" data-filter="side-projects">SIDE PROJECTS</button>
                 </div>
             </div>
             <div class="flex items-center gap-4 mb-8">
                 <h2 class="text-sm font-medium uppercase tracking-wider">Feed</h2>
-                <button id="sort-toggle-btn" class="filter-btn glassy-effect px-4 py-1.5 text-xs font-medium rounded-full">Sort by Oldest</button>
+                <button id="sort-toggle-btn" class="filter-btn px-4 py-1.5 text-xs font-medium rounded-full">Sort by Oldest</button>
             </div>
             <div id="portfolio-grid" class="grid grid-cols-1 gap-8">
             </div>
@@ -82,7 +83,7 @@
 
     <footer class="text-center py-8 text-sm relative z-10">
         <p>&copy; 2025 Damien Mazeas | Designed & Developed by the Author</p>
-        <p class="mt-2">Last Updated: September 2025 - Page Visits: <span id="visit-counter"></span></p>
+        <p class="mt-2">Last Updated: September 2025</p>
     </footer>
 
     <script src="script.js"></script>
