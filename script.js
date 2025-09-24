@@ -27,40 +27,40 @@ document.addEventListener('DOMContentLoaded', () => {
                 palette: ['#4D1B0B', '#852A0D', '#C54D13', '#FF7B25']
             },
             publication: {
-                hex: '#60A5FA', // Blue 400
-                rgb: '96, 165, 250',
-                nonPastelHex: '#2563EB', // Blue 600
-                palette: ['#93C5FD', '#60A5FA', '#3B82F6', '#BFDBFE']
-            },
-            employment: {
-                hex: '#00796B',          // Teal
-                rgb: '0, 121, 107',
-                nonPastelHex: '#4DB6AC', // Light Teal
-                palette: ['#032030', '#004D40', '#00796B', '#4DB6AC']
-            },
-            degree: {
-                hex: '#5E548E',          // Muted Purple
-                rgb: '94, 84, 142',
-                nonPastelHex: '#9F86C0', // Lilac
-                palette: ['#231942', '#5E548E', '#9F86C0', '#BE95C4']
-            },
-            teaching: {
-                hex: '#F87171', // Red 400
-                rgb: '248, 113, 113',
-                nonPastelHex: '#EF4444', // Red 500
-                palette: ['#FCA5A5', '#F87171', '#EF4444', '#FEE2E2']
-            },
-            certification: {
                 hex: '#52525B',          // Zinc 600
                 rgb: '82, 82, 91',
                 nonPastelHex: '#A1A1AA', // Zinc 400
                 palette: ['#18181B', '#27272A', '#3F3F46', '#52525B']
             },
+            employment: {
+                hex: '#525252',          // Neutral 600
+                rgb: '82, 82, 82',
+                nonPastelHex: '#A3A3A3', // Neutral 400
+                palette: ['#171717', '#262626', '#404040', '#525252']
+            },
+            degree: {
+                hex: '#57534E',          // Stone 600
+                rgb: '87, 83, 78',
+                nonPastelHex: '#A8A29E', // Stone 400
+                palette: ['#1C1917', '#292524', '#44403C', '#57534E']
+            },
+            teaching: {
+                hex: '#852A0D',          // Burnt Orange
+                rgb: '133, 42, 13',
+                nonPastelHex: '#C54D13', // Brighter Orange
+                palette: ['#4D1B0B', '#852A0D', '#C54D13', '#FF7B25']
+            },
+            certification: {
+                hex: '#475569',          // Slate 600
+                rgb: '71, 85, 105',
+                nonPastelHex: '#94A3B8', // Slate 400
+                palette: ['#0F172A', '#1E293B', '#334155', '#475569']
+            },
             'side-projects': {
-                hex: '#818CF8', // Indigo 400
-                rgb: '129, 140, 248',
-                nonPastelHex: '#6366F1', // Indigo 500
-                palette: ['#A5B4FC', '#818CF8', '#6366F1', '#E0E7FF']
+                hex: '#5B21B6',          // Violet 800
+                rgb: '91, 33, 182',
+                nonPastelHex: '#8B5CF6', // Violet 500
+                palette: ['#2E1065', '#4C1D95', '#5B21B6', '#6D28D9']
             }
         };
 
