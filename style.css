@@ -386,34 +386,43 @@ body {
     color: #E6EDF3;
 }
 
-/* For Home Page portfolio cards and other grey text */
 #home-page p,
 #home-page footer,
 #home-page span.font-medium,
 #home-page .portfolio-card p,
 .portfolio-card .text-gray-700,
 .portfolio-card .text-gray-500 {
-    color: #000000; /* Black */
+    color: #000000;
 }
 
-/* Ensures paragraphs inside cards that might be overridden are also black */
 #home-page .portfolio-card p {
     color: #000000 !important;
 }
 
-/* For Contact Page secondary text */
 #contact-page p,
 #contact-page label,
 #contact-page footer {
-    color: #000000; /* Black */
-}
+    color: #000000;
 
-/* Makes the intro paragraph and "Filters :" text white */
 #home-page p.font-medium,
 #home-page span.font-medium {
     color: #FFFFFF;
 }
 
 #home-page .portfolio-card h3 {
-    color: #000000; /* Black */
+    color: #000000;
+}
+
+#citation-text,
+#citation-text a {
+    color: #FFFFFF !important;
+}
+
+#contact-card p,
+#contact-card label {
+    color: #FFFFFF;
+}
+
+footer {
+    color: #FFFFFF;
 }
