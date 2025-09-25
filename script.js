@@ -1,14 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // --- Global Custom Cursor Elements ---
     const cursorDot = document.getElementById('cursor-dot');
     const cursorOutline = document.getElementById('cursor-outline');
-
-    // --- Global Interactive Elements for Cursor Interaction ---
     const interactiveElements = document.querySelectorAll('a, button, .cursor-pointer');
 
-    // --- Page-Specific Logic ---
-
-    // Home Page Logic
     if (document.body.id === 'home-page') {
         const filterContainer = document.getElementById('filter-container');
         const portfolioGrid = document.getElementById('portfolio-grid');
@@ -19,89 +13,59 @@ document.addEventListener('DOMContentLoaded', () => {
         const sortToggleButton = document.getElementById('sort-toggle-btn');
         let currentSortOrder = 'newest';
 
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.remove('reveal');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+
         const filterColors = {
-            all: {
-                hex: '#34D399',          // Soft Emerald
-                rgb: '52, 211, 153',
-                nonPastelHex: '#10B981', // Brighter Emerald
-                palette: ['#065F46', '#047857', '#059669', '#34D399']
-            },
-            publication: {
-                hex: '#7DD3FC',          // Sky Blue
-                rgb: '125, 211, 252',
-                nonPastelHex: '#38BDF8', // Brighter Sky Blue
-                palette: ['#0369A1', '#0284C7', '#0EA5E9', '#7DD3FC']
-            },
-            employment: {
-                hex: '#FB923C',          // Soft Orange
-                rgb: '251, 146, 60',
-                nonPastelHex: '#F97316', // Brighter Orange
-                palette: ['#9A3412', '#C2410C', '#EA580C', '#FB923C']
-            },
-            degree: {
-                hex: '#A78BFA',          // Lavender
-                rgb: '167, 139, 250',
-                nonPastelHex: '#8B5CF6', // Brighter Lavender
-                palette: ['#5B21B6', '#6D28D9', '#7C3AED', '#A78BFA']
-            },
-            teaching: {
-                hex: '#FB7185',          // Dusty Rose
-                rgb: '251, 113, 133',
-                nonPastelHex: '#F43F5E', // Brighter Rose
-                palette: ['#9F1239', '#BE123C', '#E11D48', '#FB7185']
-            },
-            certification: {
-                hex: '#2DD4BF',          // Minty Teal
-                rgb: '45, 212, 191',
-                nonPastelHex: '#14B8A6', // Brighter Teal
-                palette: ['#115E59', '#0D9488', '#0F766E', '#2DD4BF']
-            },
-            'side-projects': {
-                hex: '#E879F9',          // Light Fuchsia
-                rgb: '232, 121, 249',
-                nonPastelHex: '#D946EF', // Brighter Fuchsia
-                palette: ['#86198F', '#A21CAF', '#C026D3', '#E879F9']
-            },
-            logic: {
-                hex: '#94A3B8',          // Light Slate Gray
-                rgb: '148, 163, 184',
-                nonPastelHex: '#64748B', // Brighter Slate
-                palette: ['#334155', '#475569', '#64748B', '#94A3B8']
-            }
+            all: { hex: '#34D399', rgb: '52, 211, 153', nonPastelHex: '#10B981', palette: ['#065F46', '#047857', '#059669', '#34D399'] },
+            publication: { hex: '#7DD3FC', rgb: '125, 211, 252', nonPastelHex: '#38BDF8', palette: ['#0369A1', '#0284C7', '#0EA5E9', '#7DD3FC'] },
+            employment: { hex: '#FB923C', rgb: '251, 146, 60', nonPastelHex: '#F97316', palette: ['#9A3412', '#C2410C', '#EA580C', '#FB923C'] },
+            degree: { hex: '#A78BFA', rgb: '167, 139, 250', nonPastelHex: '#8B5CF6', palette: ['#5B21B6', '#6D28D9', '#7C3AED', '#A78BFA'] },
+            teaching: { hex: '#FB7185', rgb: '251, 113, 133', nonPastelHex: '#F43F5E', palette: ['#9F1239', '#BE123C', '#E11D48', '#FB7185'] },
+            certification: { hex: '#2DD4BF', rgb: '45, 212, 191', nonPastelHex: '#14B8A6', palette: ['#115E59', '#0D9488', '#0F766E', '#2DD4BF'] },
+            'side-projects': { hex: '#E879F9', rgb: '232, 121, 249', nonPastelHex: '#D946EF', palette: ['#86198F', '#A21CAF', '#C026D3', '#E879F9'] },
+            logic: { hex: '#94A3B8', rgb: '148, 163, 184', nonPastelHex: '#64748B', palette: ['#334155', '#475569', '#64748B', '#94A3B8'] }
         };
 
-        // Fix: Publication images have been removed from the HTML strings
         const portfolioData = [
-            { category: 'publication', date: '2025-04-01', html: `<a href="pdfs/paper5.pdf" target="_blank" class="block"><div class="portfolio-card glassy-effect rounded-2xl overflow-hidden shadow-md h-full"><div class="p-4 flex flex-col justify-center"><p class="text-sm uppercase tracking-wider mb-1">APRIL 2025, <span class="text-gray-700 normal-case">In MDPI Virtual Worlds</span></p><h3 class="font-bold text-lg">Study of Visualization Modalities on Industrial Robot Teleoperation for Inspection in a Virtual Co-Existence Space</h3><p class="text-xs text-gray-500 uppercase tracking-wider mt-2"><b>D Mazeas</b>, B Namoano</p></div></div></a>` },
-            { category: 'teaching', date: '2025-02-01', html: `<div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full"><div class="p-4 w-full sm:w-3/4 flex flex-col justify-center"><h3 class="font-bold text-lg">AI3153 Human-Computer Interaction</h3><p class="text-xs text-gray-500 uppercase tracking-wider">BNBU (UNDERGRADUATES), 2025</p><p class="text-sm text-gray-700 mt-2">Syllabus Creator and Instructor for a class of 63 students.</p></div><div class="flex items-center justify-center sm:w-1/4 p-4"><a href="pdfs/HCIsyllabus.pdf" target="_blank" class="filter-btn glassy-effect px-4 py-1.5 text-sm font-medium rounded-full flex-shrink-0" style="--filter-color: #FFC4C4; --filter-color-rgb: 255, 196, 196;">Syllabus & student feedback </a></div></div>` },
-            { category: 'teaching', date: '2025-01-01', html: `<div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full"><div class="p-4 w-full sm:w-3/4 flex flex-col justify-center"><h3 class="font-bold text-lg">GTSC2093 IT for Success in Everyday Life and Work</h3><p class="text-xs text-gray-500 uppercase tracking-wider">BNBU (UNDERGRADUATES), 2024-2025</p><p class="text-sm text-gray-700 mt-2">Instructor for a class of 80 students.</p></div></div>` },
-            { category: 'teaching', date: '2025-02-01', html: `<div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full"><div class="p-4 w-full sm:w-3/4 flex flex-col justify-center"><h3 class="font-bold text-lg">GCAP3123 Computer Technology and AI Project</h3><p class="text-xs text-gray-500 uppercase tracking-wider">BNBU (UNDERGRADUATES), 2025</p><p class="text-sm text-gray-700 mt-2">Instructor for a project-based class of 50 students.</p></div></div>` },
-            { category: 'employment', date: '2024-09-18', html: `<div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full"><div class="w-full sm:w-24 flex items-center justify-center p-4"><img src="images/logos/bnbu.png" alt="BNBU Logo" class="object-contain h-30"></div><div class="p-4 flex flex-col justify-center"><h3 class="font-bold text-lg">Assistant Professor</h3><p class="text-xs text-gray-500 uppercase tracking-wider">BNBU (Zhuhai, China) | 10 Months (2024 - 2025)</p><p class="text-sm text-gray-700 mt-2">Conducted undergraduate lecturing and mentoring in HCI and XR.</p></div></div>` },
-            { category: 'publication', date: '2024-08-01', html: `<a href="pdfs/paper4.pdf" target="_blank" class="block"><div class="portfolio-card glassy-effect rounded-2xl overflow-hidden shadow-md h-full"><div class="p-4 flex flex-col justify-center"><p class="text-sm uppercase tracking-wider mb-1">OCTOBER 2024, <span class="text-gray-700 normal-case">In CIRP Design Conference</span></p><h3 class="font-bold text-lg">Designing Immersive Tools for Expert and Worker Remote Collaboration</h3><p class="text-xs text-gray-500 uppercase tracking-wider mt-2">SCM Galvis*, <b>D Mazeas</b>*, F Noel, JA Erkoyuncu (*Equal contribution)</p></div></div></a>` },
-            { category: 'publication', date: '2024-04-01', html: `<a href="https://dspace.lib.cranfield.ac.uk/items/3d611b76-5604-4269-bd2b-e03835fcaad4" target="_blank" class="block"><div class="portfolio-card glassy-effect rounded-2xl overflow-hidden shadow-md h-full"><div class="p-4 flex flex-col justify-center"><p class="text-sm uppercase tracking-wider mb-1">APRIL 2024, <span class="text-gray-700 normal-case">PhD Thesis</span></p><h3 class="font-bold text-lg">Key principles for assessing and implementing remote inspection with telexistence capability</h3><p class="text-xs text-gray-500 uppercase tracking-wider mt-2">Damien Mazeas</p></div></div></a>` },
-            { category: 'degree', date: '2024-04-01', html: `<div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full"><div class="w-full sm:w-24 flex items-center justify-center p-4"><img src="images/logos/cranfield.webp" alt="Cranfield University Logo" class="object-contain h-20"></div><div class="p-4 flex flex-col justify-center"><p class="text-xs text-gray-500 uppercase tracking-wider">APR 2024</p><h3 class="font-bold text-lg">PhD in Human-Computer Interaction</h3><p class="text-sm text-gray-700 mt-1">Cranfield University (UK) - Centre for Digital and Design Engineering</p></div></div>` },
-            { category: 'employment', date: '2023-08-01', html: `<div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full"><div class="w-full sm:w-24 flex items-center justify-center p-4"><img src="images/logos/cnrs.png" alt="CNRS Logo" class="object-contain h-20"></div><div class="p-4 flex flex-col justify-center"><h3 class="font-bold text-lg">Research Fellow</h3><p class="text-xs text-gray-500 uppercase tracking-wider">CNRS@CREATE (Singapore) | 1 Year (2023 - 2024)</p><p class="text-sm text-gray-700 mt-2">Studied how viewpoints shaped virtual navigation.</p></div></div>` },
-            { category: 'publication', date: '2023-05-01', html: `<a href="pdfs/paper3.pdf" target="_blank" class="block"><div class="portfolio-card glassy-effect rounded-2xl overflow-hidden shadow-md h-full"><div class="p-4 flex flex-col justify-center"><p class="text-sm uppercase tracking-wider mb-1">MAY 2023, <span class="text-gray-700 normal-case">In IEEE Conference on Virtual Reality and 3D User Interfaces Abstracts and Workshops</span></p><h3 class="font-bold text-lg">Telexistence-based remote maintenance for marine engineers</h3><p class="text-xs text-gray-500 uppercase tracking-wider mt-2"><b>D Mazeas</b>, JA Erkoyuncu, F Noel</p></div></div></a>` },
-            { category: 'employment', date: '2023-02-01', html: `<div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full"><div class="w-full sm:w-24 flex items-center justify-center p-4"><img src="images/logos/gscop.jpg" alt="G-SCOP Lab Logo" class="object-contain h-20"></div><div class="p-4 flex flex-col justify-center"><h3 class="font-bold text-lg">Visiting PhD Student</h3><p class="text-xs text-gray-500 uppercase tracking-wider">G-SCOP LAB (Grenoble, France) | 6 Months (2023)</p><p class="text-sm text-gray-700 mt-2">Designed a framework for expert-worker virtual reality remote collaboration.</p></div></div>` },
-            { category: 'publication', date: '2023-02-01', html: `<a href="pdfs/paper2.pdf" target="_blank" class="block"><div class="portfolio-card glassy-effect rounded-2xl overflow-hidden shadow-md h-full"><div class="p-4 flex flex-col justify-center"><p class="text-sm uppercase tracking-wider mb-1">FEBRUARY 2023, <span class="text-gray-700 normal-case">In IFIP International Conference on Product Lifecycle Management</span></p><h3 class="font-bold text-lg">A telexistence interface for remote control of a physical industrial robot via data distribution service</h3><p class="text-xs text-gray-500 uppercase tracking-wider mt-2"><b>D Mazeas</b>, JA Erkoyuncu, F Noel</p></div></div></a>` },
-            { category: 'side-projects', date: '2022-11-01', html: `<a href="ur16e.html" class="block"><div class="portfolio-card glassy-effect flex items-center rounded-2xl overflow-hidden shadow-md h-full p-4"><div class="w-16 flex-shrink-0 flex items-center justify-center"><img src="images/social/Octicons-mark-github.svg.png" class="h-8 w-8"></div><div class="flex-grow"><h3 class="font-bold text-lg">Universal Robots 16e inverse kinematics in Unity3D</h3><p class="text-xs text-gray-500 uppercase tracking-wider">GitHub Project</p></div></div></a>` },
-            { category: 'side-projects', date: '2022-10-01', html: `<a href="https://youtu.be/3zTs_7LXH3Y" target="_blank" class="block"><div class="portfolio-card glassy-effect flex items-center rounded-2xl overflow-hidden shadow-md h-full p-4"><div class="w-16 flex-shrink-0 flex items-center justify-center"><img src="images/social/Youtube_logo.png" class="h-6"></div><div class="flex-grow"><h3 class="font-bold text-lg">Linking FANUC Roboguide software with Unity 3D</h3><p class="text-xs text-gray-500 uppercase tracking-wider">YouTube Demo</p></div></div></a>` },
-            { category: 'side-projects', date: '2022-09-01', html: `<a href="https://youtu.be/SFfLPbs9-ws" target="_blank" class="block"><div class="portfolio-card glassy-effect flex items-center rounded-2xl overflow-hidden shadow-md h-full p-4"><div class="w-16 flex-shrink-0 flex items-center justify-center"><img src="images/social/Youtube_logo.png" class="h-6"></div><div class="flex-grow"><h3 class="font-bold text-lg">Pick and place programmed with a FANUC robot</h3><p class="text-xs text-gray-500 uppercase tracking-wider">YouTube Demo</p></div></div></a>` },
-            { category: 'side-projects', date: '2022-08-01', html: `<a href="https://youtu.be/m4l9wxIvU98" target="_blank" class="block"><div class="portfolio-card glassy-effect flex items-center rounded-2xl overflow-hidden shadow-md h-full p-4"><div class="w-16 flex-shrink-0 flex items-center justify-center"><img src="images/social/Youtube_logo.png" class="h-6"></div><div class="flex-grow"><h3 class="font-bold text-lg">Remote control of a TurtleBot2 with the HoloLens 2</h3><p class="text-xs text-gray-500 uppercase tracking-wider">YouTube Demo</p></div></div></a>` },
-            { category: 'side-projects', date: '2022-07-01', html: `<a href="https://www.maintenanceandengineering.com/2021/06/16/emerging-technologies-to-support-asset-management/" target="_blank" class="block"><div class="portfolio-card glassy-effect flex items-center rounded-2xl overflow-hidden shadow-md h-full p-4"><div class="w-16 flex-shrink-0 flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg></div><div class="flex-grow"><h3 class="font-bold text-lg">Emerging tech to support asset management</h3><p class="text-xs text-gray-500 uppercase tracking-wider">Technical Article</p></div></div></a>` },
-            { category: 'side-projects', date: '2022-06-01', html: `<a href="https://youtu.be/x-0PAZydMrk?si=yNJKiUbViiESZV_v" target="_blank" class="block"><div class="portfolio-card glassy-effect flex items-center rounded-2xl overflow-hidden shadow-md h-full p-4"><div class="w-16 flex-shrink-0 flex items-center justify-center"><img src="images/social/Youtube_logo.png" class="h-6"></div><div class="flex-grow"><h3 class="font-bold text-lg">Visualization of an injection moulding in VR</h3><p class="text-xs text-gray-500 uppercase tracking-wider">YouTube Demo</p></div></div></a>` },
-            { category: 'side-projects', date: '2022-05-01', html: `<a href="https://youtu.be/Zn1bKinud8s?si=my8Fv56XyIeIKABA" target="_blank" class="block"><div class="portfolio-card glassy-effect flex items-center rounded-2xl overflow-hidden shadow-md h-full p-4"><div class="w-16 flex-shrink-0 flex items-center justify-center"><img src="images/social/Youtube_logo.png" class="h-6"></div><div class="flex-grow"><h3 class="font-bold text-lg">Training procedure for starting a production line in VR</h3><p class="text-xs text-gray-500 uppercase tracking-wider">YouTube Demo</p></div></div></a>` },
-            { category: 'certification', date: '2021-09-01', html: `<div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full"><div class="w-full sm:w-24 flex items-center justify-center p-4"><img src="images/logos/fanuc.png" alt="FANUC Logo" class="object-contain h-12"></div><div class="p-4 flex flex-col justify-center"><p class="text-xs text-gray-500 uppercase tracking-wider">SEP 2021</p><h3 class="font-bold text-lg">Standard Teach Pendant Programming</h3><p class="text-sm text-gray-700 mt-1">FANUC</p></div></div>` },
-            { category: 'publication', date: '2020-06-01', html: `<a href="pdfs/paper1.pdf" target="_blank" class="block"><div class="portfolio-card glassy-effect rounded-2xl overflow-hidden shadow-md h-full"><div class="p-4 flex flex-col justify-center"><p class="text-sm uppercase tracking-wider mb-1">JUNE 2020, <span class="text-gray-700 normal-case">In Proceedings of the design society: DESIGN conference</span></p><h3 class="font-bold text-lg">IMPRO: Immersive prototyping in virtual environments for industrial designers</h3><p class="text-xs text-gray-500 uppercase tracking-wider mt-2">S Stadler, H Cornet, <b>D Mazeas*</b>, JR Chardonnet, F Frenkler (*App development, experiment design, data collection, and analysis)</p></div></div></a>` },
-            { category: 'employment', date: '2020-01-01', html: `<div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full"><div class="w-full sm:w-24 flex items-center justify-center p-4"><img src="images/logos/safran.png" alt="Safran Logo" class="object-contain h-20"></div><div class="p-4 flex flex-col justify-center"><h3 class="font-bold text-lg">Solutions Engineer</h3><p class="text-xs text-gray-500 uppercase tracking-wider">SAFRAN LANDING SYSTEMS (Gloucester, UK) | 6 Months (2020)</p><p class="text-sm text-gray-700 mt-2">Assisted with the implementation of augmented reality solutions for maintenance.</p></div></div>` },
-            { category: 'employment', date: '2019-10-01', html: `<div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full"><div class="w-full sm:w-24 flex items-center justify-center p-4"><img src="images/logos/sec.png" alt="SEC Logo" class="object-contain h-30"></div><div class="p-4 flex flex-col justify-center"><h3 class="font-bold text-lg">Freelance</h3><p class="text-xs text-gray-500 uppercase tracking-wider">SINGAPORE-ETH CENTRE (Remote) | 4 Months (2019 - 2020)</p><p class="text-sm text-gray-700 mt-2">Developed Unity 3D applications to study human navigation in isolation.</p></div></div>` },
-            { category: 'degree', date: '2019-09-01', html: `<div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full"><div class="w-full sm:w-24 flex items-center justify-center p-4"><img src="images/logos/artsetmetiers.svg" alt="Arts et Métiers Logo" class="object-contain h-30"></div><div class="p-4 flex flex-col justify-center"><p class="text-xs text-gray-500 uppercase tracking-wider">SEP 2019</p><h3 class="font-bold text-lg">Master's degree in Digital Engineering</h3><p class="text-sm text-gray-700 mt-1">Arts et Metiers (France) - Institute Image</p></div></div>` },
-            { category: 'employment', date: '2019-04-01', html: `<div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full"><div class="w-full sm:w-24 flex items-center justify-center p-4"><img src="images/logos/tumcreate.png" alt="TUMCREATE Logo" class="object-contain h-20"></div><div class="p-4 flex flex-col justify-center"><h3 class="font-bold text-lg">Research Assistant</h3><p class="text-xs text-gray-500 uppercase tracking-wider">TUMCREATE (Singapore) | 6 Months (2019)</p><p class="text-sm text-gray-700 mt-2">Studied the use of virtual reality for industrial designers.</p></div></div>` },
-            { category: 'employment', date: '2018-09-01', html: `<div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full"><div class="w-full sm:w-24 flex items-center justify-center p-4"><img src="images/logos/orano.svg" alt="Orano Logo" class="object-contain h-20"></div><div class="p-4 flex flex-col justify-center"><h3 class="font-bold text-lg">Virtual Reality Intern</h3><p class="text-xs text-gray-500 uppercase tracking-wider">ORANO (Cherbourg, France) | 6 Months (2018)</p><p class="text-sm text-gray-700 mt-2">Prepared project reviews for the design office using IC.IDO, Unity 3D, PiXYZ, SolidWorks, and Autodesk Navisworks.</p></div></div>` },
-            { category: 'degree', date: '2017-07-01', html: `<div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full"><div class="w-full sm:w-24 flex items-center justify-center p-4"><img src="images/logos/poitiers.png" alt="University of Poitiers Logo" class="object-contain h-20"></div><div class="p-4 flex flex-col justify-center"><p class="text-xs text-gray-500 uppercase tracking-wider">JUL 2017</p><h3 class="font-bold text-lg">Professional Bachelor's degree in Industrial Design</h3><p class="text-sm text-gray-700 mt-1">University of Poitiers (France)</p></div></div>` },
-            { category: 'employment', date: '2017-04-01', html: `<div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full"><div class="w-full sm:w-24 flex items-center justify-center p-4"><img src="images/logos/vernetdray.png" alt="Vernet Dray Logo" class="object-contain h-20"></div><div class="p-4 flex flex-col justify-center"><h3 class="font-bold text-lg">SolidWorks Intern</h3><p class="text-xs text-gray-500 uppercase tracking-wider">VERNET DRAY (Lyon, France) | 4 Months (2017)</p><p class="text-sm text-gray-700 mt-2">Modeled jewelry and created technical drawings on SolidWorks.</p></div></div>` },
-            { category: 'degree', date: '2016-06-01', html: `<div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full"><div class="w-full sm:w-24 flex items-center justify-center p-4"><img src="images/logos/tours.png" alt="University of Tours Logo" class="object-contain h-20"></div><div class="p-4 flex flex-col justify-center"><p class="text-xs text-gray-500 uppercase tracking-wider">JUN 2016</p><h3 class="font-bold text-lg">Associate's degree in Materials Engineering</h3><p class="text-sm text-gray-700 mt-1">University of Tours (France)</p></div></div>` },
-            { category: 'employment', date: '2016-04-01', html: `<div class="portfolio-card glassy-effect flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-md h-full"><div class="w-full sm:w-24 flex items-center justify-center p-4"><img src="images/logos/europoly.png" alt="EUROPOLY Logo" class="object-contain h-20"></div><div class="p-4 flex flex-col justify-center"><h3 class="font-bold text-lg">Methods Intern</h3><p class="text-xs text-gray-500 uppercase tracking-wider">EUROPOLY (Lyon, France) | 3 Months (2016)</p><p class="text-sm text-gray-700 mt-2">Programmed a 3-axis CNC on Autodesk ArtCAM and produced technical drawings on SolidWorks.</p></div></div>` }
+            { category: 'publication', date: '2025-04-01', displayDate: 'APR 2025', url: 'pdfs/paper5.pdf', period: '<span class="normal-case">In MDPI Virtual Worlds</span>', title: 'Study of Visualization Modalities on Industrial Robot Teleoperation for Inspection in a Virtual Co-Existence Space', authors: '<span class="highlight-name">D Mazeas</span>, B Namoano' },
+            { category: 'teaching', date: '2025-02-01', displayDate: '2025', title: 'AI3153 Human-Computer Interaction', period: 'BNBU (UNDERGRADUATES)', description: 'Syllabus Creator and Instructor for a class of 63 students.' },
+            { category: 'teaching', date: '2025-01-01', displayDate: '2024-2025', title: 'GTSC2093 IT for Success in Everyday Life and Work', period: 'BNBU (UNDERGRADUATES)', description: 'Instructor for a class of 80 students.' },
+            { category: 'teaching', date: '2025-02-01', displayDate: '2025', title: 'GCAP3123 Computer Technology and AI Project', period: 'BNBU (UNDERGRADUATES)', description: 'Instructor for a project-based class of 50 students.' },
+            { category: 'employment', date: '2024-09-18', displayDate: '2024-2025', logo: 'images/logos/bnbu.png', title: 'Assistant Professor', period: 'BNBU (Zhuhai, China) | 10 Months', description: 'Conducted undergraduate lecturing and mentoring in HCI and XR.' },
+            { category: 'publication', date: '2024-08-01', displayDate: 'OCT 2024', url: 'pdfs/paper4.pdf', period: '<span class="normal-case">In CIRP Design Conference</span>', title: 'Designing Immersive Tools for Expert and Worker Remote Collaboration', authors: 'SCM Galvis*, <span class="highlight-name">D Mazeas</span>*, F Noel, JA Erkoyuncu (*Equal contribution)' },
+            { category: 'publication', date: '2024-04-01', displayDate: 'APR 2024', url: 'https://dspace.lib.cranfield.ac.uk/items/3d611b76-5604-4269-bd2b-e03835fcaad4', period: '<span class="normal-case">PhD Thesis</span>', title: 'Key principles for assessing and implementing remote inspection with telexistence capability', authors: '<span class="highlight-name">Damien Mazeas</span>' },
+            { category: 'degree', date: '2024-04-01', displayDate: 'APR 2024', logo: 'images/logos/cranfield.webp', title: 'PhD in Human-Computer Interaction', description: 'Cranfield University (UK) - Centre for Digital and Design Engineering' },
+            { category: 'employment', date: '2023-08-01', displayDate: '2023-2024', logo: 'images/logos/cnrs.png', title: 'Research Fellow', period: 'CNRS@CREATE (Singapore) | 1 Year', description: 'Studied how viewpoints shaped virtual navigation.' },
+            { category: 'publication', date: '2023-05-01', displayDate: 'MAY 2023', url: 'pdfs/paper3.pdf', period: '<span class="normal-case">In IEEE VRW</span>', title: 'Telexistence-based remote maintenance for marine engineers', authors: '<span class="highlight-name">D Mazeas</span>, JA Erkoyuncu, F Noel' },
+            { category: 'employment', date: '2023-02-01', displayDate: '2023', logo: 'images/logos/gscop.jpg', title: 'Visiting PhD Student', period: 'G-SCOP LAB (Grenoble, France) | 6 Months', description: 'Designed a framework for expert-worker virtual reality remote collaboration.' },
+            { category: 'publication', date: '2023-02-01', displayDate: 'FEB 2023', url: 'pdfs/paper2.pdf', period: '<span class="normal-case">In IFIP PLM</span>', title: 'A telexistence interface for remote control of a physical industrial robot via data distribution service', authors: '<span class="highlight-name">D Mazeas</span>, JA Erkoyuncu, F Noel' },
+            { category: 'side-projects', date: '2022-11-01', displayDate: '2022', url: 'ur16e.html', icon: 'images/social/Octicons-mark-github.svg.png', title: 'Universal Robots 16e inverse kinematics in Unity3D', subtitle: 'GitHub Project' },
+            { category: 'side-projects', date: '2022-10-01', displayDate: '2022', url: 'https://youtu.be/3zTs_7LXH3Y', icon: 'images/social/Youtube_logo.png', title: 'Linking FANUC Roboguide software with Unity 3D', subtitle: 'YouTube Demo' },
+            { category: 'side-projects', date: '2022-09-01', displayDate: '2022', url: 'https://youtu.be/SFfLPbs9-ws', icon: 'images/social/Youtube_logo.png', title: 'Pick and place programmed with a FANUC robot', subtitle: 'YouTube Demo' },
+            { category: 'side-projects', date: '2022-08-01', displayDate: '2022', url: 'https://youtu.be/m4l9wxIvU98', icon: 'images/social/Youtube_logo.png', title: 'Remote control of a TurtleBot2 with the HoloLens 2', subtitle: 'YouTube Demo' },
+            { category: 'side-projects', date: '2022-07-01', displayDate: '2021', url: 'https://www.maintenanceandengineering.com/2021/06/16/emerging-technologies-to-support-asset-management/', icon: 'svg_article', title: 'Emerging tech to support asset management', subtitle: 'Technical Article' },
+            { category: 'side-projects', date: '2022-06-01', displayDate: '2022', url: 'https://youtu.be/x-0PAZydMrk?si=yNJKiUbViiESZV_v', icon: 'images/social/Youtube_logo.png', title: 'Visualization of an injection moulding in VR', subtitle: 'YouTube Demo' },
+            { category: 'side-projects', date: '2022-05-01', displayDate: '2022', url: 'https://youtu.be/Zn1bKinud8s?si=my8Fv56XyIeIKABA', icon: 'images/social/Youtube_logo.png', title: 'Training procedure for starting a production line in VR', subtitle: 'YouTube Demo' },
+            { category: 'certification', date: '2021-09-01', displayDate: 'SEP 2021', logo: 'images/logos/fanuc.png', title: 'Standard Teach Pendant Programming', description: 'FANUC' },
+            { category: 'publication', date: '2020-06-01', displayDate: 'JUN 2020', url: 'pdfs/paper1.pdf', period: '<span class="normal-case">In DESIGN conference</span>', title: 'IMPRO: Immersive prototyping in virtual environments for industrial designers', authors: 'S Stadler, H Cornet, <span class="highlight-name">D Mazeas*</span>, JR Chardonnet, F Frenkler (*App development, experiment design, data collection, and analysis)' },
+            { category: 'employment', date: '2020-01-01', displayDate: '2020', logo: 'images/logos/safran.png', title: 'Solutions Engineer', period: 'SAFRAN (Gloucester, UK) | 6 Months', description: 'Assisted with the implementation of augmented reality solutions for maintenance.' },
+            { category: 'employment', date: '2019-10-01', displayDate: '2019-2020', logo: 'images/logos/sec.png', title: 'Freelance', period: 'SINGAPORE-ETH CENTRE (Remote) | 4 Months', description: 'Developed Unity 3D applications to study human navigation in isolation.' },
+            { category: 'degree', date: '2019-09-01', displayDate: 'SEP 2019', logo: 'images/logos/artsetmetiers.svg', title: "Master's degree in Digital Engineering", description: 'Arts et Metiers (France) - Institute Image' },
+            { category: 'employment', date: '2019-04-01', displayDate: '2019', logo: 'images/logos/tumcreate.png', title: 'Research Assistant', period: 'TUMCREATE (Singapore) | 6 Months', description: 'Studied the use of virtual reality for industrial designers.' },
+            { category: 'employment', date: '2018-09-01', displayDate: '2018', logo: 'images/logos/orano.svg', title: 'Virtual Reality Intern', period: 'ORANO (Cherbourg, France) | 6 Months', description: 'Prepared project reviews for the design office.' },
+            { category: 'degree', date: '2017-07-01', displayDate: 'JUL 2017', logo: 'images/logos/poitiers.png', title: "Professional Bachelor's degree in Industrial Design", description: 'University of Poitiers (France)' },
+            { category: 'employment', date: '2017-04-01', displayDate: '2017', logo: 'images/logos/vernetdray.png', title: 'SolidWorks Intern', period: 'VERNET DRAY (Lyon, France) | 4 Months', description: 'Modeled jewelry and created technical drawings on SolidWorks.' },
+            { category: 'degree', date: '2016-06-01', displayDate: 'JUN 2016', logo: 'images/logos/tours.png', title: "Associate's degree in Materials Engineering", description: 'University of Tours (France)' },
+            { category: 'employment', date: '2016-04-01', displayDate: '2016', logo: 'images/logos/europoly.png', title: 'Methods Intern', period: 'EUROPOLY (Lyon, France) | 3 Months', description: 'Programmed a 3-axis CNC on Autodesk ArtCAM and produced technical drawings.' }
         ];
 
         function hexToRgb(hex) {
@@ -123,34 +87,30 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         function applyFilterColorToCards() {
-            const isDarkMode = document.body.classList.contains('dark');
             document.querySelectorAll('.portfolio-item').forEach(item => {
                 const category = item.dataset.category;
                 const card = item.querySelector('.portfolio-card');
                 if (category && filterColors[category] && card) {
                     const rgb = filterColors[category].rgb;
-                    const backgroundOpacity = isDarkMode ? 0.25 : 0.55;
-                    const borderOpacity = isDarkMode ? 0.4 : 0.7;
-                    card.style.backgroundColor = `rgba(${rgb}, ${backgroundOpacity})`;
-                    card.style.borderColor = `rgba(${rgb}, ${borderOpacity})`;
+                    card.style.setProperty('--item-color', `rgba(${rgb}, 0.8)`);
+                    card.style.setProperty('--item-glow-color', `rgba(${rgb}, 0.15)`);
                 }
             });
         }
 
-        function animateItems(filter = 'all') {
+        function filterAndObserve(filter = 'all') {
             const items = document.querySelectorAll('.portfolio-item');
-            let delay = 0;
             items.forEach(item => {
                 const categories = item.dataset.category.split(' ');
                 let shouldShow = categories.includes('side-projects') ? (filter === 'side-projects') : (filter === 'all' || categories.includes(filter));
 
                 if (shouldShow) {
                     item.style.display = 'block';
-                    setTimeout(() => item.classList.add('is-visible'), delay);
-                    delay += 50;
+                    item.classList.add('reveal');
+                    observer.observe(item);
                 } else {
-                    item.classList.remove('is-visible');
-                    setTimeout(() => { item.style.display = 'none'; }, 500);
+                    item.style.display = 'none';
+                    observer.unobserve(item);
                 }
             });
         }
@@ -158,15 +118,87 @@ document.addEventListener('DOMContentLoaded', () => {
         function renderPortfolio(sortOrder) {
             if (sortOrder === 'newest') {
                 portfolioData.sort((a, b) => new Date(b.date) - new Date(a.date));
-            } else { // 'oldest'
+            } else {
                 portfolioData.sort((a, b) => new Date(a.date) - new Date(b.date));
             }
 
             const currentFilter = filterContainer ? filterContainer.querySelector('.active').dataset.filter : 'all';
-            const gridHTML = portfolioData.map(item => `<div class="portfolio-item" data-category="${item.category}">${item.html}</div>`).join('');
+            const gridHTML = portfolioData.map(item => {
+                let content;
+                const isClickable = item.url;
+                const itemWrapperStart = isClickable ? `<a href="${item.url}" target="_blank" class="block h-full">` : '<div class="h-full">';
+                const itemWrapperEnd = isClickable ? '</a>' : '</div>';
+const categoryName = item.category.replace('-', ' ').toUpperCase();
+const categoryTag = (item.category === 'side-projects') ? '' : `<div class="absolute top-2 right-3 text-xs uppercase tracking-wider bg-black/20 text-white/70 px-2 py-1 rounded-full">${categoryName}</div>`;                const displayDate = item.displayDate;
+
+                const periodHtml = item.period ? `<p class="text-sm uppercase tracking-wider mb-1">${item.period}</p>` : '';
+
+                switch (item.category) {
+                    case 'publication':
+                        content = `
+                            <div class="px-4 pb-4 pt-12 flex flex-col justify-center flex-grow">
+                                ${periodHtml}
+                                <h3 class="font-bold text-lg">${item.title}</h3>
+                                <p class="text-sm mt-2">${item.authors}</p>
+                            </div>`;
+                        break;
+                    case 'teaching':
+                        content = `
+                            <div class="px-4 pb-4 pt-12 w-full flex flex-col justify-center flex-grow">
+                                <h3 class="font-bold text-lg">${item.title}</h3>
+                                ${periodHtml}
+                                <p class="text-sm mt-2">${item.description}</p>
+                            </div>`;
+                        break;
+                    case 'employment':
+                    case 'degree':
+                    case 'certification':
+                         content = `
+                            <div class="flex flex-col sm:flex-row h-full">
+                                <div class="w-full sm:w-24 flex items-center justify-center p-4">
+                                    <img src="${item.logo}" alt="${item.title} Logo" class="object-contain h-24" loading="lazy">
+                                </div>
+                                <div class="px-4 pb-4 pt-12 sm:pt-12 flex flex-col justify-center flex-grow">
+                                    <h3 class="font-bold text-lg">${item.title}</h3>
+                                    ${periodHtml}
+                                    <p class="text-sm mt-1">${item.description}</p>
+                                </div>
+                            </div>`;
+                        break;
+                    case 'side-projects':
+                        const iconHtml = item.icon === 'svg_article'
+                            ? `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>`
+                            : `<img src="${item.icon}" class="${item.subtitle.includes('YouTube') ? 'h-6' : 'h-8 w-8'}" loading="lazy">`;
+                        
+                        content = `
+                             <div class="flex items-center h-full px-4 pb-4 pt-12">
+                                 <div class="w-16 flex-shrink-0 flex items-center justify-center">${iconHtml}</div>
+                                 <div class="flex-grow">
+                                     <h3 class="font-bold text-lg">${item.title}</h3>
+                                     <p class="text-sm">${item.subtitle}</p>
+                                 </div>
+                             </div>`;
+                        break;
+                    default:
+                        content = `<div class="px-4 pb-4 pt-12 flex-grow"><h3 class="font-bold text-lg">${item.title}</h3></div>`;
+                }
+
+                return `
+                    <div class="portfolio-item" data-category="${item.category}">
+                        ${itemWrapperStart}
+                            <div class="portfolio-card glassy-effect rounded-2xl overflow-hidden shadow-md h-full">
+                                <div class="absolute top-2 left-3 text-xs font-bold tracking-wider bg-black/20 text-white/70 px-2 py-1 rounded-full">${displayDate}</div>
+                                <div class="absolute top-2 right-3 text-xs uppercase tracking-wider bg-black/20 text-white/70 px-2 py-1 rounded-full">${categoryName}</div>
+                                ${content}
+                            </div>
+                        ${itemWrapperEnd}
+                    </div>`;
+
+            }).join('');
+
             portfolioGrid.innerHTML = gridHTML;
             applyFilterColorToCards();
-            animateItems(currentFilter);
+            filterAndObserve(currentFilter);
         }
 
         filterButtons.forEach(btn => {
@@ -178,14 +210,34 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
+        if (sortToggleButton) {
+            sortToggleButton.textContent = 'Sorted by: Newest';
+        }
+
         renderPortfolio(currentSortOrder);
         updateTheme('all');
+
+        if (portfolioGrid) {
+            portfolioGrid.addEventListener('mousemove', e => {
+                const card = e.target.closest('.portfolio-card');
+                if (card) {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    card.style.setProperty('--x', `${x}px`);
+                    card.style.setProperty('--y', `${y}px`);
+                }
+            });
+        }
 
         window.addEventListener('mousemove', e => {
             cursorBlob.animate({
                 left: `${e.clientX}px`,
                 top: `${e.clientY}px`
-            }, { duration: 2000, fill: "forwards" });
+            }, {
+                duration: 2000,
+                fill: "forwards"
+            });
         });
 
         window.addEventListener('click', e => {
@@ -201,7 +253,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const currentTransform = window.getComputedStyle(blob).transform;
                 const newTransform = currentTransform === 'none' ? `translate(${translateX}px, ${translateY}px)` : `${currentTransform} translate(${translateX}px, ${translateY}px)`;
                 blob.style.transform = newTransform;
-                setTimeout(() => { blob.style.transform = ''; }, 500);
+                setTimeout(() => {
+                    blob.style.transform = '';
+                }, 500);
             });
         });
 
@@ -213,7 +267,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     targetButton.classList.add('active');
                     const filter = targetButton.dataset.filter;
                     updateTheme(filter);
-                    animateItems(filter);
+                    filterAndObserve(filter);
+                    
+                    // Fire the custom event for the oculus-viewer to pick up
+                    window.dispatchEvent(new CustomEvent('themeUpdated'));
                 }
             });
         }
@@ -222,20 +279,19 @@ document.addEventListener('DOMContentLoaded', () => {
             sortToggleButton.addEventListener('click', () => {
                 if (currentSortOrder === 'newest') {
                     currentSortOrder = 'oldest';
-                    sortToggleButton.textContent = 'Sort by Newest';
+                    sortToggleButton.textContent = 'Sorted by: Oldest';
                 } else {
                     currentSortOrder = 'newest';
-                    sortToggleButton.textContent = 'Sort by Oldest';
+                    sortToggleButton.textContent = 'Sorted by: Newest';
                 }
                 renderPortfolio(currentSortOrder);
             });
         }
     }
 
-    // Contact Page Logic
-    if (document.body.id === 'contact-page') {
+if (document.body.id === 'contact-page' || document.body.id === 'home-page') {
         const canvas = document.getElementById('constellation-canvas');
-        if (canvas) { // Only run if canvas exists
+        if (canvas) {
             const ctx = canvas.getContext('2d');
             let dots = [];
             const mouse = { x: null, y: null };
@@ -254,9 +310,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 const dotCount = Math.floor((canvas.width * canvas.height) / baseDotDensity);
                 for (let i = 0; i < dotCount; i++) {
                     dots.push({
-                        x: Math.random() * canvas.width, y: Math.random() * canvas.height,
-                        hue: Math.floor(Math.random() * 360), size: Math.random() * 2 + 1,
-                        speedX: (Math.random() - 0.5) * 0.5, speedY: (Math.random() - 0.5) * 0.5
+                        x: Math.random() * canvas.width,
+                        y: Math.random() * canvas.height,
+                        hue: Math.floor(Math.random() * 360),
+                        size: Math.random() * 2 + 1,
+                        speedX: (Math.random() - 0.5) * 0.5,
+                        speedY: (Math.random() - 0.5) * 0.5
                     });
                 }
             }
@@ -267,9 +326,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 const allVisibleDots = new Set(persistentDots);
 
                 for (const dot of dots) {
-                    dot.x += dot.speedX; dot.y += dot.speedY;
-                    if (dot.x < 0) dot.x = canvas.width; if (dot.x > canvas.width) dot.x = 0;
-                    if (dot.y < 0) dot.y = canvas.height; if (dot.y > canvas.height) dot.y = 0;
+                    dot.x += dot.speedX;
+                    dot.y += dot.speedY;
+                    if (dot.x < 0) dot.x = canvas.width;
+                    if (dot.x > canvas.width) dot.x = 0;
+                    if (dot.y < 0) dot.y = canvas.height;
+                    if (dot.y > canvas.height) dot.y = 0;
 
                     let isNearby = false;
                     if (mouse.x !== null) {
@@ -325,7 +387,10 @@ document.addEventListener('DOMContentLoaded', () => {
             resizeCanvas();
             animate();
             window.addEventListener('resize', resizeCanvas);
-            window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+            window.addEventListener('mousemove', e => {
+                mouse.x = e.clientX;
+                mouse.y = e.clientY;
+            });
 
             window.addEventListener('click', e => {
                 const dotsToMakePersistent = dots.filter(dot => {
@@ -337,7 +402,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- Global Custom Cursor Logic ---
     window.addEventListener('mousemove', e => {
         if (cursorDot) {
             cursorDot.style.left = `${e.clientX}px`;
@@ -347,7 +411,10 @@ document.addEventListener('DOMContentLoaded', () => {
             cursorOutline.animate({
                 left: `${e.clientX}px`,
                 top: `${e.clientY}px`
-            }, { duration: 500, fill: "forwards" });
+            }, {
+                duration: 500,
+                fill: "forwards"
+            });
         }
 
         interactiveElements.forEach(el => {

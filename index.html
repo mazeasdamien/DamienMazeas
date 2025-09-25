@@ -20,29 +20,37 @@
         <div class="blob color-4"></div>
         <div id="cursor-blob" class="blob"></div>
     </div>
+    
+    <!-- This canvas is for the constellation effect, it will overlap the blobs -->
+    <canvas id="constellation-canvas"></canvas>
 
     <header class="w-full p-6 md:p-8 relative z-10">
         <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-center md:justify-between">
-            <div class="flex flex-col items-center md:flex-row gap-4 md:gap-6 mb-4 md:mb-0">
+            
+            <div class="flex items-center gap-4 md:gap-6">
                 <div class="profile-picture-container">
                     <img src="images/profil.jpg" alt="Damien Mazeas" class="w-full h-full object-cover">
                 </div>
-                <div class="name-container text-center md:text-left">
-                    <h1 class="text-3xl md:text-4xl font-black tracking-tight cursor-pointer">Damien MAZEAS</h1>
-                    <div class="flex items-center justify-center md:justify-start gap-2 mt-2">
-                        <a href="https://www.linkedin.com/in/mazeas/" target="_blank" class="social-bubble" aria-label="LinkedIn"><img src="images/social/LinkedIn_icon.svg.webp" alt="LinkedIn logo"></a>
-                        <a href="https://github.com/mazeasdamien" target="_blank" class="social-bubble" aria-label="GitHub">
-                            <img src="images/social/github-white-icon.svg" alt="GitHub logo">
-                        </a>
-                        <a href="https://orcid.org/0000-0001-9258-3909" target="_blank" class="social-bubble" aria-label="Orcid"><img src="images/social/ORCID_iD.svg.png" alt="ORCID logo"></a>
-                        <a href="https://scholar.google.com/citations?user=SydtND4AAAAJ&hl=en" target="_blank" class="social-bubble" aria-label="Google Scholar"><img src="images/social/Google_Scholar_logo.svg.png" alt="Google Scholar logo"></a>
-                        <a href="https://www.youtube.com/@mazeas" target="_blank" class="social-bubble" aria-label="YouTube"><img src="images/social/Youtube_logo.png" alt="YouTube logo"></a>
+                <div class="flex items-center">
+                    <div class="name-container text-center md:text-left">
+                        <h1 class="text-3xl md:text-4xl font-black tracking-tight">Damien MAZEAS<span class="font-semibold text-white/70">, PhD</span></h1>
+                        <div class="flex items-center justify-center md:justify-start gap-2 mt-2">
+                            <a href="https://www.linkedin.com/in/mazeas/" target="_blank" class="social-bubble" aria-label="LinkedIn"><img src="images/social/LinkedIn_icon.svg.webp" alt="LinkedIn logo"></a>
+                            <a href="https://github.com/mazeasdamien" target="_blank" class="social-bubble" aria-label="GitHub">
+                                <img src="images/social/github-white-icon.svg" alt="GitHub logo">
+                            </a>
+                            <a href="https://orcid.org/0000-0001-9258-3909" target="_blank" class="social-bubble" aria-label="Orcid"><img src="images/social/ORCID_iD.svg.png" alt="ORCID logo"></a>
+                            <a href="https://scholar.google.com/citations?user=SydtND4AAAAJ&hl=en" target="_blank" class="social-bubble" aria-label="Google Scholar"><img src="images/social/Google_Scholar_logo.svg.png" alt="Google Scholar logo"></a>
+                            <a href="https://www.youtube.com/@mazeas" target="_blank" class="social-bubble" aria-label="YouTube"><img src="images/social/Youtube_logo.png" alt="YouTube logo"></a>
+                        </div>
                     </div>
+                     <div id="oculus-container"></div>
                 </div>
             </div>
+
             <nav class="w-full flex justify-center md:w-auto md:justify-end items-center space-x-2 md:space-x-4 mt-4 md:mt-0">
                 <a href="pdfs/cv.pdf" target="_blank" class="header-btn glassy-effect text-sm font-semibold tracking-wider p-2.5 rounded-full">CV</a>
-                <a href="contact.html" class="header-btn glassy-effect text-sm font-semibold tracking-wider p-2.5 rounded-full">CONTACT</a>
+                <a href="mailto:damien.mazeas@icloud.com" class="header-btn glassy-effect text-sm font-semibold tracking-wider p-2.5 rounded-full">EMAIL ME</a>
             </nav>
         </div>
     </header>
@@ -76,7 +84,7 @@
                 <h2 class="text-sm font-medium uppercase tracking-wider">Feed</h2>
                 <button id="sort-toggle-btn" class="filter-btn px-4 py-1.5 text-xs font-medium rounded-full">Sort by Oldest</button>
             </div>
-            <div id="portfolio-grid" class="grid grid-cols-1 gap-8">
+            <div id="portfolio-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             </div>
         </div>
     </main>
@@ -86,6 +94,16 @@
         <p class="mt-2">Last Updated: September 2025</p>
     </footer>
 
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/"
+        }
+    }
+    </script>
+
     <script src="script.js"></script>
+    <script type="module" src="oculus-viewer.js"></script>
 </body>
 </html>
