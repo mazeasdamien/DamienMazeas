@@ -6,6 +6,7 @@ const container = document.getElementById('oculus-container');
 
 if (container) {
     const backgroundContainer = document.getElementById('background-container');
+    const oculusLoader = document.getElementById('oculus-loader');
 
     // --- Basic Scene Setup ---
     const scene = new THREE.Scene();
@@ -85,10 +86,25 @@ if (container) {
             oculusModel.position.set(0, -0.4, 0); // Positioned to be in the center
             scene.add(oculusModel);
             controls.target.copy(oculusModel.position);
+
+            // Hide the loader once the model is loaded
+            if (oculusLoader) {
+                oculusLoader.style.display = 'none';
+            }
         },
-        undefined,
+        (xhr) => {
+            // This is the onProgress callback, which is triggered during loading.
+            if (xhr.total > 0) {
+                const percentComplete = (xhr.loaded / xhr.total) * 100;
+                console.log(Math.round(percentComplete, 2) + '% loaded');
+            }
+        },
         (error) => {
             console.error('An error happened while loading the oculus model:', error);
+            // Hide the loader in case of an error as well.
+            if (oculusLoader) {
+                oculusLoader.style.display = 'none';
+            }
         }
     );
     
