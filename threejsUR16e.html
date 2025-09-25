@@ -21,6 +21,10 @@
             max-width: 400px;
             overflow-y: auto;
             z-index: 100;
+            transition: transform 0.3s ease-in-out;
+        }
+        #structure-panel.collapsed {
+            transform: translateX(calc(-100% - 20px));
         }
         #structure-panel button {
             margin-left: 10px;
@@ -59,7 +63,11 @@
 <body>
     <div id="container"></div>
     <div id="structure-panel">
-        <h3>Model Structure <button id="toggle-gizmos">Toggle Gizmos</button></h3>
+        <h3>
+            Model Structure 
+            <button id="toggle-gizmos">Toggle Gizmos</button>
+            <button id="toggle-panel">Collapse</button>
+        </h3>
         <div id="structure-output">Loading model...</div>
     </div>
     <footer id="footer">
@@ -68,8 +76,8 @@
     <script type="importmap">
         {
             "imports": {
-                "three": "https://unpkg.com/three@0.165.0/build/three.module.js",
-                "three/addons/": "https://unpkg.com/three@0.165.0/examples/jsm/",
+                "three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js",
+                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/",
                 "lil-gui": "https://unpkg.com/lil-gui@0.19.1/dist/lil-gui.esm.js"
             }
         }
@@ -91,23 +99,23 @@
 
         const controls = new OrbitControls(camera, renderer.domElement);
         controls.enableDamping = true;
-        scene.add(new THREE.AmbientLight(0xffffff, 1.5));
+        scene.add(new THREE.AmbientLight(0xffffff, 0.3));
         const dirLight = new THREE.DirectionalLight(0xffffff, 3);
-        dirLight.position.set(5, 10, 7.5);
+        dirLight.position.set(2, 30, 7.5);
         scene.add(dirLight);
-        const gridHelper = new THREE.GridHelper(50, 100, 0x888888, 0x444444);
+        const gridHelper = new THREE.GridHelper(50, 10, 0x888888, 0x444444);
         scene.add(gridHelper);
 
         const gui = new GUI();
         const jointControls = {};
 
         const jointConfigurations = {
-            'Base':     { axis: 'y', name: 'Rotate Y' },
-            'Shoulder': { axis: 'z', name: 'Rotate Z' },
-            'Elbow':    { axis: 'z', name: 'Rotate Z' },
-            'Wrist1':   { axis: 'z', name: 'Rotate Z' },
-            'Wrist2':   { axis: 'y', name: 'Rotate Y' },
-            'Wrist3':   { axis: 'z', name: 'Rotate Z' }
+            'Base':     { axis: 'y' },
+            'Shoulder': { axis: 'z' },
+            'Elbow':    { axis: 'z' },
+            'Wrist1':   { axis: 'z' },
+            'Wrist2':   { axis: 'y' },
+            'Wrist3':   { axis: 'z' }
         };
 
         const raycaster = new THREE.Raycaster();
@@ -122,11 +130,11 @@
         let transformControls;
 
         function createMovableSphere() {
-            // --- UPDATED: Sphere size increased by 20x, color changed to pink ---
-            const sphereGeometry = new THREE.SphereGeometry(0.15 * 10, 32, 32); 
-            const sphereMaterial = new THREE.MeshStandardMaterial({ color: 0xFF69B4, metalness: 0.8, roughness: 0.2 }); // Pink color
+            // Sphere size increased by 20x, color changed to pink
+            const sphereGeometry = new THREE.SphereGeometry(0.15 * 5, 32, 32); 
+            const sphereMaterial = new THREE.MeshStandardMaterial({ color: 0xFF69B4, metalness: 0.8, roughness: 0.2 });
             movableSphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
-            movableSphere.position.set(1.5, 1, 1.5);
+            movableSphere.position.set(15, 20, 15);
             scene.add(movableSphere);
 
             transformControls = new TransformControls(camera, renderer.domElement);
@@ -136,12 +144,6 @@
             transformControls.addEventListener('dragging-changed', function (event) {
                 controls.enabled = !event.value;
             });
-
-            const sphereFolder = gui.addFolder('Movable Sphere');
-            sphereFolder.add(movableSphere.position, 'x', -5, 5, 0.1).name('Position X').listen();
-            sphereFolder.add(movableSphere.position, 'y', 0, 5, 0.1).name('Position Y').listen();
-            sphereFolder.add(movableSphere.position, 'z', -5, 5, 0.1).name('Position Z').listen();
-            sphereFolder.add(movableSphere, 'visible').name('Visible');
         }
 
         function findSelectableGroup(object) {
@@ -254,7 +256,7 @@
                 const config = jointConfigurations[group.name];
                 if (config) {
                     jointControls[group.name] = 0;
-                    gui.add(jointControls, group.name, -180, 180).name(`${group.name} ${config.name}`);
+                    gui.add(jointControls, group.name, -180, 180).name(group.name);
                 }
             });
 
@@ -274,6 +276,18 @@
             camera.lookAt(center);
             controls.update();
 
+            const togglePanelBtn = document.getElementById('toggle-panel');
+            const structurePanel = document.getElementById('structure-panel');
+
+            togglePanelBtn.addEventListener('click', () => {
+                structurePanel.classList.toggle('collapsed');
+                if (structurePanel.classList.contains('collapsed')) {
+                    togglePanelBtn.textContent = 'Expand';
+                } else {
+                    togglePanelBtn.textContent = 'Collapse';
+                }
+            });
+
             const structureOutput = document.getElementById('structure-output');
             structureOutput.innerHTML = ''; 
             const structureElement = buildStructureHTML(robotModel);
@@ -282,7 +296,7 @@
             }
             
             selectableGroups.forEach(group => {
-                const axesHelper = new THREE.AxesHelper(0.2); 
+                const axesHelper = new THREE.AxesHelper(4); 
                 group.add(axesHelper);
                 gizmos.push(axesHelper);
             });
