@@ -21,7 +21,6 @@
         <div id="cursor-blob" class="blob"></div>
     </div>
     
-    <!-- This canvas is for the constellation effect, it will overlap the blobs -->
     <canvas id="constellation-canvas"></canvas>
 
     <header class="w-full p-6 md:p-8 relative z-10">
@@ -32,7 +31,7 @@
                     <img src="images/profil.jpg" alt="Damien Mazeas" class="w-full h-full object-cover">
                 </div>
                 <div class="flex items-center">
-                    <div class="name-container text-center md:text-left">
+                    <div class="name-container text-center md:text-left flex flex-col">
                         <h1 class="text-3xl md:text-4xl font-black tracking-tight">Damien MAZEAS<span class="font-semibold text-white/70">, PhD</span></h1>
                         <div class="flex items-center justify-center md:justify-start gap-2 mt-2">
                             <a href="https://www.linkedin.com/in/mazeas/" target="_blank" class="social-bubble" aria-label="LinkedIn"><img src="images/social/LinkedIn_icon.svg.webp" alt="LinkedIn logo"></a>
@@ -43,15 +42,15 @@
                             <a href="https://scholar.google.com/citations?user=SydtND4AAAAJ&hl=en" target="_blank" class="social-bubble" aria-label="Google Scholar"><img src="images/social/Google_Scholar_logo.svg.png" alt="Google Scholar logo"></a>
                             <a href="https://www.youtube.com/@mazeas" target="_blank" class="social-bubble" aria-label="YouTube"><img src="images/social/Youtube_logo.png" alt="YouTube logo"></a>
                         </div>
+                        <nav class="flex w-full justify-center md:justify-start items-center space-x-2 md:space-x-4 mt-4">
+                            <a href="pdfs/cv.pdf" target="_blank" class="header-btn glassy-effect text-sm font-semibold tracking-wider p-2.5 rounded-full">CV</a>
+                            <a href="mailto:damien.mazeas@icloud.com" class="header-btn glassy-effect text-sm font-semibold tracking-wider p-2.5 rounded-full">EMAIL ME</a>
+                        </nav>
                     </div>
                      <div id="oculus-container"></div>
                 </div>
             </div>
-
-            <nav class="w-full flex justify-center md:w-auto md:justify-end items-center space-x-2 md:space-x-4 mt-4 md:mt-0">
-                <a href="pdfs/cv.pdf" target="_blank" class="header-btn glassy-effect text-sm font-semibold tracking-wider p-2.5 rounded-full">CV</a>
-                <a href="mailto:damien.mazeas@icloud.com" class="header-btn glassy-effect text-sm font-semibold tracking-wider p-2.5 rounded-full">EMAIL ME</a>
-            </nav>
+            
         </div>
     </header>
 

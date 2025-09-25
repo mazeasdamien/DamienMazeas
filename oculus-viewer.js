@@ -53,11 +53,11 @@ if (container) {
     }
 
     // --- Immersive Colored Lighting (with much stronger intensity) ---
-    const pointLight1 = new THREE.PointLight(getColorFromCSS('--gradient-2'), 30, 20);
+    const pointLight1 = new THREE.PointLight(getColorFromCSS('--gradient-2'), 200, 20);
     pointLight1.position.set(2, 2, 2);
     scene.add(pointLight1);
     
-    const pointLight2 = new THREE.PointLight(getColorFromCSS('--gradient-3'), 30, 20);
+    const pointLight2 = new THREE.PointLight(getColorFromCSS('--gradient-3'), 200, 20);
     pointLight2.position.set(-2, -2, -2);
     scene.add(pointLight2);
     
@@ -82,16 +82,16 @@ if (container) {
             });
 
             oculusModel.scale.setScalar(8);
-            oculusModel.position.set(0, -0.4, 0);
+            oculusModel.position.set(0, -0.4, 0); // Positioned to be in the center
             scene.add(oculusModel);
             controls.target.copy(oculusModel.position);
         },
         undefined,
         (error) => {
-            console.error('An error happened while loading the model:', error);
+            console.error('An error happened while loading the oculus model:', error);
         }
     );
-
+    
     // --- Event Listeners ---
     function onWindowResize() {
         if (container.clientWidth > 0 && container.clientHeight > 0) {

@@ -10,6 +10,17 @@ body {
     color: #E6EDF3;
 }
 
+#home-page #background-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: -2;
+    overflow: hidden;
+    filter: blur(200px) saturate(1);
+}
+
 #home-page #constellation-canvas {
     position: fixed;
     top: 0;
@@ -18,17 +29,10 @@ body {
     height: 100%;
     z-index: -1;
     opacity: 0.7;
-}
-
-#home-page #background-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    z-index: -2; 
-    overflow: hidden;
-    filter: blur(200px) saturate(1);
+    filter: blur(0px);
+    transition: filter 0.5s ease-in-out;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
 .blob {
@@ -95,27 +99,6 @@ body {
     to {
         transform: translate(10vw, -10vh) rotate(120deg) scale(1.2);
     }
-}
-
-#contact-page #page-background {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -2;
-    overflow: hidden;
-    background-color: #0D1117;
-}
-
-#contact-page #constellation-canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    opacity: 0.7;
 }
 
 .marquee-container {
@@ -319,8 +302,6 @@ a:hover .portfolio-card::after {
 
 .profile-picture-container:hover {
     border-radius: 50%;
-    box-shadow: 0 0 40px rgba(var(--glow-color), 0.7), 0 0 80px rgba(var(--glow-color), 0.5);
-    animation-play-state: paused;
 }
 
 @media (min-width: 768px) {
@@ -360,43 +341,6 @@ a:hover .portfolio-card::after {
     object-fit: contain;
 }
 
-#contact-page {
-    color: #E6EDF3;
-}
-
-#contact-page h1, #contact-page h2, #contact-page h3 {
-    color: #E6EDF3;
-}
-
-#contact-page p, #contact-page label, #contact-page footer {
-    color: #8B949E;
-}
-
-#contact-page a {
-    color: #58a6ff;
-}
-
-#contact-page .glassy-effect,
-#contact-page .filter-btn,
-#contact-page .header-btn {
-    background-color: rgba(31, 41, 55, 0.4);
-    border-color: rgba(75, 85, 99, 0.5);
-    color: #E6EDF3;
-}
-
-#contact-page .glassy-effect:hover,
-#contact-page .filter-btn:hover,
-#contact-page .header-btn:hover {
-    background-color: rgba(55, 65, 81, 0.6);
-    border-color: rgba(100, 116, 139, 0.7);
-}
-
-#contact-page .social-btn:hover {
-    background-color: #E6EDF3 !important;
-    color: #0D1117;
-    border-color: #E6EDF3;
-}
-
 #cursor-dot {
     position: fixed;
     top: 0;
@@ -429,30 +373,6 @@ a:hover .portfolio-card::after {
     width: 50px;
     height: 50px;
     border-color: rgba(230, 237, 243, 0.2);
-}
-
-#contact-page #cursor-dot {
-    background-color: #E6EDF3;
-}
-
-#contact-page #cursor-outline {
-    border-color: rgba(230, 237, 243, 0.4);
-}
-
-#contact-page #cursor-outline.grow {
-    border-color: rgba(230, 237, 243, 0.2);
-}
-
-#contact-page #contact-card:hover {
-    transform: none;
-    background-color: rgba(31, 41, 55, 0.4);
-    border-color: rgba(75, 85, 99, 0.5);
-}
-
-#contact-page #ur16e-card:hover {
-    transform: none;
-    background-color: rgba(31, 41, 55, 0.4);
-    border-color: rgba(75, 85, 99, 0.5);
 }
 
 #home-page h1,
