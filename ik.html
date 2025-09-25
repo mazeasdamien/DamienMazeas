@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Three.js Robot Controller</title>
+    <style>
+        body { margin: 0; overflow: hidden; background-color: #1a1a1a; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <div id="container"></div>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.165.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.165.0/examples/jsm/",
+                "lil-gui": "https://unpkg.com/lil-gui@0.19.1/dist/lil-gui.esm.js"
+            }
+        }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
+        import GUI from 'lil-gui';
+
+        // --- Basic Scene Setup ---
+        const container = document.getElementById('container');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+        // UPDATED: Camera starts further away for a wider view
+        camera.position.set(5, 3, 6);
+
+        // --- Realistic Renderer ---
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.outputColorSpace = THREE.SRGBColorSpace;
+        renderer.shadowMap.enabled = true;
+        container.appendChild(renderer.domElement);
+        
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.target.set(0, 1, 0); // Aim at the middle of the robot
+
+        // --- Enhanced Lighting ---
+        // 1. Environment map for realistic reflections and ambient light
+        new RGBELoader().setPath('env/').load('studio.hdr', (texture) => {
+            texture.mapping = THREE.EquirectangularReflectionMapping;
+            scene.environment = texture;
+        });
+
+        // 2. Hemisphere light to soften shadows
+        const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 1.5);
+        hemiLight.position.set(0, 20, 0);
+        scene.add(hemiLight);
+        
+        // 3. Main directional light for casting sharp shadows
+        const dirLight = new THREE.DirectionalLight(0xffffff, 5);
+        dirLight.position.set(3, 10, 5);
+        dirLight.castShadow = true;
+        dirLight.shadow.mapSize.width = 2048;
+        dirLight.shadow.mapSize.height = 2048;
+        scene.add(dirLight);
+
+        // --- Ground Plane with Updated Material ---
+        const ground = new THREE.Mesh(
+            new THREE.PlaneGeometry(20, 20),
+            // UPDATED: Material now looks more like polished concrete
+            new THREE.MeshStandardMaterial({ color: 0x444444, metalness: 0.1, roughness: 0.4 })
+        );
+        ground.rotation.x = -Math.PI / 2;
+        ground.receiveShadow = true;
+        scene.add(ground);
+
+        // --- UI Panel Setup ---
+        const gui = new GUI();
+        const jointControls = {
+            Shoulder: 0,
+            Elbow: 0,
+            Wrist1: 0,
+            Wrist2: 0,
+            Wrist3: 0,
+        };
+        let robotJoints = {};
+
+        // --- Model Loading ---
+        const loader = new GLTFLoader();
+        loader.load(
+            '3dmodels/UR_16.glb',
+            (gltf) => {
+                const robotModel = gltf.scene;
+                scene.add(robotModel);
+
+                robotModel.traverse((child) => {
+                    if (child.isMesh) {
+                        child.castShadow = true;
+                        child.receiveShadow = true;
+                    }
+                });
+
+                robotJoints.Shoulder = robotModel.getObjectByName('Shoulder');
+                robotJoints.Elbow = robotModel.getObjectByName('Elbow');
+                robotJoints.Wrist1 = robotModel.getObjectByName('Wrist1');
+                robotJoints.Wrist2 = robotModel.getObjectByName('Wrist2');
+                robotJoints.Wrist3 = robotModel.getObjectByName('Wrist3');
+                
+                gui.add(jointControls, 'Shoulder', -180, 180, 1).name('Shoulder Yaw');
+                gui.add(jointControls, 'Elbow', -180, 180, 1).name('Elbow Bend');
+                gui.add(jointControls, 'Wrist1', -180, 180, 1).name('Wrist 1 Bend');
+                gui.add(jointControls, 'Wrist2', -180, 180, 1).name('Wrist 2 Twist');
+                gui.add(jointControls, 'Wrist3', -180, 180, 1).name('Wrist 3 Twist');
+            }
+        );
+
+        // --- Animation Loop ---
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // Update joint rotations from UI sliders
+            if (robotJoints.Shoulder) {
+                robotJoints.Shoulder.rotation.y = THREE.MathUtils.degToRad(jointControls.Shoulder);
+                robotJoints.Elbow.rotation.z = THREE.MathUtils.degToRad(jointControls.Elbow);
+                robotJoints.Wrist1.rotation.z = THREE.MathUtils.degToRad(jointControls.Wrist1);
+                robotJoints.Wrist2.rotation.y = THREE.MathUtils.degToRad(jointControls.Wrist2);
+                robotJoints.Wrist3.rotation.z = THREE.MathUtils.degToRad(jointControls.Wrist3);
+            }
+            
+            controls.update();
+            renderer.render(scene, camera);
+        }
+
+        // --- Resize Handler ---
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+        
+        animate();
+    </script>
+</body>
+</html>
