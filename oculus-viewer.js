@@ -11,7 +11,8 @@ if (container) {
     // --- Basic Scene Setup ---
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 100);
-    camera.position.set(0, 0, 3.5);
+    // Adjust camera position to better frame the large model
+    camera.position.set(0, 0, 8); 
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(container.clientWidth, container.clientHeight);
@@ -65,7 +66,7 @@ if (container) {
     // --- Model Loading ---
     const loader = new GLTFLoader();
     loader.load(
-        '3dmodels/oculus_quest_3.glb',
+        '3dmodels/apple_vision_pro.glb',
         (gltf) => {
             oculusModel = gltf.scene;
             
@@ -82,8 +83,12 @@ if (container) {
                 }
             });
 
+            oculusModel.rotation.x = -90;
+            oculusModel.rotation.y = 20;
+            oculusModel.rotation.z = 120; // 90 degrees
+            // Increase the scale and adjust the position
             oculusModel.scale.setScalar(8);
-            oculusModel.position.set(0, -0.4, 0); // Positioned to be in the center
+            oculusModel.position.set(0, 0, 0); // Reposition to the upper-right
             scene.add(oculusModel);
             controls.target.copy(oculusModel.position);
 
@@ -93,7 +98,6 @@ if (container) {
             }
         },
         (xhr) => {
-            // This is the onProgress callback, which is triggered during loading.
             if (xhr.total > 0) {
                 const percentComplete = (xhr.loaded / xhr.total) * 100;
                 console.log(Math.round(percentComplete, 2) + '% loaded');
@@ -101,7 +105,6 @@ if (container) {
         },
         (error) => {
             console.error('An error happened while loading the oculus model:', error);
-            // Hide the loader in case of an error as well.
             if (oculusLoader) {
                 oculusLoader.style.display = 'none';
             }
@@ -120,7 +123,6 @@ if (container) {
 
     // --- NEW: Listen for the custom event from script.js ---
     window.addEventListener('themeUpdated', () => {
-        // Use a smooth transition for the color change
         pointLight1.color.lerp(getColorFromCSS('--gradient-2'), 0.5);
         pointLight2.color.lerp(getColorFromCSS('--gradient-3'), 0.5);
     });

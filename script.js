@@ -133,88 +133,59 @@ document.addEventListener('DOMContentLoaded', () => {
             const currentFilter = filterContainer ? filterContainer.querySelector('.active').dataset.filter : 'all';
             const gridHTML = portfolioData.map(item => {
                 let content;
-                const isClickable = item.url;
-                const itemWrapperStart = isClickable ? `<a href="${item.url}" target="_blank" class="block h-full">` : '<div class="h-full">';
-                const itemWrapperEnd = isClickable ? '</a>' : '</div>';
+                const isVideoProject = item.subtitle?.includes('YouTube');
+                const isOtherClickableProject = item.url && !isVideoProject;
+
+                let itemWrapperStart;
+                let itemWrapperEnd;
+
+                if (isVideoProject) {
+                    itemWrapperStart = `<div class="block h-full cursor-pointer video-popup-trigger" data-video-src="${item.url}">`;
+                    itemWrapperEnd = '</div>';
+                } else if (isOtherClickableProject) {
+                    itemWrapperStart = `<a href="${item.url}" target="_blank" class="block h-full">`;
+                    itemWrapperEnd = '</a>';
+                } else {
+                    itemWrapperStart = `<div class="h-full">`;
+                    itemWrapperEnd = '</div>';
+                }
                 
                 const categoryName = item.category.replace('-', ' ').toUpperCase();
                 const categoryTag = (item.category === 'side-projects') ? '' : `<div class="absolute top-2 right-3 text-xs uppercase tracking-wider bg-black/20 text-white/70 px-2 py-1 rounded-full">${categoryName}</div>`;
                 
                 const displayDate = item.displayDate;
-
                 const periodHtml = item.period ? `<p class="text-sm uppercase tracking-wider mb-1">${item.period}</p>` : '';
 
                 switch (item.category) {
                     case 'publication':
-                        content = `
-                            <div class="px-4 pb-4 pt-12 flex flex-col justify-center flex-grow">
-                                ${periodHtml}
-                                <h3 class="font-bold text-lg">${item.title}</h3>
-                                <p class="text-sm mt-2">${item.authors}</p>
-                            </div>`;
+                        content = `<div class="px-4 pb-4 pt-12 flex flex-col justify-center flex-grow">${periodHtml}<h3 class="font-bold text-lg">${item.title}</h3><p class="text-sm mt-2">${item.authors}</p></div>`;
                         break;
                     case 'teaching':
-                        content = `
-                            <div class="px-4 pb-4 pt-12 w-full flex flex-col justify-center flex-grow">
-                                <h3 class="font-bold text-lg">${item.title}</h3>
-                                ${periodHtml}
-                                <p class="text-sm mt-2">${item.description}</p>
-                            </div>`;
+                        content = `<div class="px-4 pb-4 pt-12 w-full flex flex-col justify-center flex-grow"><h3 class="font-bold text-lg">${item.title}</h3>${periodHtml}<p class="text-sm mt-2">${item.description}</p></div>`;
                         break;
                     case 'employment':
                     case 'degree':
                     case 'certification':
-                         content = `
-                            <div class="flex flex-col sm:flex-row h-full">
-                                <div class="w-full sm:w-24 flex items-center justify-center p-4">
-                                    <img src="${item.logo}" alt="${item.title} Logo" class="object-contain h-24" loading="lazy">
-                                </div>
-                                <div class="px-4 pb-4 pt-12 sm:pt-12 flex flex-col justify-center flex-grow">
-                                    <h3 class="font-bold text-lg">${item.title}</h3>
-                                    ${periodHtml}
-                                    <p class="text-sm mt-1">${item.description}</p>
-                                </div>
-                            </div>`;
+                         content = `<div class="flex flex-col sm:flex-row h-full"><div class="w-full sm:w-24 flex items-center justify-center p-4"><img src="${item.logo}" alt="${item.title} Logo" class="object-contain h-24" loading="lazy"></div><div class="px-4 pb-4 pt-12 sm:pt-12 flex flex-col justify-center flex-grow"><h3 class="font-bold text-lg">${item.title}</h3>${periodHtml}<p class="text-sm mt-1">${item.description}</p></div></div>`;
                         break;
                     case 'side-projects':
-                        let iconHtml;
-                        let itemLinkStart = `<a href="${item.url}" target="${item.url.startsWith('http') ? '_blank' : ''}" class="block h-full">`;
-                        let itemLinkEnd = '</a>';
-                        if (item.icon === 'svg_article') {
-                           iconHtml = `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>`;
-                        } else if (item.subtitle.includes('YouTube')) {
-                            iconHtml = `<img src="${item.icon}" class="h-6" loading="lazy">`;
-                            itemLinkStart = `<a href="javascript:void(0)" onclick="window.open('${item.url}', '_blank')" class="block h-full">`;
-                            itemLinkEnd = '</a>';
+                        if (isVideoProject) {
+                            content = `<div class="relative h-full flex items-center justify-center p-4"><div class="text-center transition-opacity group-hover:opacity-20"><h3 class="font-bold text-lg">${item.title}</h3></div><div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"><div class="transform scale-75 group-hover:scale-100 transition-transform duration-300"><svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-white" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" /></svg></div></div></div>`;
+                        } else {
+                            let iconHtml;
+                            if (item.icon === 'svg_article') {
+                               iconHtml = `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>`;
+                            } else {
+                               iconHtml = `<img src="${item.icon}" class="h-8 w-8" loading="lazy">`;
+                            }
+                            content = `<div class="flex items-center h-full px-4 pb-4 pt-12"><div class="w-16 flex-shrink-0 flex items-center justify-center">${iconHtml}</div><div class="flex-grow"><h3 class="font-bold text-lg">${item.title}</h3><p class="text-sm">${item.subtitle}</p></div></div>`;
                         }
-                        else {
-                           iconHtml = `<img src="${item.icon}" class="h-8 w-8" loading="lazy">`;
-                        }
-
-                        content = `
-                             <div class="flex items-center h-full px-4 pb-4 pt-12">
-                                 <div class="w-16 flex-shrink-0 flex items-center justify-center">${iconHtml}</div>
-                                 <div class="flex-grow">
-                                     <h3 class="font-bold text-lg">${item.title}</h3>
-                                     <p class="text-sm">${item.subtitle}</p>
-                                 </div>
-                             </div>`;
                         break;
                     default:
                         content = `<div class="px-4 pb-4 pt-12 flex-grow"><h3 class="font-bold text-lg">${item.title}</h3></div>`;
                 }
 
-                return `
-                    <div class="portfolio-item" data-category="${item.category}">
-                        ${itemWrapperStart}
-                            <div class="portfolio-card glassy-effect rounded-2xl overflow-hidden shadow-md h-full">
-                                <div class="absolute top-2 left-3 text-xs font-bold tracking-wider bg-black/20 text-white/70 px-2 py-1 rounded-full">${displayDate}</div>
-                                ${categoryTag}
-                                ${content}
-                            </div>
-                        ${itemWrapperEnd}
-                    </div>`;
-
+                return `<div class="portfolio-item" data-category="${item.category}">${itemWrapperStart}<div class="portfolio-card glassy-effect rounded-2xl overflow-hidden shadow-md h-full flex flex-col group">${categoryTag}<div class="absolute top-2 left-3 text-xs font-bold tracking-wider bg-black/20 text-white/70 px-2 py-1 rounded-full z-10">${displayDate}</div>${content}</div>${itemWrapperEnd}</div>`;
             }).join('');
 
             portfolioGrid.innerHTML = gridHTML;
@@ -222,7 +193,6 @@ document.addEventListener('DOMContentLoaded', () => {
             filterAndObserve(currentFilter);
         }
         
-
         filterButtons.forEach(btn => {
             const filter = btn.dataset.filter;
             if (filter && filterColors[filter]) {
@@ -232,9 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        if (sortToggleButton) {
-            sortToggleButton.textContent = 'Sorted by: Newest';
-        }
+        if (sortToggleButton) { sortToggleButton.textContent = 'Sorted by: Newest'; }
 
         renderPortfolio(currentSortOrder);
         updateTheme('all');
@@ -252,15 +220,38 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         }
+        
+        // Modal handling logic
+        const videoModal = document.getElementById('video-modal');
+        const modalVideoPlayer = document.getElementById('modal-video-player');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+
+        if (videoModal && modalVideoPlayer && closeModalBtn) {
+            portfolioGrid.addEventListener('click', (e) => {
+                const trigger = e.target.closest('.video-popup-trigger');
+                if (trigger) {
+                    const videoSrc = trigger.dataset.videoSrc;
+                    if (videoSrc) {
+                        modalVideoPlayer.src = videoSrc;
+                        videoModal.classList.remove('hidden');
+                        videoModal.classList.add('flex');
+                    }
+                }
+            });
+
+            const closeModal = () => {
+                modalVideoPlayer.pause();
+                modalVideoPlayer.src = '';
+                videoModal.classList.add('hidden');
+                videoModal.classList.remove('flex');
+            };
+
+            closeModalBtn.addEventListener('click', closeModal);
+            videoModal.addEventListener('click', (e) => { if (e.target === videoModal) { closeModal(); } });
+        }
 
         window.addEventListener('mousemove', e => {
-            cursorBlob.animate({
-                left: `${e.clientX}px`,
-                top: `${e.clientY}px`
-            }, {
-                duration: 2000,
-                fill: "forwards"
-            });
+            cursorBlob.animate({ left: `${e.clientX}px`, top: `${e.clientY}px` }, { duration: 2000, fill: "forwards" });
         });
 
         window.addEventListener('click', e => {
@@ -276,9 +267,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const currentTransform = window.getComputedStyle(blob).transform;
                 const newTransform = currentTransform === 'none' ? `translate(${translateX}px, ${translateY}px)` : `${currentTransform} translate(${translateX}px, ${translateY}px)`;
                 blob.style.transform = newTransform;
-                setTimeout(() => {
-                    blob.style.transform = '';
-                }, 500);
+                setTimeout(() => { blob.style.transform = ''; }, 500);
             });
         });
 
