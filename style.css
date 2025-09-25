@@ -227,7 +227,8 @@ body {
     box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.2), inset 4px 0 15px -8px var(--item-color, transparent);
 }
 
-a:hover .portfolio-card {
+a:hover .portfolio-card,
+.video-popup-trigger:hover .portfolio-card {
     transform: translateY(-8px);
     border: 1px solid var(--item-color, #34D399);
 }
@@ -440,4 +441,12 @@ a:hover .portfolio-card::after {
     .name-container {
         flex-direction: column;
     }
+}
+
+#oculus-container {
+    transition: top 4s ease-in-out;
+}
+
+#oculus-container.hide-model {
+    top: -800px !important;
 }

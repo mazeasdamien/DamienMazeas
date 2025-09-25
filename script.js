@@ -170,8 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         break;
                     case 'side-projects':
                         if (isVideoProject) {
-                            content = `<div class="relative h-full flex items-center justify-center p-4"><div class="text-center transition-opacity group-hover:opacity-20"><h3 class="font-bold text-lg">${item.title}</h3></div><div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"><div class="transform scale-75 group-hover:scale-100 transition-transform duration-300"><svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-white" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" /></svg></div></div></div>`;
-                        } else {
+content = `<div class="relative h-full flex items-center justify-center py-12 px-4"><div class="text-center transition-opacity group-hover:opacity-20"><h3 class="font-bold text-lg">${item.title}</h3></div><div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"><div class="transform scale-75 group-hover:scale-100 transition-transform duration-300"><svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-white" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" /></svg></div></div></div>`;                        } else {
                             let iconHtml;
                             if (item.icon === 'svg_article') {
                                iconHtml = `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>`;
@@ -442,4 +441,15 @@ document.addEventListener('DOMContentLoaded', () => {
             if (cursorOutline) cursorOutline.classList.remove('grow');
         });
     });
+
+    const oculusContainer = document.getElementById('oculus-container');
+    if (oculusContainer) {
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                oculusContainer.classList.add('hide-model');
+            } else {
+                oculusContainer.classList.remove('hide-model');
+            }
+        });
+    }
 });
