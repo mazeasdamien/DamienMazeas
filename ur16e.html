@@ -9,15 +9,224 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            position: relative;
+            z-index: 1;
+            background-color: #0D1117;
+            color: #E6EDF3;
+        }
+        #background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -2;
+            overflow: hidden;
+            filter: blur(200px) saturate(1);
+        }
+        #constellation-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.7;
+            filter: blur(0px);
+            transition: filter 0.5s ease-in-out;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.3;
+            transition: background-color 1.5s ease-in-out, transform 0.5s ease-out;
+            animation: move 25s infinite alternate;
+        }
+        .color-1 {
+            width: 35vw;
+            height: 35vw;
+            top: 5vh;
+            left: 10vw;
+            background-color: var(--gradient-1);
+            animation-delay: -2s;
+        }
+        .color-2 {
+            width: 30vw;
+            height: 30vw;
+            top: 10vh;
+            right: 5vw;
+            background-color: var(--gradient-2);
+            animation-delay: -5s;
+        }
+        .color-3 {
+            width: 25vw;
+            height: 25vw;
+            bottom: 5vh;
+            left: 20vw;
+            background-color: var(--gradient-3);
+            animation-delay: -10s;
+        }
+        .color-4 {
+            width: 30vw;
+            height: 30vw;
+            bottom: 10vh;
+            right: 15vw;
+            background-color: var(--gradient-4);
+            animation-delay: -7s;
+        }
+        #cursor-blob {
+            width: 200px;
+            height: 200px;
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: none;
+            transition: none;
+        }
+        @keyframes move {
+            from {
+                transform: translate(0, 0) rotate(0deg) scale(1.1);
+            }
+            to {
+                transform: translate(10vw, -10vh) rotate(120deg) scale(1.2);
+            }
+        }
+        .glassy-effect {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: all 0.3s ease;
+            background-color: rgba(31, 41, 55, 0.4);
+            border: 1px solid rgba(75, 85, 99, 0.5);
+            color: #E6EDF3;
+            box-shadow: inset 0.5px 0.5px 1px rgba(255, 255, 255, 0.1), 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.15);
+        }
+        .header-btn, .social-bubble {
+            cursor: pointer;
+        }
+        .header-btn:hover {
+            transform: scale(1.05);
+            background-color: rgba(55, 65, 81, 0.6);
+            border-color: rgba(100, 116, 139, 0.7);
+        }
+        .profile-picture-container {
+            width: 8rem;
+            height: 8rem;
+            position: relative;
+            border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            animation: morph 8s ease-in-out infinite;
+            transition: all 0.5s ease-in-out;
+            --glow-color: 107, 114, 128;
+        }
+        @keyframes morph {
+            0% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+            50% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+            100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+        }
+        .profile-picture-container:hover {
+            border-radius: 50%;
+        }
+        @media (min-width: 768px) {
+            .profile-picture-container {
+                width: 10rem;
+                height: 10rem;
+            }
+        }
+        .name-container {
+            position: relative;
+        }
+        .social-bubble {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+            background-color: rgba(31, 41, 55, 0.4);
+            border: 1px solid rgba(75, 85, 99, 0.5);
+            box-shadow: inset 0.5px 0.5px 1px rgba(255, 255, 255, 0.1), 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.15);
+        }
+        .social-bubble:hover {
+            transform: scale(1.15);
+            background-color: rgba(55, 65, 81, 0.6);
+            border-color: rgba(100, 116, 139, 0.7);
+        }
+        .social-bubble img {
+            width: 22px;
+            height: 22px;
+            object-fit: contain;
+        }
+        #cursor-dot {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            transition: background-color 0.5s ease;
+            background-color: #E6EDF3;
+        }
+        #cursor-outline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 30px;
+            height: 30px;
+            border: 2px solid rgba(230, 237, 243, 0.4);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s ease, height 0.3s ease, border-color 0.5s ease;
+            z-index: 9999;
+        }
+        #cursor-outline.grow {
+            width: 50px;
+            height: 50px;
+            border-color: rgba(230, 237, 243, 0.2);
+        }
+        body h1, body h2, body h3, body span:not(.text-gray-700) {
+            color: #E6EDF3;
+        }
+        body footer, body footer p {
+            color: #8B949E;
+        }
+        @media (max-width: 1024px) {
+            #oculus-container {
+                display: none;
+            }
+            .name-container {
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
-<body id="contact-page" class="dark">
+<body id="ur16e-page">
+
+    <div id="background-container">
+        <div class="blob color-1"></div>
+        <div class="blob color-2"></div>
+        <div class="blob color-3"></div>
+        <div class="blob color-4"></div>
+        <div id="cursor-blob" class="blob"></div>
+    </div>
+    <canvas id="constellation-canvas"></canvas>
 
     <div id="cursor-dot"></div>
     <div id="cursor-outline"></div>
-
-    <div id="page-background"></div>
-    <canvas id="constellation-canvas"></canvas>
 
     <header class="w-full p-6 md:p-8 relative z-10">
         <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-center md:justify-between">
@@ -26,17 +235,15 @@
                     <img src="images/profil.jpg" alt="Damien Mazeas" class="w-full h-full object-cover">
                 </div>
                 <div class="name-container text-center md:text-left">
-                    <h1 class="text-3xl md:text-4xl font-black tracking-tight cursor-pointer">Damien MAZEAS</h1>
+                    <h1 class="text-3xl md:text-4xl font-black tracking-tight cursor-pointer">Damien MAZEAS<span class="font-semibold text-white/70">, PhD</span></h1>
                     <div class="flex items-center justify-center md:justify-start gap-2 mt-2">
-                        <a href="https://www.linkedin.com/in/mazeas/" target="_blank" class="social-bubble glassy-effect" aria-label="LinkedIn"><img src="images/social/LinkedIn_icon.svg.webp" alt="LinkedIn logo"></a>
-                        <a href="https://github.com/mazeasdamien" target="_blank" class="social-bubble glassy-effect" aria-label="GitHub">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-6 h-6">
-                                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8" />
-                            </svg>
+                        <a href="https://www.linkedin.com/in/mazeas/" target="_blank" class="social-bubble" aria-label="LinkedIn"><img src="images/social/LinkedIn_icon.svg.webp" alt="LinkedIn logo"></a>
+                        <a href="https://github.com/mazeasdamien" target="_blank" class="social-bubble" aria-label="GitHub">
+                            <img src="images/social/github-white-icon.svg" alt="GitHub logo">
                         </a>
-                        <a href="https://orcid.org/0000-0001-9258-3909" target="_blank" class="social-bubble glassy-effect" aria-label="Orcid"><img src="images/social/ORCID_iD.svg.png" alt="ORCID logo"></a>
-                        <a href="https://scholar.google.com/citations?user=SydtND4AAAAJ&hl=en" target="_blank" class="social-bubble glassy-effect" aria-label="Google Scholar"><img src="images/social/Google_Scholar_logo.svg.png" alt="Google Scholar logo"></a>
-                        <a href="https://www.youtube.com/@mazeas" target="_blank" class="social-bubble glassy-effect" aria-label="YouTube"><img src="images/social/Youtube_logo.png" alt="YouTube logo"></a>
+                        <a href="https://orcid.org/0000-0001-9258-3909" target="_blank" class="social-bubble" aria-label="Orcid"><img src="images/social/ORCID_iD.svg.png" alt="ORCID logo"></a>
+                        <a href="https://scholar.google.com/citations?user=SydtND4AAAAJ&hl=en" target="_blank" class="social-bubble" aria-label="Google Scholar"><img src="images/social/Google_Scholar_logo.svg.png" alt="Google Scholar logo"></a>
+                        <a href="https://www.youtube.com/@mazeas" target="_blank" class="social-bubble" aria-label="YouTube"><img src="images/social/Youtube_logo.png" alt="YouTube logo"></a>
                     </div>
                 </div>
             </div>
@@ -49,20 +256,29 @@
 
     <main class="w-full px-6 md:px-8 py-8 relative z-10">
         <div class="max-w-6xl mx-auto">
-            <div id="ur16e-card" class="glassy-effect rounded-2xl shadow-lg p-8 md:p-12">
-                <h1 class="text-3xl md:text-4xl font-bold mb-4 border-b border-gray-700 pb-4">Inverse Kinematics for a UR16e Robot in Unity<a href="https://github.com/mazeasdamien/Inverse-Kinematics-Universal-Robot-Unity" target="_blank" rel="noopener noreferrer"><img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/mazeasdamien/Inverse-Kinematics-Universal-Robot-Unity?style=social" class="inline-block ml-4"></a></h1>
+            <div id="ur16e-card" class="glassy-effect rounded-2xl shadow-lg p-8 md:p-12" style="--item-color: rgba(232, 121, 249, 0.8); --item-glow-color: rgba(232, 121, 249, 0.15);">
+                <div class="relative pb-4 mb-4 border-b border-gray-700">
+                    <div class="flex items-center justify-start gap-4">
+                        <h1 class="text-3xl md:text-4xl font-bold tracking-tight">Inverse Kinematics for a UR16e Robot in Unity</h1>
+                        <a href="https://github.com/mazeasdamien/Inverse-Kinematics-Universal-Robot-Unity" target="_blank" rel="noopener noreferrer" class="social-bubble">
+                            <img alt="GitHub Logo" src="images/social/github-white-icon.svg">
+                        </a>
+                    </div>
+                    <p class="text-sm text-gray-400 mt-2">A C# implementation for the Universal Robots UR16e.</p>
+                </div>
+                
                 <p class="text-lg leading-relaxed mb-4">If you use this project in your research or work, please consider citing it as follows:</p>
-                <blockquote class="border-l-4 border-blue-400 bg-gray-800/50 p-4 rounded-r-lg mb-10">
+                
+                <blockquote class="border-l-4 border-fuchsia-400 bg-gray-800/50 p-4 rounded-r-lg mb-10">
                     <p id="citation-text" class="text-base text-gray-300">Damien Mazeas. (2023). mazeasdamien/Inverse-Kinematics-Universal-Robot-Unity: UnityUniversalRobots (UnityUniversalRobots). Zenodo. <a href="https://doi.org/10.5281/zenodo.15265718" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:underline">https://doi.org/10.5281/zenodo.15265718</a></p>
                 </blockquote>
 
-                <div class="w-1/2 mx-auto aspect-w-16 aspect-h-9 rounded-lg overflow-hidden shadow-lg">
-                    <video class="w-full h-full" controls autoplay muted loop>
+                <div class="w-full md:w-3/4 lg:w-2/3 mx-auto rounded-lg overflow-hidden shadow-lg border border-gray-700">
+                    <video class="w-full h-auto" controls autoplay muted loop>
                         <source src="videos/ur16e.mp4" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
                 </div>
-
             </div>
         </div>
     </main>
@@ -72,6 +288,206 @@
         <p class="mt-2">Last Updated: September 2025</p>
     </footer>
 
-    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const cursorDot = document.getElementById('cursor-dot');
+            const cursorOutline = document.getElementById('cursor-outline');
+            const interactiveElements = document.querySelectorAll('a, button, .cursor-pointer');
+            const backgroundContainer = document.getElementById('background-container');
+            const cursorBlob = document.getElementById('cursor-blob');
+
+            // Apply specific background colors for this page
+            backgroundContainer.style.setProperty('--gradient-1', '#86198F');
+            backgroundContainer.style.setProperty('--gradient-2', '#A21CAF');
+            backgroundContainer.style.setProperty('--gradient-3', '#C026D3');
+            backgroundContainer.style.setProperty('--gradient-4', '#E879F9');
+            
+            // Mouse event listeners for cursor blob and interactive elements
+            window.addEventListener('mousemove', e => {
+                cursorBlob.animate({
+                    left: `${e.clientX}px`,
+                    top: `${e.clientY}px`
+                }, {
+                    duration: 2000,
+                    fill: "forwards"
+                });
+                if (cursorDot) {
+                    cursorDot.style.left = `${e.clientX}px`;
+                    cursorDot.style.top = `${e.clientY}px`;
+                }
+                if (cursorOutline) {
+                    cursorOutline.animate({
+                        left: `${e.clientX}px`,
+                        top: `${e.clientY}px`
+                    }, {
+                        duration: 500,
+                        fill: "forwards"
+                    });
+                }
+                interactiveElements.forEach(el => {
+                    const rect = el.getBoundingClientRect();
+                    el.style.setProperty('--x', `${e.clientX - rect.left}px`);
+                    el.style.setProperty('--y', `${e.clientY - rect.top}px`);
+                });
+            });
+
+            // Mouse event listeners for cursor growth
+            interactiveElements.forEach(el => {
+                el.addEventListener('mouseenter', () => {
+                    if (cursorOutline) cursorOutline.classList.add('grow');
+                });
+                el.addEventListener('mouseleave', () => {
+                    if (cursorOutline) cursorOutline.classList.remove('grow');
+                });
+            });
+
+            // Click event for background blobs
+            window.addEventListener('click', e => {
+                const colorBlobs = document.querySelectorAll('.blob:not(#cursor-blob)');
+                colorBlobs.forEach(blob => {
+                    const rect = blob.getBoundingClientRect();
+                    const blobX = rect.left + rect.width / 2;
+                    const blobY = rect.top + rect.height / 2;
+                    const angle = Math.atan2(blobY - e.clientY, blobX - e.clientX);
+                    const force = 100;
+                    const translateX = Math.cos(angle) * force;
+                    const translateY = Math.sin(angle) * force;
+                    const currentTransform = window.getComputedStyle(blob).transform;
+                    const newTransform = currentTransform === 'none' ? `translate(${translateX}px, ${translateY}px)` : `${currentTransform} translate(${translateX}px, ${translateY}px)`;
+                    blob.style.transform = newTransform;
+                    setTimeout(() => {
+                        blob.style.transform = '';
+                    }, 500);
+                });
+            });
+            
+            // Constellation canvas logic
+            const canvas = document.getElementById('constellation-canvas');
+            if (canvas) {
+                const ctx = canvas.getContext('2d');
+                let dots = [];
+                const mouse = { x: null, y: null };
+                const dotConnectionDistance = 100;
+                const baseDotDensity = 1000;
+                const persistentDots = new Set();
+                
+                function resizeCanvas() {
+                    canvas.width = window.innerWidth;
+                    canvas.height = window.innerHeight;
+                    createDots();
+                }
+
+                function createDots() {
+                    dots = [];
+                    const dotCount = Math.floor((canvas.width * canvas.height) / baseDotDensity);
+                    for (let i = 0; i < dotCount; i++) {
+                        dots.push({
+                            x: Math.random() * canvas.width,
+                            y: Math.random() * canvas.height,
+                            hue: Math.floor(Math.random() * 360),
+                            size: Math.random() * 2 + 1,
+                            speedX: (Math.random() - 0.5) * 0.5,
+                            speedY: (Math.random() - 0.5) * 0.5
+                        });
+                    }
+                }
+
+                function animate() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    const nearbyDots = [];
+                    const allVisibleDots = new Set(persistentDots);
+                    const blobElements = document.querySelectorAll('.blob:not(#cursor-blob)');
+                    const blobRects = Array.from(blobElements).map(el => el.getBoundingClientRect());
+
+                    for (const dot of dots) {
+                        dot.x += dot.speedX;
+                        dot.y += dot.speedY;
+
+                        if (dot.x < 0) dot.x = canvas.width;
+                        if (dot.x > canvas.width) dot.x = 0;
+                        if (dot.y < 0) dot.y = canvas.height;
+                        if (dot.y > canvas.height) dot.y = 0;
+
+                        let blobProximityOpacity = 1;
+                        for (const rect of blobRects) {
+                            const distX = dot.x - (rect.left + rect.width / 2);
+                            const distY = dot.y - (rect.top + rect.height / 2);
+                            const distToBlob = Math.hypot(distX, distY);
+                            const fadeRadius = Math.max(rect.width, rect.height) / 1.5;
+                            if (distToBlob < fadeRadius) {
+                                blobProximityOpacity = Math.min(blobProximityOpacity, distToBlob / fadeRadius);
+                            }
+                        }
+
+                        let isNearby = false;
+                        let mouseProximityOpacity = 0;
+                        if (mouse.x !== null) {
+                            const distMouse = Math.hypot(mouse.x - dot.x, mouse.y - dot.y);
+                            if (distMouse < dotConnectionDistance) {
+                                isNearby = true;
+                                nearbyDots.push(dot);
+                                allVisibleDots.add(dot);
+                                mouseProximityOpacity = 1 - (distMouse / dotConnectionDistance);
+                            }
+                        }
+
+                        if (persistentDots.has(dot) || isNearby) {
+                            const finalOpacity = (mouseProximityOpacity > 0 ? mouseProximityOpacity : 0.3) * blobProximityOpacity;
+                            ctx.beginPath();
+                            ctx.arc(dot.x, dot.y, dot.size, 0, Math.PI * 2);
+                            ctx.fillStyle = `hsla(${dot.hue}, 80%, 70%, ${finalOpacity})`;
+                            ctx.fill();
+                        }
+                    }
+
+                    nearbyDots.forEach(dot => {
+                        const distMouse = Math.hypot(mouse.x - dot.x, mouse.y - dot.y);
+                        const opacity = 1 - (distMouse / dotConnectionDistance);
+                        ctx.beginPath();
+                        ctx.moveTo(dot.x, dot.y);
+                        ctx.lineTo(mouse.x, mouse.y);
+                        ctx.strokeStyle = `hsla(${dot.hue}, 80%, 70%, ${opacity * 0.6})`;
+                        ctx.lineWidth = 1.5;
+                        ctx.stroke();
+                    });
+
+                    const visibleDotsArray = Array.from(allVisibleDots);
+                    for (let i = 0; i < visibleDotsArray.length; i++) {
+                        for (let j = i + 1; j < visibleDotsArray.length; j++) {
+                            const dot1 = visibleDotsArray[i];
+                            const dot2 = visibleDotsArray[j];
+                            const dist = Math.hypot(dot1.x - dot2.x, dot1.y - dot2.y);
+                            if (dist < dotConnectionDistance) {
+                                const opacity = 1 - (dist / dotConnectionDistance);
+                                ctx.beginPath();
+                                ctx.moveTo(dot1.x, dot1.y);
+                                ctx.lineTo(dot2.x, dot2.y);
+                                ctx.strokeStyle = `hsla(${dot1.hue}, 80%, 70%, ${opacity * 0.2})`;
+                                ctx.lineWidth = 1;
+                                ctx.stroke();
+                            }
+                        }
+                    }
+                    requestAnimationFrame(animate);
+                }
+
+                resizeCanvas();
+                animate();
+                window.addEventListener('resize', resizeCanvas);
+                window.addEventListener('mousemove', e => {
+                    mouse.x = e.clientX;
+                    mouse.y = e.clientY;
+                });
+
+                window.addEventListener('click', e => {
+                    const dotsToMakePersistent = dots.filter(dot => {
+                        const dist = Math.hypot(e.clientX - dot.x, e.clientY - dot.y);
+                        return dist < dotConnectionDistance;
+                    });
+                    dotsToMakePersistent.forEach(dot => persistentDots.add(dot));
+                });
+            }
+        });
+    </script>
 </body>
 </html>
