@@ -103,13 +103,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 { category: 'publication', date: '2023-05-01', displayDate: 'MAY 2023', url: 'pdfs/paper3.pdf', period: '<span class="normal-case">In IEEE VRW</span>', title: 'Telexistence-based remote maintenance for marine engineers', authors: '<span class="highlight-name">D Mazeas</span>, JA Erkoyuncu, F Noel' },
                 { category: 'employment', date: '2023-02-01', displayDate: '2023', logo: 'images/logos/gscop.jpg', title: 'Visiting PhD Student', period: 'G-SCOP LAB (Grenoble, France) | 6 Months', description: 'Designed a framework for expert-worker virtual reality remote collaboration.' },
                 { category: 'publication', date: '2023-02-01', displayDate: 'FEB 2023', url: 'pdfs/paper2.pdf', period: '<span class="normal-case">In IFIP PLM</span>', title: 'A telexistence interface for remote control of a physical industrial robot via data distribution service', authors: '<span class="highlight-name">D Mazeas</span>, JA Erkoyuncu, F Noel' },
-                { category: 'side-projects', date: '2023-11-01', displayDate: '2023', url: 'ur16e.html', icon: 'images/social/Octicons-mark-github.svg.png', title: 'Universal Robots 16e inverse kinematics in Unity3D', subtitle: 'GitHub Project' },
-                { category: 'side-projects', date: '2022-10-01', displayDate: '2022', url: 'https://youtu.be/3zTs_7LXH3Y', icon: 'images/social/Youtube_logo.png', title: 'Linking FANUC Roboguide software with Unity 3D', subtitle: 'YouTube Demo' },
-                { category: 'side-projects', date: '2022-09-01', displayDate: '2022', url: 'https://youtu.be/SFfLPbs-ws', icon: 'images/social/Youtube_logo.png', title: 'Pick and place programmed with a FANUC robot', subtitle: 'YouTube Demo' },
-                { category: 'side-projects', date: '2022-08-01', displayDate: '2022', url: 'https://youtu.be/m4l9wxIvU98', icon: 'images/social/Youtube_logo.png', title: 'Remote control of a TurtleBot2 with the HoloLens 2', subtitle: 'YouTube Demo' },
+                { category: 'side-projects', date: '2023-11-01', displayDate: '2023', url: 'ur16e.html', icon: 'images/social/github-white-icon.svg', title: 'Universal Robots 16e inverse kinematics in Unity3D', subtitle: 'GitHub Project' },
+                { category: 'side-projects', date: '2025-11-01', displayDate: '2025', url: 'threejsUR16e.html', icon: 'images/social/threejs.png', title: 'Three.js robot Controller', subtitle: 'Universal Robot 16e' },
+                { category: 'side-projects', date: '2022-10-01', displayDate: '2022', url: 'videos/roboguideunity.mp4', icon: 'images/social/Youtube_logo.png', title: 'Linking FANUC Roboguide software with Unity 3D', subtitle: 'YouTube Demo' },
+                { category: 'side-projects', date: '2022-09-01', displayDate: '2022', url: 'videos/fanucpickandplace.mp4', icon: 'images/social/Youtube_logo.png', title: 'Pick and place programmed with a FANUC robot', subtitle: 'YouTube Demo' },
+                { category: 'side-projects', date: '2022-08-01', displayDate: '2022', url: 'videos/turtlebot.mp4', icon: 'images/social/Youtube_logo.png', title: 'Remote control of a TurtleBot2 with the HoloLens 2', subtitle: 'YouTube Demo' },
                 { category: 'side-projects', date: '2022-07-01', displayDate: '2021', url: 'https://www.maintenanceandengineering.com/2021/06/16/emerging-technologies-to-support-asset-management/', icon: 'svg_article', title: 'Emerging tech to support asset management', subtitle: 'Technical Article' },
-                { category: 'side-projects', date: '2022-06-01', displayDate: '2022', url: 'https://youtu.be/x-0PAZydMrk?si=yNJKiUbViiESZV_v', icon: 'images/social/Youtube_logo.png', title: 'Visualization of an injection moulding in VR', subtitle: 'YouTube Demo' },
-                { category: 'side-projects', date: '2022-05-01', displayDate: '2022', url: 'https://youtu.be/Zn1bKinud8s?si=my8Fv56XyIeIKABA', icon: 'images/social/Youtube_logo.png', title: 'Training procedure for starting a production line in VR', subtitle: 'YouTube Demo' },
+                { category: 'side-projects', date: '2022-06-01', displayDate: '2022', url: 'videos/moulding.mp4', icon: 'images/social/Youtube_logo.png', title: 'Visualization of an injection moulding in VR', subtitle: 'YouTube Demo' },
+                { category: 'side-projects', date: '2022-05-01', displayDate: '2022', url: 'videos/production-line.mp4', icon: 'images/social/Youtube_logo.png', title: 'Training procedure for starting a production line in VR', subtitle: 'YouTube Demo' },
                 { category: 'certification', date: '2021-09-01', displayDate: 'SEP 2021', logo: 'images/logos/fanuc.png', title: 'Standard Teach Pendant Programming', description: 'FANUC' },
                 { category: 'publication', date: '2020-06-01', displayDate: 'JUN 2020', url: 'pdfs/paper1.pdf', period: '<span class="normal-case">In DESIGN conference</span>', title: 'IMPRO: Immersive prototyping in virtual environments for industrial designers', authors: 'S Stadler, H Cornet, <span class="highlight-name">D Mazeas*</span>, JR Chardonnet, F Frenkler (*App development, experiment design, data collection, and analysis)' },
                 { category: 'employment', date: '2020-01-01', displayDate: '2020', logo: 'images/logos/safran.png', title: 'Solutions Engineer', period: 'SAFRAN (Gloucester, UK) | 6 Months', description: 'Assisted with the implementation of augmented reality solutions for maintenance.' },
@@ -176,10 +177,20 @@ document.addEventListener('DOMContentLoaded', () => {
                             </div>`;
                         break;
                     case 'side-projects':
-                        const iconHtml = item.icon === 'svg_article'
-                            ? `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>`
-                            : `<img src="${item.icon}" class="${item.subtitle.includes('YouTube') ? 'h-6' : 'h-8 w-8'}" loading="lazy">`;
-                        
+                        let iconHtml;
+                        let itemLinkStart = `<a href="${item.url}" target="${item.url.startsWith('http') ? '_blank' : ''}" class="block h-full">`;
+                        let itemLinkEnd = '</a>';
+                        if (item.icon === 'svg_article') {
+                           iconHtml = `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>`;
+                        } else if (item.subtitle.includes('YouTube')) {
+                            iconHtml = `<img src="${item.icon}" class="h-6" loading="lazy">`;
+                            itemLinkStart = `<a href="javascript:void(0)" onclick="window.open('${item.url}', '_blank')" class="block h-full">`;
+                            itemLinkEnd = '</a>';
+                        }
+                        else {
+                           iconHtml = `<img src="${item.icon}" class="h-8 w-8" loading="lazy">`;
+                        }
+
                         content = `
                              <div class="flex items-center h-full px-4 pb-4 pt-12">
                                  <div class="w-16 flex-shrink-0 flex items-center justify-center">${iconHtml}</div>
@@ -333,7 +344,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             function animate() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
-                const nearbyDots = [];
                 const allVisibleDots = new Set(persistentDots);
                 const blobElements = document.querySelectorAll('.blob:not(#cursor-blob)');
                 const blobRects = Array.from(blobElements).map(el => el.getBoundingClientRect());
@@ -363,15 +373,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     let isNearby = false;
                     let mouseProximityOpacity = 0;
-                    if (mouse.x !== null) {
-                        const distMouse = Math.hypot(mouse.x - dot.x, mouse.y - dot.y);
-                        if (distMouse < dotConnectionDistance) {
-                            isNearby = true;
-                            nearbyDots.push(dot);
-                            allVisibleDots.add(dot);
-                            mouseProximityOpacity = 1 - (distMouse / dotConnectionDistance);
-                        }
-                    }
 
                     if (persistentDots.has(dot) || isNearby) {
                         const finalOpacity = (mouseProximityOpacity > 0 ? mouseProximityOpacity : 0.3) * blobProximityOpacity;
@@ -381,17 +382,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         ctx.fill();
                     }
                 }
-
-                nearbyDots.forEach(dot => {
-                    const distMouse = Math.hypot(mouse.x - dot.x, mouse.y - dot.y);
-                    const opacity = 1 - (distMouse / dotConnectionDistance);
-                    ctx.beginPath();
-                    ctx.moveTo(dot.x, dot.y);
-                    ctx.lineTo(mouse.x, mouse.y);
-                    ctx.strokeStyle = `hsla(${dot.hue}, 80%, 70%, ${opacity * 0.6})`;
-                    ctx.lineWidth = 1.5;
-                    ctx.stroke();
-                });
 
                 const visibleDotsArray = Array.from(allVisibleDots);
                 for (let i = 0; i < visibleDotsArray.length; i++) {

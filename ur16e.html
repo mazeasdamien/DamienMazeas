@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IK for UR16e in Unity - DM</title>
+    <title>UR16e in Unity - DM</title>
     <link rel="shortcut icon" type="image/x-icon" href="favicon.jpg">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -421,15 +421,6 @@
 
                         let isNearby = false;
                         let mouseProximityOpacity = 0;
-                        if (mouse.x !== null) {
-                            const distMouse = Math.hypot(mouse.x - dot.x, mouse.y - dot.y);
-                            if (distMouse < dotConnectionDistance) {
-                                isNearby = true;
-                                nearbyDots.push(dot);
-                                allVisibleDots.add(dot);
-                                mouseProximityOpacity = 1 - (distMouse / dotConnectionDistance);
-                            }
-                        }
 
                         if (persistentDots.has(dot) || isNearby) {
                             const finalOpacity = (mouseProximityOpacity > 0 ? mouseProximityOpacity : 0.3) * blobProximityOpacity;
@@ -439,17 +430,6 @@
                             ctx.fill();
                         }
                     }
-
-                    nearbyDots.forEach(dot => {
-                        const distMouse = Math.hypot(mouse.x - dot.x, mouse.y - dot.y);
-                        const opacity = 1 - (distMouse / dotConnectionDistance);
-                        ctx.beginPath();
-                        ctx.moveTo(dot.x, dot.y);
-                        ctx.lineTo(mouse.x, mouse.y);
-                        ctx.strokeStyle = `hsla(${dot.hue}, 80%, 70%, ${opacity * 0.6})`;
-                        ctx.lineWidth = 1.5;
-                        ctx.stroke();
-                    });
 
                     const visibleDotsArray = Array.from(allVisibleDots);
                     for (let i = 0; i < visibleDotsArray.length; i++) {
