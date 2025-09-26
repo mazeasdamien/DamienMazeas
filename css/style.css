@@ -395,7 +395,6 @@ a:hover .portfolio-card::after {
     width: 70%;
     height: 100vh;
     z-index: 5;
-    transition: top 4s ease-in-out;
 }
 
 #oculus-container canvas {
@@ -444,13 +443,6 @@ a:hover .portfolio-card::after {
     }
 }
 
-#oculus-container {
-    transition: top 4s ease-in-out;
-}
-
-#oculus-container.hide-model {
-    top: -800px !important;
-}
 
 .filter-btn {
     border: 1.5px solid transparent;

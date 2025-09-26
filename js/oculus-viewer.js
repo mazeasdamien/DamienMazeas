@@ -121,14 +121,20 @@ if (container) {
     function handleScroll() {
         if (oculusModel) {
             const scrollY = window.scrollY;
-            const scrollFactor = scrollY * 0.005;
-            oculusModel.position.y = scrollFactor;
+            const scrollThreshold = 200;
+            const scrollProgress = Math.min(scrollY / scrollThreshold, 1);
 
-            if (scrollY > 100) {
-                container.classList.add('hide-model');
-            } else {
-                container.classList.remove('hide-model');
-            }
+            const startScale = 8;
+            const endScale = 4;
+            const newScale = startScale + (endScale - startScale) * scrollProgress;
+            oculusModel.scale.setScalar(newScale);
+
+            const startY = 0;
+            const endY = -2;
+            const newY = startY + (endY - startY) * scrollProgress;
+            oculusModel.position.y = newY;
+
+            container.style.opacity = `${1 - scrollProgress}`;
         }
     }
     window.addEventListener('scroll', handleScroll);
