@@ -389,12 +389,13 @@ a:hover .portfolio-card::after {
 }
 
 #oculus-container {
-    width: 600px;
-    height: 200px;
-    position: relative;
-    margin-left: 2rem;
-    top: 0px;
-    z-index: 10;
+    position: fixed;
+    top: -260px;
+    right: -250px;
+    width: 70%;
+    height: 100vh;
+    z-index: 5;
+    transition: top 4s ease-in-out;
 }
 
 #oculus-container canvas {
