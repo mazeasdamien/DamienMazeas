@@ -359,18 +359,18 @@ a:hover .portfolio-card::after {
 }
 
 #oculus-container {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100vh;
-    z-index: -1;
+    z-index: 10;
 }
 
 #oculus-container canvas {
     width: 100% !important;
     height: 100% !important;
-    cursor: grab;
+    cursor: default;
 }
 
 #oculus-loader {

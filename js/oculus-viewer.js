@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+// import { OrbitControls } from 'three/addons/controls/OrbitControls.js'; // A new line
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 
 const container = document.getElementById('oculus-container');
@@ -20,14 +20,14 @@ if (container) {
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     container.appendChild(renderer.domElement);
     
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.05;
-    controls.screenSpacePanning = false;
-    controls.enableZoom = true;
-    controls.enablePan = true;
-    controls.autoRotate = true;
-    controls.autoRotateSpeed = 0.5;
+    // const controls = new OrbitControls(camera, renderer.domElement);
+    // controls.enableDamping = true;
+    // controls.dampingFactor = 0.05;
+    // controls.screenSpacePanning = false;
+    // controls.enableZoom = true;
+    // controls.enablePan = true;
+    // controls.autoRotate = true;
+    // controls.autoRotateSpeed = 0.5;
 
     let oculusModel = null;
     const clock = new THREE.Clock();
@@ -86,10 +86,10 @@ if (container) {
             oculusModel.rotation.x = -90;
             oculusModel.rotation.y = 20;
             oculusModel.rotation.z = 120;
-            oculusModel.scale.setScalar(8);
-            oculusModel.position.set(0, 0, 0);
+            oculusModel.scale.setScalar(7);
+            oculusModel.position.set(5, 1.5, 0);
             scene.add(oculusModel);
-            controls.target.copy(oculusModel.position);
+            // controls.target.copy(oculusModel.position);
 
             if (oculusLoader) {
                 oculusLoader.style.display = 'none';
@@ -117,25 +117,6 @@ if (container) {
         }
     }
     window.addEventListener('resize', onWindowResize);
-
-    function handleScroll() {
-        if (oculusModel) {
-            const scrollY = window.scrollY;
-            const scrollThreshold = 500;
-            const scrollProgress = Math.min(scrollY / scrollThreshold, 1);
-
-            const startScale = 8;
-            const endScale = 4;
-            const newScale = startScale + (endScale - startScale) * scrollProgress;
-            oculusModel.scale.setScalar(newScale);
-
-            const startY = 0;
-            const endY = -2;
-            const newY = startY + (endY - startY) * scrollProgress;
-            oculusModel.position.y = newY;
-        }
-    }
-    window.addEventListener('scroll', handleScroll);
 
     function setRandomRotation() {
         if (oculusModel) {
@@ -168,13 +149,13 @@ if (container) {
 
         if (isRotating && oculusModel) {
             oculusModel.quaternion.slerp(targetRotation, 0.05);
-            if (oculusModel.quaternion.angleTo(targetRotation) < 0.01) {
-                oculusModel.quaternion.copy(targetRotation);
+            if (oculusModel.quaternion.angleTo(targetRotation) < 0.05) {
                 isRotating = false;
             }
+        } else if (oculusModel) {
+            oculusModel.rotation.y += 0.002;
         }
 
-        controls.update();
         renderer.render(scene, camera);
     }
 
