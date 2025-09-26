@@ -24,8 +24,8 @@ if (container) {
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
     controls.screenSpacePanning = false;
-    controls.enableZoom = false;
-    controls.enablePan = false;
+    controls.enableZoom = true;
+    controls.enablePan = true;
     controls.autoRotate = true;
     controls.autoRotateSpeed = 0.5;
 
@@ -133,8 +133,6 @@ if (container) {
             const endY = -2;
             const newY = startY + (endY - startY) * scrollProgress;
             oculusModel.position.y = newY;
-
-            container.style.opacity = `${1 - scrollProgress}`;
         }
     }
     window.addEventListener('scroll', handleScroll);
