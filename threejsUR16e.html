@@ -89,7 +89,6 @@
         import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
         import { TransformControls } from 'three/addons/controls/TransformControls.js';
         import GUI from 'lil-gui';
-        import IK_toolkit from './js/IK_toolkit.js';
 
         const scene = new THREE.Scene();
         scene.background = new THREE.Color(0x333333);
@@ -108,7 +107,6 @@
         scene.add(gridHelper);
 
         const gui = new GUI();
-        const ik_toolkit = new IK_toolkit();
         const jointControls = {};
 
         const jointConfigurations = {
@@ -254,14 +252,13 @@
                 }
             });
 
-            // The GUI for manual joint control is no longer needed as the IK solver now handles this.
-            // selectableGroups.forEach(group => {
-            //     const config = jointConfigurations[group.name];
-            //     if (config) {
-            //         jointControls[group.name] = 0;
-            //         gui.add(jointControls, group.name, -180, 180).name(group.name);
-            //     }
-            // });
+            selectableGroups.forEach(group => {
+                const config = jointConfigurations[group.name];
+                if (config) {
+                    jointControls[group.name] = 0;
+                    gui.add(jointControls, group.name, -180, 180).name(group.name);
+                }
+            });
 
             const box = new THREE.Box3().setFromObject(robotModel);
             const center = box.getCenter(new THREE.Vector3());
@@ -353,43 +350,14 @@
         function animate() {
             requestAnimationFrame(animate);
 
-            if (robotModel && selectableGroups.length > 0 && movableSphere) {
-                const targetMatrix = new THREE.Matrix4();
-                const position = new THREE.Vector3();
-                const quaternion = new THREE.Quaternion();
-                const scale = new THREE.Vector3();
-
-                movableSphere.matrixWorld.decompose(position, quaternion, scale);
-
-                // Create a target matrix for the IK solver
-                const targetPosition = movableSphere.position.clone();
-                const targetRotation = new THREE.Matrix4().makeRotationFromQuaternion(movableSphere.quaternion);
-                targetMatrix.compose(targetPosition, new THREE.Quaternion(), new THREE.Vector3(1, 1, 1));
-
-                // Reflect the matrix along the Y-axis
-                const mt = new THREE.Matrix4().makeScale(1, -1, 1);
-                const resultMatrix = new THREE.Matrix4().multiply(mt).multiply(targetMatrix).multiply(mt);
-
-                const solutions = ik_toolkit.inverseKinematicSolutions(resultMatrix);
-                const solution = solutions.map(row => row[5]);
-
-                if (solution.every(angle => !isNaN(angle))) {
-                    const jointNames = ['Base', 'Shoulder', 'Elbow', 'Wrist1', 'Wrist2', 'Wrist3'];
-                    jointNames.forEach((name, i) => {
-                        const group = selectableGroups.find(g => g.name === name);
-                        if (group) {
-                            const config = jointConfigurations[name];
-                            let angle = solution[i];
-
-                            // Adjust angles based on joint configuration
-                            if (name === 'Shoulder' || name === 'Elbow' || name === 'Wrist1' || name === 'Wrist3') {
-                                angle *= -1;
-                            }
-
-                            group.rotation[config.axis] = angle;
-                        }
-                    });
-                }
+            if (robotModel && selectableGroups.length > 0) {
+                selectableGroups.forEach(group => {
+                    const config = jointConfigurations[group.name];
+                    if (config) {
+                        const value = jointControls[group.name];
+                        group.rotation[config.axis] = THREE.MathUtils.degToRad(value);
+                    }
+                });
             }
 
             controls.update();
