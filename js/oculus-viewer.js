@@ -121,7 +121,7 @@ if (container) {
     function handleScroll() {
         if (oculusModel) {
             const scrollY = window.scrollY;
-            const scrollThreshold = 200;
+            const scrollThreshold = 500;
             const scrollProgress = Math.min(scrollY / scrollThreshold, 1);
 
             const startScale = 8;
