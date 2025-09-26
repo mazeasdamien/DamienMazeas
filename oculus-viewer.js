@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 
 const container = document.getElementById('oculus-container');
 
@@ -8,10 +9,8 @@ if (container) {
     const backgroundContainer = document.getElementById('background-container');
     const oculusLoader = document.getElementById('oculus-loader');
 
-    // --- Basic Scene Setup ---
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 100);
-    // Adjust camera position to better frame the large model
     camera.position.set(0, 0, 8); 
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -21,7 +20,6 @@ if (container) {
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     container.appendChild(renderer.domElement);
     
-    // --- Controls ---
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
@@ -31,17 +29,14 @@ if (container) {
     controls.autoRotate = true;
     controls.autoRotateSpeed = 0.5;
 
-    // --- State & Clock for Animation ---
     let oculusModel = null;
     const clock = new THREE.Clock();
     
-    // --- Standard Lighting ---
     scene.add(new THREE.AmbientLight(0xffffff, 1.0));
     const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
     directionalLight.position.set(2, 5, 3);
     scene.add(directionalLight);
     
-    // --- Helper function to read page's CSS variables ---
     function getColorFromCSS(variableName) {
         if (backgroundContainer) {
             const colorStr = getComputedStyle(backgroundContainer).getPropertyValue(variableName).trim();
@@ -54,7 +49,6 @@ if (container) {
         return new THREE.Color(0xffffff);
     }
 
-    // --- Immersive Colored Lighting (with much stronger intensity) ---
     const pointLight1 = new THREE.PointLight(getColorFromCSS('--gradient-2'), 200, 20);
     pointLight1.position.set(2, 2, 2);
     scene.add(pointLight1);
@@ -63,10 +57,14 @@ if (container) {
     pointLight2.position.set(-2, -2, -2);
     scene.add(pointLight2);
     
-    // --- Model Loading ---
+    const dracoLoader = new DRACOLoader();
+    dracoLoader.setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/libs/draco/');
+
     const loader = new GLTFLoader();
+    loader.setDRACOLoader(dracoLoader);
+    
     loader.load(
-        '3dmodels/apple_vision_pro.glb',
+        '3dmodels/apple_vision_pro.compressed.glb',
         (gltf) => {
             oculusModel = gltf.scene;
             
@@ -85,14 +83,12 @@ if (container) {
 
             oculusModel.rotation.x = -90;
             oculusModel.rotation.y = 20;
-            oculusModel.rotation.z = 120; // 90 degrees
-            // Increase the scale and adjust the position
+            oculusModel.rotation.z = 120;
             oculusModel.scale.setScalar(8);
-            oculusModel.position.set(0, 0, 0); // Reposition to the upper-right
+            oculusModel.position.set(0, 0, 0);
             scene.add(oculusModel);
             controls.target.copy(oculusModel.position);
 
-            // Hide the loader once the model is loaded
             if (oculusLoader) {
                 oculusLoader.style.display = 'none';
             }
@@ -111,7 +107,6 @@ if (container) {
         }
     );
     
-    // --- Event Listeners ---
     function onWindowResize() {
         if (container.clientWidth > 0 && container.clientHeight > 0) {
             camera.aspect = container.clientWidth / container.clientHeight;
@@ -121,13 +116,11 @@ if (container) {
     }
     window.addEventListener('resize', onWindowResize);
 
-    // --- NEW: Listen for the custom event from script.js ---
     window.addEventListener('themeUpdated', () => {
         pointLight1.color.lerp(getColorFromCSS('--gradient-2'), 0.5);
         pointLight2.color.lerp(getColorFromCSS('--gradient-3'), 0.5);
     });
 
-    // --- Animation Loop ---
     function animate() {
         requestAnimationFrame(animate);
         const elapsedTime = clock.getElapsedTime();
