@@ -121,8 +121,14 @@ if (container) {
     function handleScroll() {
         if (oculusModel) {
             const scrollY = window.scrollY;
-            const scrollFactor = scrollY * 0.01;
+            const scrollFactor = scrollY * 0.005;
             oculusModel.position.y = scrollFactor;
+
+            if (scrollY > 100) {
+                container.classList.add('hide-model');
+            } else {
+                container.classList.remove('hide-model');
+            }
         }
     }
     window.addEventListener('scroll', handleScroll);
