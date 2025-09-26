@@ -450,3 +450,29 @@ a:hover .portfolio-card::after {
 #oculus-container.hide-model {
     top: -800px !important;
 }
+
+.filter-btn {
+    border: 1.5px solid transparent;
+    transition: background-color 0.3s, border-color 0.3s, color 0.3s, transform 0.3s;
+}
+
+.filter-btn:not(.active):not(:hover) {
+    background-color: transparent;
+    border-color: #52525b;
+    color: #a1a1aa;
+}
+
+.filter-btn:hover {
+    border-color: var(--filter-color-active);
+    background-color: var(--filter-color-active);
+    color: white;
+    transform: translateY(-2px);
+}
+
+.filter-btn.active {
+    background-color: rgba(var(--filter-color-rgb, 255, 255, 255), 0.15);
+    border-color: rgba(var(--filter-color-rgb, 255, 255, 255), 0.3);
+    color: white;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
