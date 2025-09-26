@@ -209,6 +209,7 @@ function setupEventListeners() {
                 }
 
                 if (singleVideoSrc || multipleVideoSrcs) {
+                    modalVideoPlayer.muted = true;
                     videoModal.classList.remove('hidden');
                     videoModal.classList.add('flex');
                 }
