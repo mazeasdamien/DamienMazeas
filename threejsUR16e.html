@@ -62,14 +62,6 @@
 </head>
 <body>
     <div id="container"></div>
-    <div id="structure-panel">
-        <h3>
-            Model Structure 
-            <button id="toggle-gizmos">Toggle Gizmos</button>
-            <button id="toggle-panel">Collapse</button>
-        </h3>
-        <div id="structure-output">Loading model...</div>
-    </div>
     <footer id="footer">
         <p>&copy; 2025 Damien Mazeas | Designed & Developed by the Author</p>
     </footer>
@@ -89,6 +81,7 @@
         import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
         import { TransformControls } from 'three/addons/controls/TransformControls.js';
         import GUI from 'lil-gui';
+        import IK_toolkit from './js/IK_toolkit.js';
 
         const scene = new THREE.Scene();
         scene.background = new THREE.Color(0x333333);
@@ -107,6 +100,7 @@
         scene.add(gridHelper);
 
         const gui = new GUI();
+        const ik_toolkit = new IK_toolkit();
         const jointControls = {};
 
         const jointConfigurations = {
@@ -143,6 +137,17 @@
 
             transformControls.addEventListener('dragging-changed', function (event) {
                 controls.enabled = !event.value;
+            });
+
+            window.addEventListener('keydown', function (event) {
+                switch (event.key) {
+                    case 'r':
+                        transformControls.setMode("rotate");
+                        break;
+                    case 't':
+                        transformControls.setMode("translate");
+                        break;
+                }
             });
         }
 
@@ -252,13 +257,14 @@
                 }
             });
 
-            selectableGroups.forEach(group => {
-                const config = jointConfigurations[group.name];
-                if (config) {
-                    jointControls[group.name] = 0;
-                    gui.add(jointControls, group.name, -180, 180).name(group.name);
-                }
-            });
+            // The GUI for manual joint control is no longer needed as the IK solver now handles this.
+            // selectableGroups.forEach(group => {
+            //     const config = jointConfigurations[group.name];
+            //     if (config) {
+            //         jointControls[group.name] = 0;
+            //         gui.add(jointControls, group.name, -180, 180).name(group.name);
+            //     }
+            // });
 
             const box = new THREE.Box3().setFromObject(robotModel);
             const center = box.getCenter(new THREE.Vector3());
@@ -350,14 +356,46 @@
         function animate() {
             requestAnimationFrame(animate);
 
-            if (robotModel && selectableGroups.length > 0) {
-                selectableGroups.forEach(group => {
-                    const config = jointConfigurations[group.name];
-                    if (config) {
-                        const value = jointControls[group.name];
-                        group.rotation[config.axis] = THREE.MathUtils.degToRad(value);
-                    }
-                });
+            if (robotModel && selectableGroups.length > 0 && movableSphere) {
+                const targetMatrix = new THREE.Matrix4();
+                const position = new THREE.Vector3();
+                const quaternion = new THREE.Quaternion();
+                const scale = new THREE.Vector3();
+
+                movableSphere.matrixWorld.decompose(position, quaternion, scale);
+                targetMatrix.compose(position, quaternion, new THREE.Vector3(1, 1, 1));
+
+                const mt = new THREE.Matrix4().makeScale(1, -1, 1);
+                const resultMatrix = new THREE.Matrix4().multiply(mt).multiply(targetMatrix).multiply(mt);
+
+                const solutions = ik_toolkit.inverseKinematicSolutions(resultMatrix);
+                const solution = solutions.map(row => row[5]);
+
+                if (solution.every(angle => !isNaN(angle))) {
+                    const jointNames = ['Base', 'Shoulder', 'Elbow', 'Wrist1', 'Wrist2', 'Wrist3'];
+                    jointNames.forEach((name, i) => {
+                        const group = selectableGroups.find(g => g.name === name);
+                        if (group) {
+                            const angle = -solution[i];
+                            const config = jointConfigurations[name];
+                            const euler = new THREE.Euler(0, 0, 0, group.rotation.order);
+                            euler[config.axis] = angle;
+
+                            switch(i) {
+                                case 1: // Shoulder
+                                    euler.x += THREE.MathUtils.degToRad(-90);
+                                    break;
+                                case 4: // Wrist2
+                                    euler.x += THREE.MathUtils.degToRad(-90);
+                                    break;
+                                case 5: // Wrist3
+                                    euler.x += THREE.MathUtils.degToRad(90);
+                                     break;
+                            }
+                            group.rotation.copy(euler);
+                        }
+                    });
+                }
             }
 
             controls.update();
