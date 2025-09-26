@@ -31,6 +31,8 @@ if (container) {
 
     let oculusModel = null;
     const clock = new THREE.Clock();
+    let targetRotation = new THREE.Quaternion();
+    let isRotating = false;
     
     scene.add(new THREE.AmbientLight(0xffffff, 1.0));
     const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
@@ -116,9 +118,32 @@ if (container) {
     }
     window.addEventListener('resize', onWindowResize);
 
+    function handleScroll() {
+        if (oculusModel) {
+            const scrollY = window.scrollY;
+            const scrollFactor = scrollY * 0.01;
+            oculusModel.position.y = scrollFactor;
+        }
+    }
+    window.addEventListener('scroll', handleScroll);
+
+    function setRandomRotation() {
+        if (oculusModel) {
+            const euler = new THREE.Euler(
+                Math.random() * Math.PI * 2,
+                Math.random() * Math.PI * 2,
+                Math.random() * Math.PI * 2,
+                'XYZ'
+            );
+            targetRotation.setFromEuler(euler);
+            isRotating = true;
+        }
+    }
+
     window.addEventListener('themeUpdated', () => {
         pointLight1.color.lerp(getColorFromCSS('--gradient-2'), 0.5);
         pointLight2.color.lerp(getColorFromCSS('--gradient-3'), 0.5);
+        setRandomRotation();
     });
 
     function animate() {
@@ -130,6 +155,14 @@ if (container) {
         
         pointLight2.position.x = Math.sin(elapsedTime * 0.3 + Math.PI) * 4;
         pointLight2.position.z = Math.cos(elapsedTime * 0.3 + Math.PI) * 4;
+
+        if (isRotating && oculusModel) {
+            oculusModel.quaternion.slerp(targetRotation, 0.05);
+            if (oculusModel.quaternion.angleTo(targetRotation) < 0.01) {
+                oculusModel.quaternion.copy(targetRotation);
+                isRotating = false;
+            }
+        }
 
         controls.update();
         renderer.render(scene, camera);
