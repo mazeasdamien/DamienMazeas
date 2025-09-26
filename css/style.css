@@ -147,45 +147,29 @@ body {
 }
 
 .filter-btn {
-    position: relative;
-    overflow: hidden;
-    transition: all 0.3s ease;
-    background-color: rgba(31, 41, 55, 0.4);
-    border: 1.5px solid rgba(75, 85, 99, 0.5);
-    color: #E6EDF3;
-    box-shadow: inset 0.5px 0.5px 1px rgba(255, 255, 255, 0.1), 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.15);
+    border: 1.5px solid transparent;
+    transition: background-color 0.3s, border-color 0.3s, color 0.3s, transform 0.3s;
 }
 
-.filter-btn::before {
-    content: '';
-    position: absolute;
-    top: var(--y, 0);
-    left: var(--x, 0);
-    transform: translate(-50%, -50%);
-    width: 0;
-    height: 0;
-    background: radial-gradient(circle closest-side, rgba(255, 255, 255, 0.2), transparent);
-    transition: width 0.3s ease, height 0.3s ease;
-}
-
-.filter-btn:hover::before {
-    width: 150px;
-    height: 150px;
+.filter-btn:not(.active):not(:hover) {
+    background-color: transparent;
+    border-color: #52525b;
+    color: #a1a1aa;
 }
 
 .filter-btn:hover {
-    background-color: rgba(55, 65, 81, 0.6);
-    border-color: rgba(100, 116, 139, 0.7);
-    transform: scale(1.05);
+    border-color: var(--filter-color-active);
+    background-color: var(--filter-color-active);
+    color: white;
+    transform: translateY(-2px);
 }
 
 .filter-btn.active {
-    color: #000000;
-    background-color: rgba(var(--filter-color-rgb), 0.4);
-    border-color: rgba(var(--filter-color-rgb), 0.6);
-    font-weight: 600;
-    transform: scale(1.05);
-    box-shadow: 0 0 15px -2px rgba(var(--filter-color-rgb), 0.6), 0 4px 8px -2px rgba(0,0,0,0.2);
+    background-color: rgba(var(--filter-color-rgb, 255, 255, 255), 0.15);
+    border-color: rgba(var(--filter-color-rgb, 255, 255, 255), 0.3);
+    color: white;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
 .portfolio-item {
@@ -206,25 +190,11 @@ body {
     flex-direction: column;
 }
 
-.portfolio-card::before {
-    content: '';
-    position: absolute;
-    top: var(--y, 0);
-    left: var(--x, 0);
-    transform: translate(-50%, -50%);
-    width: 400px;
-    height: 400px;
-    background: radial-gradient(circle closest-side, var(--item-glow-color, transparent), transparent);
-    opacity: 0;
-    transition: opacity 0.4s ease;
-}
-
-.portfolio-card:hover::before {
-    opacity: 1;
-}
-
 .portfolio-card:hover {
-    box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.2), inset 4px 0 15px -8px var(--item-color, transparent);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.2),
+                inset 4px 0 15px -8px var(--item-color, transparent),
+                0 0 20px var(--item-glow-color, transparent);
 }
 
 a:hover .portfolio-card,
@@ -390,11 +360,11 @@ a:hover .portfolio-card::after {
 
 #oculus-container {
     position: fixed;
-    top: -260px;
-    right: -250px;
-    width: 70%;
+    top: 0;
+    left: 0;
+    width: 100%;
     height: 100vh;
-    z-index: 5;
+    z-index: -1;
 }
 
 #oculus-container canvas {

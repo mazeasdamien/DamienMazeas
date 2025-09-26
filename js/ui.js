@@ -87,7 +87,7 @@ function renderPortfolio(sortOrder) {
     const currentFilter = filterContainer ? filterContainer.querySelector('.active').dataset.filter : 'all';
     const gridHTML = sortedData.map(item => {
         let content;
-        const isVideoProject = item.subtitle?.includes('YouTube');
+        const isVideoProject = (item.url && item.url.endsWith('.mp4')) || (item.urls && item.urls.length > 0);
         const isOtherClickableProject = item.url && !isVideoProject;
 
         let itemWrapperStart;
@@ -160,18 +160,6 @@ function setupEventListeners() {
 
     if (sortToggleButton) { sortToggleButton.textContent = 'Sorted by: Newest'; }
 
-    if (portfolioGrid) {
-        portfolioGrid.addEventListener('mousemove', e => {
-            const card = e.target.closest('.portfolio-card');
-            if (card) {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                card.style.setProperty('--x', `${x}px`);
-                card.style.setProperty('--y', `${y}px`);
-            }
-        });
-    }
 
     const videoModal = document.getElementById('video-modal');
     const modalVideoPlayer = document.getElementById('modal-video-player');
