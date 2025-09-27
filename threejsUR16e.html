@@ -270,21 +270,37 @@
             jointNames.forEach((name, i) => { const fkRow = document.createElement('div'); fkRow.className = 'control-row'; fkRow.innerHTML = `<label>${name}</label>`; const slider = document.createElement('input'); slider.type = 'range'; slider.min = -Math.PI; slider.max = Math.PI; slider.step = 0.01; slider.value = 0; slider.addEventListener('input', e => { controlSettings.fk_angles[i] = parseFloat(e.target.value); }); fkRow.appendChild(slider); fkContainer.appendChild(fkRow); const readoutRow = document.createElement('div'); readoutRow.className = 'readout-row'; readoutRow.innerHTML = `<span>${name}:</span> <span id="readout-j${i}">0.00</span>`; readoutContainer.appendChild(readoutRow); });
         }
         
-        // ✨ DEBUG: This function now contains the console logs ✨
         function solveIK() {
             if (!movableSphere || orderedJoints.length !== 6) return;
 
-            const reflectionMatrix = new THREE.Matrix4().makeScale(1, -1, 1);
-            const targetMatrixForIK = movableSphere.matrixWorld.clone();
-            targetMatrixForIK.premultiply(reflectionMatrix).multiply(reflectionMatrix);
+            // Step 1: Calculate the target matrix in the robot's local space.
+            const robotBase = orderedJoints[0].parent; // The GLTF scene root for the robot
+            robotBase.updateWorldMatrix(true, false);
+            const inverseRobotBaseMatrix = new THREE.Matrix4().copy(robotBase.matrixWorld).invert();
+
+            const targetWorldMatrix = movableSphere.matrixWorld.clone();
+
+            // T_local = T_base_inverse * T_target_world
+            const targetLocalMatrix = new THREE.Matrix4().multiplyMatrices(inverseRobotBaseMatrix, targetWorldMatrix);
+
+            // Step 2: Replicate Unity's Y-axis reflection to match the C# solver's expectation.
+            // The operation is M' = S * M * S, where S is the reflection matrix (its own inverse).
+            const reflectionMatrix = new THREE.Matrix4().makeScale(1, -1, 1); // Reflects Y-axis
+            const targetMatrixForIK = targetLocalMatrix.clone();
+
+            // Perform M' = S * M * S
+            targetMatrixForIK.premultiply(reflectionMatrix); // M' = S * M
+            targetMatrixForIK.multiply(reflectionMatrix);   // M' = (S * M) * S
+
 
             // --- ⚠️ DEBUG LOGS START ⚠️ ---
             console.clear(); // Clear console to keep logs clean each frame
             console.log("--- IK DEBUG FRAME ---");
-            console.log("IK Target World Matrix (Input to Solver):", targetMatrixForIK.elements);
+            // For clarity, let's log the final matrix being sent to the solver.
+            console.log("Final Matrix for IK Solver:", targetMatrixForIK.elements);
             // --- ⚠️ DEBUG LOGS END ⚠️ ---
 
-            const solutions = ikToolkit.inverseKinematicSolutions(targetMatrixForIK);
+            const solutions = ikToolkit.inverseKinematicSolutions(targetMatrixForIK, movableSphere);
             
             // --- ⚠️ DEBUG LOGS START ⚠️ ---
             console.log("All 8 IK Solutions (Raw Output):", solutions);
@@ -326,18 +342,35 @@
         }
         
         function applySolutionToJoints(solution) {
+            // This function maps the IK solution (in radians) to the specific
+            // orientation of each joint in the Three.js scene.
             orderedJoints.forEach((joint, i) => {
+                // For IK, the solution angle must be negated, as in the C# code.
+                // For FK, we use the angle directly from the sliders.
                 const angle = (controlSettings.mode === 'ik') ? -solution[i] : solution[i];
+
                 let x = 0, y = 0, z = 0;
-                // Using the latest axis configuration from your code
-                 switch (i) {
-                    case 0: y=angle; break; // Base
-                    case 1: x=THREE.MathUtils.degToRad(90); y=angle; break; // Shoulder
-                    case 2: y=angle; break; // Elbow
-                    case 3: y=angle; break; // Wrist1
-                    case 4: x=THREE.MathUtils.degToRad(90); y=angle; break; // Wrist2
-                    case 5: x=THREE.MathUtils.degToRad(-90); y=angle; break; // Wrist3
+
+                // The main rotation from the solution is applied to the Y-axis.
+                // This corresponds to the joint's primary axis of rotation in the GLB model.
+                y = angle;
+
+                // These static rotations on the X-axis orient the joints correctly.
+                // They correspond to the C# code's offsets but with inverted signs
+                // to account for the left-handed (Unity) vs. right-handed (Three.js) system.
+                switch (i) {
+                    case 1: // Shoulder
+                        x = THREE.MathUtils.degToRad(90);
+                        break;
+                    case 4: // Wrist2
+                        x = THREE.MathUtils.degToRad(90);
+                        break;
+                    case 5: // Wrist3
+                        x = THREE.MathUtils.degToRad(-90);
+                        break;
                 }
+
+                // Set the rotation using Euler angles. The default 'XYZ' order is correct.
                 joint.rotation.set(x, y, z);
             });
         }
