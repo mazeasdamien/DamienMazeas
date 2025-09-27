@@ -5,82 +5,101 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UR16e controller - DM</title>
     <style>
-        body { margin: 0; overflow: hidden; }
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: linear-gradient(135deg, #444850 0%, #2a2d32 100%);
+            font-family: monospace;
+        }
         canvas { display: block; }
-        #structure-panel {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            color: white;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 15px;
-            border-radius: 5px;
-            font-family: monospace;
-            font-size: 12px;
-            max-height: 90vh;
-            max-width: 400px;
-            overflow-y: auto;
-            z-index: 100;
-            transition: transform 0.3s ease-in-out;
+        #footer { position: absolute; bottom: 0; left: 0; width: 100%; padding: 1.5rem 0; text-align: center; color: rgba(255, 255, 255, 0.7); font-size: 12px; z-index: 100; pointer-events: none; }
+        #control-panel {
+            position: absolute; top: 15px; right: 15px; width: 300px;
+            background: rgba(25, 25, 25, 0.85); backdrop-filter: blur(10px);
+            border-radius: 8px; border: 1px solid rgba(128, 128, 128, 0.3);
+            color: #f0f0f0; padding: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            z-index: 101; user-select: none;
         }
-        #structure-panel.collapsed {
-            transform: translateX(calc(-100% - 20px));
+        #panel-header {
+            padding: 8px; cursor: move; background-color: rgba(80, 80, 80, 0.5);
+            border-radius: 4px 4px 0 0; text-align: center; font-weight: bold;
+            margin: -10px -10px 10px -10px;
         }
-        #structure-panel button {
-            margin-left: 10px;
-            background-color: #555;
-            border: 1px solid #888;
-            color: white;
-            border-radius: 3px;
-            cursor: pointer;
+        .panel-section { margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid rgba(128, 128, 128, 0.2); }
+        .panel-section:last-child { border-bottom: none; }
+        h4 { margin: 0 0 8px 0; color: #66d9ef; }
+        .control-row, .readout-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 12px; }
+        .readout-row span:first-child { color: #a6e22e; }
+        .readout-row span:last-child { color: #f92672; font-weight: bold; }
+        label { flex-basis: 40%; }
+        input[type="range"] { flex-grow: 1; -webkit-appearance: none; appearance: none; height: 4px; background: #444; outline: none; border-radius: 2px; margin-left: 10px; }
+        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 14px; height: 14px; background: #66d9ef; cursor: pointer; border-radius: 50%; }
+        .slider-value { margin-left: 10px; min-width: 35px; text-align: right; color: #f92672; font-weight: bold; }
+        .tabs { display: flex; border-bottom: 1px solid #555; margin-bottom: 10px; }
+        .tab-button { flex: 1; padding: 8px; border: none; background: transparent; color: #aaa; cursor: pointer; font-family: monospace; border-bottom: 2px solid transparent; }
+        .tab-button.active { color: #66d9ef; border-bottom: 2px solid #66d9ef; }
+        .panel-button { width: 100%; padding: 8px; background: #555; border: 1px solid #777; color: white; border-radius: 4px; cursor: pointer; margin-top: 5px; }
+        #error-overlay {
+            display: none; position: absolute; top: 15px; left: 50%;
+            transform: translateX(-50%); width: 80%; max-width: 800px;
+            background: rgba(217, 0, 0, 0.85); color: white; padding: 15px;
+            border-radius: 5px; text-align: center; z-index: 200;
+            font-size: 14px; pointer-events: none;
         }
-        .structure-item {
-            cursor: pointer;
-            padding: 2px;
-            border-radius: 2px;
-            transition: background-color 0.2s, color 0.2s;
-        }
-        .structure-item.selected {
-            background-color: #eab308;
-            color: black;
-            font-weight: bold;
-        }
-        #footer {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            padding: 1.5rem 0;
-            text-align: center;
-            color: rgba(255, 255, 255, 0.7);
-            font-family: monospace;
-            font-size: 12px;
-            z-index: 100;
-            pointer-events: none;
+        #fps-counter {
+            position: absolute; top: 10px; left: 10px; padding: 5px 10px;
+            background: rgba(0,0,0,0.5); color: #a6e22e;
+            border-radius: 3px; z-index: 100;
         }
     </style>
 </head>
 <body>
     <div id="container"></div>
-    <div id="structure-panel">
-        <h3>
-            Model Structure 
-            <button id="toggle-gizmos">Toggle Gizmos</button>
-            <button id="toggle-panel">Collapse</button>
-        </h3>
-        <div id="structure-output">Loading model...</div>
+    <div id="error-overlay"></div>
+    <div id="fps-counter">FPS: 0</div>
+    <div id="control-panel">
+        <div id="panel-header">🤖 UR16e Control Panel</div>
+        <div class="panel-section">
+             <button class="panel-button" id="toggle-mode-btn">Toggle Move/Rotate</button>
+             <button class="panel-button" id="toggle-gizmos-btn">Toggle Joint Axes</button>
+        </div>
+        
+        <div class="panel-section">
+            <h4>Mode Select</h4>
+            <div class="tabs">
+                <button class="tab-button active" id="ik-mode-btn">Inverse Kinematics</button>
+                <button class="tab-button" id="fk-mode-btn">Forward Kinematics</button>
+            </div>
+        </div>
+        <div id="ik-controls">
+            <div class="panel-section">
+                <h4>IK Settings</h4>
+                <div class="control-row">
+                    <label for="solution-id-slider">Solution ID</label>
+                    <input type="range" id="solution-id-slider" min="0" max="7" step="1" value="5">
+                    <span class="slider-value" id="solution-id-value">5</span>
+                </div>
+            </div>
+        </div>
+        <div id="fk-controls" style="display: none;">
+             <div class="panel-section">
+                <h4>Forward Kinematics Control</h4>
+             </div>
+        </div>
+        <div class="panel-section">
+            <h4>Joint Angles (deg)</h4>
+            <div id="joint-readouts"></div>
+        </div>
     </div>
     <footer id="footer">
         <p>&copy; 2025 Damien Mazeas | Designed & Developed by the Author</p>
     </footer>
+
     <script type="importmap">
-        {
-            "imports": {
-                "three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js",
-                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/",
-                "lil-gui": "https://unpkg.com/lil-gui@0.19.1/dist/lil-gui.esm.js"
-            }
-        }
+        { "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/"
+        } }
     </script>
 
     <script type="module">
@@ -88,287 +107,266 @@
         import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
         import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
         import { TransformControls } from 'three/addons/controls/TransformControls.js';
-        import GUI from 'lil-gui';
+        import { EXRLoader } from 'three/addons/loaders/EXRLoader.js';
+        import IK_toolkit from './js/IK_toolkit.js';
 
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x333333);
-        const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        document.getElementById('container').appendChild(renderer.domElement);
+        // --- Global Variables ---
+        const errorOverlay = document.getElementById('error-overlay');
+        function showError(message) { errorOverlay.textContent = `⚠️ Error: ${message}`; errorOverlay.style.display = 'block'; setTimeout(() => { errorOverlay.style.display = 'none'; }, 10000); }
+        window.onerror = (message, source, lineno) => { showError(`${message} at ${source.split('/').pop()}:${lineno}`); };
+        const originalConsoleError = console.error;
+        console.error = function(message) { if (message instanceof Error) { showError(message.message); } else { showError(message); } originalConsoleError.apply(console, arguments); };
 
-        const controls = new OrbitControls(camera, renderer.domElement);
-        controls.enableDamping = true;
-        scene.add(new THREE.AmbientLight(0xffffff, 0.3));
-        const dirLight = new THREE.DirectionalLight(0xffffff, 3);
-        dirLight.position.set(2, 30, 7.5);
-        scene.add(dirLight);
-        const gridHelper = new THREE.GridHelper(50, 10, 0x888888, 0x444444);
-        scene.add(gridHelper);
-
-        const gui = new GUI();
-        const jointControls = {};
-
-        const jointConfigurations = {
-            'Base':     { axis: 'y' },
-            'Shoulder': { axis: 'z' },
-            'Elbow':    { axis: 'z' },
-            'Wrist1':   { axis: 'z' },
-            'Wrist2':   { axis: 'y' },
-            'Wrist3':   { axis: 'z' }
-        };
-
-        const raycaster = new THREE.Raycaster();
-        const mouse = new THREE.Vector2();
-        let hoveredObj = null;
-        let selectedObj = null;
-        let robotModel = null;
-        const gizmos = [];
-        const selectableGroups = [];
-
-        let movableSphere;
-        let transformControls;
-
-        function createMovableSphere() {
-            // Sphere size increased by 20x, color changed to pink
-            const sphereGeometry = new THREE.SphereGeometry(0.15 * 5, 32, 32); 
-            const sphereMaterial = new THREE.MeshStandardMaterial({ color: 0xFF69B4, metalness: 0.8, roughness: 0.2 });
-            movableSphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
-            movableSphere.position.set(15, 20, 15);
-            scene.add(movableSphere);
-
-            transformControls = new TransformControls(camera, renderer.domElement);
-            transformControls.attach(movableSphere);
-            scene.add(transformControls);
-
-            transformControls.addEventListener('dragging-changed', function (event) {
-                controls.enabled = !event.value;
-            });
-        }
-
-        function findSelectableGroup(object) {
-            if (!object) return null;
-            let current = object;
-            while (current) {
-                if (selectableGroups.includes(current)) {
-                    return current;
-                }
-                current = current.parent;
-            }
-            return null;
-        }
+        let scene, camera, renderer, controls, ikToolkit, movableSphere, transformControls, dirLight;
+        const controlSettings = { mode: 'ik', solutionID: 5, fk_angles: [0, 0, 0, 0, 0, 0] };
+        const orderedJoints = [], gizmos = []; // gizmos will now hold the AxesHelpers
+        const jointNames = ['Base', 'Shoulder', 'Elbow', 'Wrist1', 'Wrist2', 'Wrist3'];
         
-        function buildStructureHTML(object, indent = '') {
-            const container = document.createElement('div');
-            if (selectableGroups.includes(object)) {
-                const div = document.createElement('div');
-                div.classList.add('structure-item');
-                div.dataset.uuid = object.uuid;
-                div.innerHTML = `${indent} L ${object.name} <span style="color: #888;">(Group)</span>`;
-                container.appendChild(div);
-            }
-            const childIndent = selectableGroups.includes(object) ? indent + '&nbsp; |' : indent;
-            object.children.forEach(child => {
-                const childElement = buildStructureHTML(child, childIndent);
-                if (childElement) {
-                    container.appendChild(childElement);
-                }
-            });
-            return container.children.length > 0 ? container : null;
-        }
-        
-        function applyHighlight(groupToHighlight, type) {
-            if (!groupToHighlight) return;
-            groupToHighlight.traverse((object) => {
-                if (object.isMesh) {
-                    const immediateSelectableParent = findSelectableGroup(object);
-                    if (immediateSelectableParent === groupToHighlight) {
-                        if (!object.userData.originalMaterial) {
-                            object.userData.originalMaterial = object.material;
-                        }
-                        const highlightMaterial = Array.isArray(object.userData.originalMaterial) ? object.userData.originalMaterial.map(m => m.clone()) : object.userData.originalMaterial.clone();
-                        const applyProps = (mat) => {
-                            mat.transparent = true;
-                            mat.opacity = 0.5;
-                            const color = (type === 'hover') ? 0xff0000 : 0xffff00;
-                            mat.color.setHex(color);
-                        };
-                        if (Array.isArray(highlightMaterial)) {
-                            highlightMaterial.forEach(applyProps);
-                        } else {
-                            applyProps(highlightMaterial);
-                        }
-                        object.material = highlightMaterial;
-                    }
-                }
-            });
-        }
+        let lastTime = performance.now();
+        let frameCount = 0;
+        const fpsCounter = document.getElementById('fps-counter');
 
-        function clearHighlight(groupToClear) {
-            if (!groupToClear) return;
-            groupToClear.traverse((object) => {
-                if (object.isMesh && object.userData.originalMaterial) {
-                    const immediateSelectableParent = findSelectableGroup(object);
-                    if (immediateSelectableParent === groupToClear) {
-                        object.material = object.userData.originalMaterial;
-                        object.userData.originalMaterial = null;
-                    }
-                }
-            });
-        }
+        // --- Initialization ---
+        init();
 
-        function selectObject(group) {
-            if (selectedObj) {
-                clearHighlight(selectedObj);
-                const oldElem = document.querySelector(`.structure-item[data-uuid="${selectedObj.uuid}"]`);
-                if (oldElem) oldElem.classList.remove('selected');
-            }
-            selectedObj = group;
-            if (selectedObj) {
-                applyHighlight(selectedObj, 'select');
-                const newElem = document.querySelector(`.structure-item[data-uuid="${selectedObj.uuid}"]`);
-                if (newElem) newElem.classList.add('selected');
-            }
-        }
-        
-        function hoverObject(group) {
-            if (hoveredObj && hoveredObj !== selectedObj) {
-                clearHighlight(hoveredObj);
-            }
-            hoveredObj = group;
-            if (hoveredObj && hoveredObj !== selectedObj) {
-                applyHighlight(hoveredObj, 'hover');
-            }
-        }
-
-        const loader = new GLTFLoader();
-        loader.load('3dmodels/UR16e.glb', (gltf) => {
-            robotModel = gltf.scene; 
-            scene.add(robotModel);
-
-            robotModel.traverse((object) => {
-                if(object.isGroup && object.name && object.children.some(c => c.isMesh)) {
-                    selectableGroups.push(object);
-                }
-            });
-
-            selectableGroups.forEach(group => {
-                const config = jointConfigurations[group.name];
-                if (config) {
-                    jointControls[group.name] = 0;
-                    gui.add(jointControls, group.name, -180, 180).name(group.name);
-                }
-            });
-
-            const box = new THREE.Box3().setFromObject(robotModel);
-            const center = box.getCenter(new THREE.Vector3());
-            const size = box.getSize(new THREE.Vector3());
-            controls.target.copy(center);
-            const maxDim = Math.max(size.x, size.y, size.z);
-            const fov = camera.fov * (Math.PI / 180);
-            let cameraDistance = Math.abs(maxDim / Math.sin(fov / 2));
-            cameraDistance *= 1.5; 
+        function init() {
+            scene = new THREE.Scene();
+            scene.name = "Scene";
+            camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(2.5, 1.5, 2.5);
             
-            camera.position.copy(center);
-            camera.position.x += cameraDistance / 2;
-            camera.position.y += cameraDistance / 4;
-            camera.position.z += cameraDistance;
-            camera.lookAt(center);
-            controls.update();
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setClearColor(0x000000, 0);
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.outputColorSpace = THREE.SRGBColorSpace;
+            renderer.toneMapping = THREE.ACESFilmicToneMapping;
+            renderer.toneMappingExposure = 0.18;
+            renderer.shadowMap.enabled = true;
+            document.getElementById('container').appendChild(renderer.domElement);
+            
+            controls = new OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.target.set(0, 0.8, 0);
+            
+            const exrLoader = new EXRLoader();
+            exrLoader.load('./env/industrial_sunset_02_puresky_1k.exr', (texture) => {
+                texture.mapping = THREE.EquirectangularReflectionMapping;
+                scene.environment = texture;
+            }, undefined, (error) => { console.error("Could not load EXR texture:", error) });
+            
+            dirLight = new THREE.DirectionalLight(0xffffff, 3);
+            dirLight.position.set(5, 10, 7.5);
+            dirLight.castShadow = true;
+            dirLight.shadow.mapSize.set(2048, 2048);
+            scene.add(dirLight);
 
-            const togglePanelBtn = document.getElementById('toggle-panel');
-            const structurePanel = document.getElementById('structure-panel');
+            const gridHelper = new THREE.GridHelper(100, 100, 0x888888, 0x444444);
+            gridHelper.receiveShadow = true;
+            scene.add(gridHelper);
 
-            togglePanelBtn.addEventListener('click', () => {
-                structurePanel.classList.toggle('collapsed');
-                if (structurePanel.classList.contains('collapsed')) {
-                    togglePanelBtn.textContent = 'Expand';
+            // Add a larger AxesHelper at the world origin for reference
+            const worldAxesHelper = new THREE.AxesHelper(1);
+            scene.add(worldAxesHelper);
+
+            ikToolkit = new IK_toolkit();
+            loadModel();
+            setupPanelControls();
+            animate();
+        }
+
+        function loadModel() {
+            const loader = new GLTFLoader();
+            loader.load('3dmodels/UR16e.glb', (gltf) => {
+                const root = gltf.scene;
+                root.name = "UR_16e";
+                scene.add(root);
+
+                // Find and process all required parts
+                root.traverse((object) => {
+                    if (object.isMesh) { object.castShadow = true; }
+                    if (object.name === 'IK_TARGET_CONTROL') { movableSphere = object; }
+                    if (object.isGroup && jointNames.includes(object.name)) {
+                        orderedJoints.push(object);
+                    }
+                });
+                
+                orderedJoints.sort((a, b) => jointNames.indexOf(a.name) - jointNames.indexOf(b.name));
+                
+                // ✨ DEBUG: Add an AxesHelper to each joint ✨
+                if (orderedJoints.length === 6) {
+                    orderedJoints.forEach(joint => {
+                        const axesHelper = new THREE.AxesHelper(0.5); // Adjust size as needed
+                        axesHelper.visible = false; // Initially hidden
+                        joint.add(axesHelper);
+                        gizmos.push(axesHelper); // Add to array to be toggled
+                    });
                 } else {
-                    togglePanelBtn.textContent = 'Collapse';
+                    console.error("Could not find all 6 required robot joints.");
+                }
+                
+                if (movableSphere) {
+                    transformControls = new TransformControls(camera, renderer.domElement);
+                    transformControls.attach(movableSphere);
+                    transformControls.setSize(0.5);
+                    scene.add(transformControls);
+                    transformControls.addEventListener('dragging-changed', (event) => {
+                        controls.enabled = !event.value;
+                    });
+                } else {
+                    console.error("Could not find an object named 'IK_TARGET_CONTROL' in the GLB model.");
+                }
+                
+                frameCamera(root);
+            }, undefined, (error) => { console.error(error); });
+        }
+        
+        function setupPanelControls() {
+            const panel = document.getElementById('control-panel');
+            const header = document.getElementById('panel-header');
+            const ikModeBtn = document.getElementById('ik-mode-btn');
+            const fkModeBtn = document.getElementById('fk-mode-btn');
+            const solutionSlider = document.getElementById('solution-id-slider');
+            const solutionIdValue = document.getElementById('solution-id-value');
+            const toggleGizmosBtn = document.getElementById('toggle-gizmos-btn');
+            const toggleModeBtn = document.getElementById('toggle-mode-btn');
+            
+            let isDragging = false, offset = { x: 0, y: 0 };
+            header.addEventListener('mousedown', (e) => { isDragging = true; offset.x = e.clientX - panel.offsetLeft; offset.y = e.clientY - panel.offsetTop; });
+            document.addEventListener('mouseup', () => { isDragging = false; });
+            document.addEventListener('mousemove', (e) => { if (isDragging) { panel.style.left = `${e.clientX - offset.x}px`; panel.style.top = `${e.clientY - offset.y}px`; }});
+            
+            // This button now toggles the joint axes helpers
+            toggleGizmosBtn.addEventListener('click', () => {
+                if (gizmos.length > 0) {
+                    const isVisible = !gizmos[0].visible;
+                    gizmos.forEach(gizmo => gizmo.visible = isVisible);
                 }
             });
 
-            const structureOutput = document.getElementById('structure-output');
-            structureOutput.innerHTML = ''; 
-            const structureElement = buildStructureHTML(robotModel);
-            if(structureElement) {
-                structureOutput.appendChild(structureElement);
+            toggleModeBtn.addEventListener('click', () => { if (transformControls) { transformControls.setMode(transformControls.mode === 'translate' ? 'rotate' : 'translate'); }});
+            
+            ikModeBtn.addEventListener('click', () => setMode('ik'));
+            fkModeBtn.addEventListener('click', () => setMode('fk'));
+            
+            function setMode(mode) {
+                controlSettings.mode = mode;
+                const ikControlsDiv = document.getElementById('ik-controls');
+                const fkControlsDiv = document.getElementById('fk-controls');
+                ikModeBtn.classList.toggle('active', mode === 'ik');
+                fkModeBtn.classList.toggle('active', mode === 'fk');
+                ikControlsDiv.style.display = mode === 'ik' ? 'block' : 'none';
+                fkControlsDiv.style.display = mode === 'fk' ? 'block' : 'none';
+                if (transformControls) { transformControls.enabled = (mode === 'ik'); transformControls.visible = (mode === 'ik'); }
             }
-            
-            selectableGroups.forEach(group => {
-                const axesHelper = new THREE.AxesHelper(4); 
-                group.add(axesHelper);
-                gizmos.push(axesHelper);
+
+            solutionSlider.addEventListener('input', (e) => {
+                controlSettings.solutionID = parseInt(e.target.value);
+                solutionIdValue.textContent = e.target.value;
             });
+            solutionIdValue.textContent = solutionSlider.value;
 
-        }, undefined, (error) => {
-            console.error('An error happened', error);
-            document.getElementById('structure-output').innerText = 'Error loading model.';
-        });
-
-        createMovableSphere();
-
-        function onMouseMove(event) {
-            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-            if (!robotModel) return;
-            raycaster.setFromCamera(mouse, camera);
-            
-            if(transformControls && transformControls.dragging) return;
-
-            const intersects = raycaster.intersectObject(robotModel, true);
-            const firstIntersectedMesh = intersects.find(intersect => intersect.object.isMesh);
-            const groupToHover = findSelectableGroup(firstIntersectedMesh?.object);
-            hoverObject(groupToHover);
-        }
-
-        function onMouseClick(event) {
-            if (event.button !== 0 || event.target.closest('#structure-panel') || event.target.closest('.lil-gui') || (transformControls && transformControls.dragging)) return; 
-            
-            raycaster.setFromCamera(mouse, camera);
-            const intersects = raycaster.intersectObject(robotModel, true);
-            const firstIntersectedMesh = intersects.find(intersect => intersect.object.isMesh);
-            const groupToSelect = findSelectableGroup(firstIntersectedMesh?.object);
-            selectObject(groupToSelect);
+            const fkContainer = document.getElementById('fk-controls').querySelector('.panel-section');
+            const readoutContainer = document.getElementById('joint-readouts');
+            jointNames.forEach((name, i) => { const fkRow = document.createElement('div'); fkRow.className = 'control-row'; fkRow.innerHTML = `<label>${name}</label>`; const slider = document.createElement('input'); slider.type = 'range'; slider.min = -Math.PI; slider.max = Math.PI; slider.step = 0.01; slider.value = 0; slider.addEventListener('input', e => { controlSettings.fk_angles[i] = parseFloat(e.target.value); }); fkRow.appendChild(slider); fkContainer.appendChild(fkRow); const readoutRow = document.createElement('div'); readoutRow.className = 'readout-row'; readoutRow.innerHTML = `<span>${name}:</span> <span id="readout-j${i}">0.00</span>`; readoutContainer.appendChild(readoutRow); });
         }
         
-        document.getElementById('structure-panel').addEventListener('click', (event) => {
-            const item = event.target.closest('.structure-item');
-            if(item && item.dataset.uuid) {
-                const group = scene.getObjectByProperty('uuid', item.dataset.uuid);
-                if(group) selectObject(group);
+        // ✨ DEBUG: This function now contains the console logs ✨
+        function solveIK() {
+            if (!movableSphere || orderedJoints.length !== 6) return;
+
+            const reflectionMatrix = new THREE.Matrix4().makeScale(1, -1, 1);
+            const targetMatrixForIK = movableSphere.matrixWorld.clone();
+            targetMatrixForIK.premultiply(reflectionMatrix).multiply(reflectionMatrix);
+
+            // --- ⚠️ DEBUG LOGS START ⚠️ ---
+            console.clear(); // Clear console to keep logs clean each frame
+            console.log("--- IK DEBUG FRAME ---");
+            console.log("IK Target World Matrix (Input to Solver):", targetMatrixForIK.elements);
+            // --- ⚠️ DEBUG LOGS END ⚠️ ---
+
+            const solutions = ikToolkit.inverseKinematicSolutions(targetMatrixForIK);
+            
+            // --- ⚠️ DEBUG LOGS START ⚠️ ---
+            console.log("All 8 IK Solutions (Raw Output):", solutions);
+            // --- ⚠️ DEBUG LOGS END ⚠️ ---
+
+            const chosenSolution = solutions.map(row => row[controlSettings.solutionID]);
+            
+            // --- ⚠️ DEBUG LOGS START ⚠️ ---
+            console.log(`Chosen Solution ID #${controlSettings.solutionID}:`, chosenSolution);
+            // --- ⚠️ DEBUG LOGS END ⚠️ ---
+
+            if (!chosenSolution.some(isNaN)) {
+                applySolutionToJoints(chosenSolution);
             }
-        });
-
-        document.getElementById('toggle-gizmos').addEventListener('click', () => {
-            gizmos.forEach(gizmo => { gizmo.visible = !gizmo.visible; });
-        });
-
-        window.addEventListener('mousemove', onMouseMove);
-        window.addEventListener('click', onMouseClick);
-
+        }
+        
         function animate() {
             requestAnimationFrame(animate);
 
-            if (robotModel && selectableGroups.length > 0) {
-                selectableGroups.forEach(group => {
-                    const config = jointConfigurations[group.name];
-                    if (config) {
-                        const value = jointControls[group.name];
-                        group.rotation[config.axis] = THREE.MathUtils.degToRad(value);
-                    }
-                });
+            const now = performance.now();
+            frameCount++;
+            if (now >= lastTime + 1000) {
+                fpsCounter.textContent = `FPS: ${frameCount}`;
+                frameCount = 0;
+                lastTime = now;
             }
 
+            if (orderedJoints.length === 6) {
+                // ✨ IK is now solved every frame for real-time feedback ✨
+                if (controlSettings.mode === 'ik' && movableSphere) {
+                    solveIK();
+                } else { // FK Mode
+                    applySolutionToJoints(controlSettings.fk_angles);
+                }
+                updateReadouts();
+            }
             controls.update();
             renderer.render(scene, camera);
         }
-        animate();
+        
+        function applySolutionToJoints(solution) {
+            orderedJoints.forEach((joint, i) => {
+                const angle = (controlSettings.mode === 'ik') ? -solution[i] : solution[i];
+                let x = 0, y = 0, z = 0;
+                // Using the latest axis configuration from your code
+                 switch (i) {
+                    case 0: y=angle; break; // Base
+                    case 1: x=THREE.MathUtils.degToRad(90); y=angle; break; // Shoulder
+                    case 2: y=angle; break; // Elbow
+                    case 3: y=angle; break; // Wrist1
+                    case 4: x=THREE.MathUtils.degToRad(90); y=angle; break; // Wrist2
+                    case 5: x=THREE.MathUtils.degToRad(-90); y=angle; break; // Wrist3
+                }
+                joint.rotation.set(x, y, z);
+            });
+        }
+        
+        function updateReadouts() {
+            orderedJoints.forEach((joint, i) => {
+                let angleRad = joint.rotation.y;
+                if (controlSettings.mode === 'ik') angleRad *= -1;
+                document.getElementById(`readout-j${i}`).textContent = THREE.MathUtils.radToDeg(angleRad).toFixed(2);
+            });
+        }
+        
+        function frameCamera(targetObject) {
+             if(!targetObject) return;
+             const box = new THREE.Box3().setFromObject(targetObject);
+             const center = box.getCenter(new THREE.Vector3());
+             controls.target.copy(center);
+             const size = box.getSize(new THREE.Vector3());
+             const maxDim = Math.max(size.x, size.y, size.z);
+             const fov = camera.fov * (Math.PI / 180);
+             const cameraDistance = Math.abs(maxDim / Math.sin(fov / 2)) * 1.5;
+             camera.position.set(center.x + cameraDistance / 2, center.y + cameraDistance / 3, center.z + cameraDistance / 2);
+             camera.lookAt(center);
+        }
         
         window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
+             camera.aspect=window.innerWidth / window.innerHeight;
+             camera.updateProjectionMatrix();
+             renderer.setSize(window.innerWidth, window.innerHeight);
         });
     </script>
 </body>
